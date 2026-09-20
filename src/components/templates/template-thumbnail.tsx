@@ -21,7 +21,10 @@ export function TemplateThumbnail({
       className={cn("thumb-frame relative overflow-hidden rounded-xl bg-page-deep", ratio, className)}
     >
       <div className="thumb-canvas absolute top-0 left-0">
-        <TemplateRenderer template={template.slug} data={template.sample} />
+        <TemplateRenderer
+          template={template.slug}
+          data={{ ...template.sample, bgMusicUrl: "", musicTitle: "" }}
+        />
       </div>
     </div>
   );

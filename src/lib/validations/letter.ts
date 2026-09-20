@@ -10,6 +10,8 @@ export const templateSlugSchema = z
 export const createLetterSchema = z.object({
   templateSlug: templateSlugSchema,
   content: z.record(z.union([z.string(), z.number()])),
+  payerName: z.string().optional(),
+  payerEmail: z.string().email().optional().or(z.literal("")),
 });
 
 export const updateLetterSchema = createLetterSchema.extend({

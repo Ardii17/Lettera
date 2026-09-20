@@ -15,15 +15,15 @@ const sections = [
   },
   {
     title: "Siapa yang bisa membaca suratmu",
-    body: "Hanya kamu (lewat dashboard) dan siapa pun yang memegang tautan surat. Tautan berisi token acak yang tidak bisa ditebak dari surat lain.",
+    body: "Hanya kamu dan siapa pun yang memegang tautan surat rahasia. Tautan berisi token acak yang unik dan tidak bisa ditebak dari surat lain.",
   },
   {
     title: "Mesin pencari",
     body: "Halaman surat diberi instruksi noindex dan diblokir lewat robots.txt sehingga tidak muncul di hasil pencarian.",
   },
   {
-    title: "Menghapus data",
-    body: "Menghapus surat dari dashboard menghapusnya dari database, dan tautannya langsung berhenti bekerja.",
+    title: "Keamanan data & pembayaran",
+    body: "Data surat dan bukti pembayaran tersimpan secara aman tanpa memerlukan kata sandi akun.",
   },
 ];
 

@@ -1,4 +1,4 @@
-import { EyeOff, Layers, Link2, Smartphone, Sparkles, Undo2 } from "lucide-react";
+import { EyeOff, Layers, Link2, QrCode, Smartphone, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/container";
 
 const features = [
@@ -28,9 +28,9 @@ const features = [
     body: "Halaman surat diberi noindex dan hanya bisa diakses lewat tautan yang kamu bagikan.",
   },
   {
-    icon: Undo2,
-    title: "Masih bisa diperbaiki",
-    body: "Salah ketik setelah dikirim? Ubah isinya dari dashboard, tautannya tetap sama.",
+    icon: QrCode,
+    title: "Pembayaran Instan via QRIS",
+    body: "Selesai mengisi surat, langsung bayar via QRIS tanpa perlu registrasi akun atau kata sandi.",
   },
 ];
 

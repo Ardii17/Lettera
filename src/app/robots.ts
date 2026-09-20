@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Surat bersifat personal: tidak boleh diindeks maupun ditelusuri crawler.
-      disallow: ["/letter/", "/created/", "/dashboard/", "/create/"],
+      disallow: ["/letter/", "/created/", "/pay/", "/create/"],
     },
     sitemap: `${siteConfig.url}/sitemap.xml`,
   };

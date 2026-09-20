@@ -32,7 +32,7 @@ export default async function TemplatesPage() {
         ) : (
           <EmptyState
             title="Template belum tersedia"
-            description="Jalankan migrasi dan seed database Supabase untuk mengaktifkan template bawaan."
+            description="Template digital letter sedang dipersiapkan. Silakan periksa kembali beberapa saat lagi."
             actionLabel="Kembali ke beranda"
             actionHref="/"
           />

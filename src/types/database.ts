@@ -33,7 +33,11 @@ export type TemplateRow = {
 
 export type LetterRow = {
   id: string;
-  user_id: string;
+  user_id: string | null;
+  payer_email?: string | null;
+  payer_name?: string | null;
+  payment_status?: string;
+  amount?: number;
   template_id: string;
   public_token: string;
   title: string | null;
@@ -71,7 +75,7 @@ export interface Database {
       letters: {
         Row: LetterRow;
         Insert: Omit<LetterRow, "id" | "created_at" | "updated_at" | "view_count"> &
-          Partial<Pick<LetterRow, "id" | "status" | "view_count">>;
+          Partial<Pick<LetterRow, "id" | "user_id" | "status" | "view_count" | "payer_email" | "payer_name" | "payment_status" | "amount">>;
         Update: Partial<LetterRow>;
         Relationships: [];
       };

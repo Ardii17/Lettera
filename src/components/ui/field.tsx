@@ -9,21 +9,28 @@ const control =
 export function Field({
   label,
   htmlFor,
+  id,
   error,
   hint,
+  helperText,
   required,
   children,
 }: {
   label: string;
-  htmlFor: string;
+  htmlFor?: string;
+  id?: string;
   error?: string;
   hint?: string;
+  helperText?: string;
   required?: boolean;
   children: ReactNode;
 }) {
+  const targetId = htmlFor || id || "";
+  const displayHint = hint || helperText;
+
   return (
     <div className="space-y-2">
-      <label htmlFor={htmlFor} className="block text-sm font-medium text-ink">
+      <label htmlFor={targetId} className="block text-sm font-medium text-ink">
         {label}
         {required ? (
           <span className="ml-1 text-seal-500" aria-hidden>
@@ -32,13 +39,17 @@ export function Field({
         ) : null}
       </label>
       {children}
-      {hint && !error ? (
-        <p id={`${htmlFor}-hint`} className="text-xs text-ink-muted">
-          {hint}
+      {displayHint && !error ? (
+        <p id={targetId ? `${targetId}-hint` : undefined} className="text-xs text-ink-muted">
+          {displayHint}
         </p>
       ) : null}
       {error ? (
-        <p id={`${htmlFor}-error`} role="alert" className="text-xs font-medium text-seal-600">
+        <p
+          id={targetId ? `${targetId}-error` : undefined}
+          role="alert"
+          className="text-xs font-medium text-seal-600"
+        >
           {error}
         </p>
       ) : null}

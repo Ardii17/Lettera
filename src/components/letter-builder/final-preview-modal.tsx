@@ -79,7 +79,7 @@ export function FinalPreviewModal({
                 </span>
               </div>
               <p className="text-xs text-ink-muted">
-                Periksa kembali foto, nama, & teks. Setelah disimpan & dibayar, data tidak dapat diubah lagi.
+                Periksa kembali foto, nama, & teks. Setelah pembayaran QRIS diverifikasi, surat langsung diterbitkan.
               </p>
             </div>
           </div>
@@ -106,7 +106,7 @@ export function FinalPreviewModal({
               className="bg-seal-600 hover:bg-seal-700 text-white shadow-sm"
             >
               {isPending ? <Spinner className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
-              {mode === "create" ? "Konfirmasi & Lanjutkan" : "Simpan Perubahan"}
+              {mode === "create" ? "Lanjut ke Pembayaran QRIS" : "Simpan Perubahan"}
             </Button>
           </div>
 
@@ -142,7 +142,7 @@ export function FinalPreviewModal({
             className="flex-2 bg-seal-600 text-white"
           >
             {isPending ? <Spinner className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
-            Konfirmasi & Lanjut
+            {mode === "create" ? "Bayar QRIS" : "Simpan"}
           </Button>
         </div>
       </footer>

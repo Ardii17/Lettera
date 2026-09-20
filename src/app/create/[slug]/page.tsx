@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { LetterBuilder } from "@/components/letter-builder/letter-builder";
-import { getCurrentUser } from "@/lib/auth/session";
 import { getAvailableTemplate } from "@/services/templates.service";
 import { getTemplate } from "@/templates/registry";
 
@@ -22,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CreateLetterPage({ params }: PageProps) {
   const { slug } = await params;
-  const [template, user] = await Promise.all([getAvailableTemplate(slug), getCurrentUser()]);
+  const template = await getAvailableTemplate(slug);
 
   if (!template) notFound();
 
@@ -45,7 +44,7 @@ export default async function CreateLetterPage({ params }: PageProps) {
         </Link>
       </header>
 
-      <LetterBuilder template={template} isAuthenticated={Boolean(user)} />
+      <LetterBuilder template={template} />
     </Container>
   );
 }

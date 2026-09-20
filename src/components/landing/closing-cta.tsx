@@ -14,11 +14,11 @@ export function ClosingCta() {
             Tulis sekarang selagi masih terasa. Dua menit, lalu tinggal kirim tautannya.
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <Link href="/templates" className={buttonStyles({ size: "lg" })}>
+            <Link href="/create/romantic" className={buttonStyles({ size: "lg" })}>
               Buat digital letter
             </Link>
-            <Link href="/register" className={buttonStyles({ variant: "outline", size: "lg" })}>
-              Buat akun gratis
+            <Link href="/templates" className={buttonStyles({ variant: "outline", size: "lg" })}>
+              Lihat semua template
             </Link>
           </div>
         </div>

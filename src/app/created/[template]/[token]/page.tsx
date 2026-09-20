@@ -56,19 +56,24 @@ export default async function LetterCreatedPage({
             <Link href="/templates" className={buttonStyles({ variant: "outline" })}>
               Tulis surat lagi
             </Link>
-            <Link href="/dashboard/letters" className={buttonStyles({ variant: "ghost" })}>
-              Lihat semua suratku
+            <Link href={letterPath} className={buttonStyles({ variant: "primary", className: "bg-seal-600 text-white" })}>
+              Buka Surat
             </Link>
           </div>
         </div>
 
-        <Link href={letterPath} className="block rounded-2xl">
+        <div className="relative overflow-hidden rounded-2xl">
           <TemplateThumbnail
             template={{ ...template, sample: letter.content }}
             ratio="aspect-10/11"
             className="border border-line shadow-paper"
           />
-        </Link>
+          <Link
+            href={letterPath}
+            className="absolute inset-0 z-10"
+            aria-label="Lihat surat"
+          />
+        </div>
       </div>
     </Container>
   );

@@ -8,10 +8,8 @@ import { buttonStyles } from "@/components/ui/button";
 
 export function MobileNav({
   links,
-  isAuthenticated,
 }: {
   links: { label: string; href: string }[];
-  isAuthenticated: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -50,10 +48,10 @@ export function MobileNav({
             ))}
           </nav>
           <Link
-            href={isAuthenticated ? "/dashboard" : "/login"}
+            href="/templates"
             className={buttonStyles({ className: "mt-4 w-full" })}
           >
-            {isAuthenticated ? "Dashboard" : "Masuk"}
+            Tulis Surat
           </Link>
         </div>
       ) : null}

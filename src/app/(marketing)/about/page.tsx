@@ -25,8 +25,8 @@ export default function AboutPage() {
           oleh orang yang kamu beri.
         </p>
         <p>
-          Surat tidak muncul di mesin pencari, tidak bisa dijelajahi dari surat lain, dan hanya kamu
-          yang bisa mengubah atau menghapusnya dari dashboard.
+          Surat tidak muncul di mesin pencari, tidak bisa dijelajahi dari surat lain, dan terlindungi
+          lewat tautan unik rahasia yang kamu bagikan.
         </p>
       </div>
     </Container>

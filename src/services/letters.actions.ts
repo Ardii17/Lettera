@@ -1,7 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { getCurrentUser } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { sanitizeContent } from "@/lib/utils/sanitize";
 import { generatePublicToken } from "@/lib/utils/token";
@@ -10,7 +8,7 @@ import { createLetterSchema, letterIdSchema, updateLetterSchema } from "@/lib/va
 import { getTemplate } from "@/templates/registry";
 import type { ActionResult } from "@/types";
 import type { LetterContent } from "@/types/letter";
-import { getTemplateRowBySlug } from "./templates.service";
+import { getTemplateRowBySlug, getTemplateRowsById } from "./templates.service";
 
 const GENERIC_ERROR = "Surat gagal disimpan. Coba lagi sebentar lagi.";
 
@@ -48,9 +46,6 @@ export async function createLetterAction(
   const parsedInput = createLetterSchema.safeParse(input);
   if (!parsedInput.success) return { ok: false, error: "Permintaan tidak valid." };
 
-  const user = await getCurrentUser();
-  if (!user) return { ok: false, error: "Masuk dulu untuk menyimpan surat." };
-
   const { error, fieldErrors, template, content } = validateContent(
     parsedInput.data.templateSlug,
     parsedInput.data.content,
@@ -71,19 +66,21 @@ export async function createLetterAction(
     const { data, error: insertError } = await supabase
       .from("letters")
       .insert({
-        user_id: user.id,
+        user_id: null,
+        payer_name: parsedInput.data.payerName || null,
+        payer_email: parsedInput.data.payerEmail || null,
+        payment_status: "pending",
+        amount: 15000,
         template_id: templateRow.id,
         public_token: publicToken,
         title,
         content,
-        status: "published",
+        status: "draft",
       })
       .select("public_token")
       .single();
 
     if (!insertError && data) {
-      revalidatePath("/dashboard");
-      revalidatePath("/dashboard/letters");
       return { ok: true, data: { templateSlug: template.slug, token: data.public_token } };
     }
 
@@ -96,12 +93,49 @@ export async function createLetterAction(
   return { ok: false, error: GENERIC_ERROR };
 }
 
+export async function confirmPaymentAction(input: {
+  token: string;
+  payerName: string;
+  payerEmail: string;
+}): Promise<ActionResult<{ templateSlug: string; token: string }>> {
+  if (!input.token || typeof input.token !== "string") {
+    return { ok: false, error: "Token surat tidak valid." };
+  }
+  if (!input.payerName?.trim()) {
+    return { ok: false, error: "Nama pemesan wajib diisi." };
+  }
+  if (!input.payerEmail?.trim() || !input.payerEmail.includes("@")) {
+    return { ok: false, error: "Alamat email aktif wajib diisi." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("letters")
+    .update({
+      payment_status: "paid",
+      status: "published",
+      payer_name: input.payerName.trim(),
+      payer_email: input.payerEmail.trim(),
+    })
+    .eq("public_token", input.token)
+    .select("public_token, template_id")
+    .maybeSingle();
+
+  if (error || !data) {
+    console.error("[letters.actions] gagal konfirmasi pembayaran:", error?.message);
+    return { ok: false, error: "Gagal memverifikasi pembayaran. Silakan coba lagi." };
+  }
+
+  const templateRows = await getTemplateRowsById();
+  const templateRow = templateRows.get(data.template_id);
+  const templateSlug = templateRow?.slug || "romantic";
+
+  return { ok: true, data: { templateSlug, token: data.public_token } };
+}
+
 export async function updateLetterAction(input: unknown): Promise<ActionResult<{ id: string }>> {
   const parsedInput = updateLetterSchema.safeParse(input);
   if (!parsedInput.success) return { ok: false, error: "Permintaan tidak valid." };
-
-  const user = await getCurrentUser();
-  if (!user) return { ok: false, error: "Masuk dulu untuk mengubah surat." };
 
   const { error, fieldErrors, template, content } = validateContent(
     parsedInput.data.templateSlug,
@@ -112,7 +146,6 @@ export async function updateLetterAction(input: unknown): Promise<ActionResult<{
   const supabase = await createClient();
   const { data, error: updateError } = await supabase
     .from("letters")
-    // user_id tidak ikut dikirim: kepemilikan dijaga RLS, bukan field tersembunyi di form.
     .update({ title: deriveTitle(template, content), content })
     .eq("id", parsedInput.data.id)
     .select("id")
@@ -120,20 +153,15 @@ export async function updateLetterAction(input: unknown): Promise<ActionResult<{
 
   if (updateError || !data) {
     console.error("[letters.actions] gagal memperbarui surat:", updateError?.message);
-    return { ok: false, error: "Surat tidak ditemukan atau bukan milikmu." };
+    return { ok: false, error: "Surat tidak ditemukan." };
   }
 
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/letters");
   return { ok: true, data: { id: data.id } };
 }
 
 export async function deleteLetterAction(id: string): Promise<ActionResult<{ id: string }>> {
   const parsedId = letterIdSchema.safeParse(id);
   if (!parsedId.success) return { ok: false, error: "Id surat tidak valid." };
-
-  const user = await getCurrentUser();
-  if (!user) return { ok: false, error: "Masuk dulu untuk menghapus surat." };
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -144,10 +172,8 @@ export async function deleteLetterAction(id: string): Promise<ActionResult<{ id:
     .maybeSingle();
 
   if (error || !data) {
-    return { ok: false, error: "Surat tidak ditemukan atau bukan milikmu." };
+    return { ok: false, error: "Surat tidak ditemukan." };
   }
 
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/letters");
   return { ok: true, data: { id: data.id } };
 }

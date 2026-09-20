@@ -25,22 +25,34 @@ export const BIRTHDAY_COLOR_PRESETS: ColorPreset[] = [
   { label: "Sunny Gold", value: "#f59e0b", description: "Kuning keemasan hangat" },
   { label: "Teal Confetti", value: "#0d9488", description: "Biru toska segar" },
   { label: "Electric Purple", value: "#8b5cf6", description: "Ungu cerah berenergi" },
-  { label: "Coral Pink", value: "#f43f5e", description: "Merah muda ceria" },
+  { label: "Bubblegum Pink", value: "#ec4899", description: "Merah muda manis meriah" },
+  { label: "Royal Indigo", value: "#3b82f6", description: "Biru pesta royal elegan" },
+  { label: "Emerald Fiesta", value: "#10b981", description: "Hijau zamrud cerah" },
+  { label: "Sunset Coral", value: "#f97316", description: "Jingga senja bersemangat" },
 ];
 
 export const GRADUATION_COLOR_PRESETS: ColorPreset[] = [
-  { label: "Deep Forest", value: "#1f3329", description: "Hijau lumut wibawa" },
-  { label: "Prestige Gold", value: "#b8912f", description: "Emas tanda kehormatan" },
-  { label: "Navy Academia", value: "#1e3a8a", description: "Biru dongker almamater" },
-  { label: "Burgundy Scholar", value: "#881337", description: "Merah marun elegan" },
+  { label: "Prestige Gold", value: "#caa64f", description: "Emas tanda kehormatan & toga" },
+  { label: "Navy Academia", value: "#1e3a8a", description: "Biru dongker almamater megah" },
+  { label: "Deep Forest", value: "#1f3329", description: "Hijau lumut almamater wibawa" },
+  { label: "Burgundy Scholar", value: "#881337", description: "Merah marun wisuda agung" },
+  { label: "Royal Sapphire", value: "#2563eb", description: "Biru safir gelar sarjana" },
+  { label: "Champagne Honor", value: "#d97706", description: "Kuning keemasan medali" },
+  { label: "Slate Chancellor", value: "#334155", description: "Abu-abu gelap dekanat tegas" },
+  { label: "Crimson Magna", value: "#991b1b", description: "Merah menyala cum laude" },
 ];
 
 export const FRIENDSHIP_COLOR_PRESETS: ColorPreset[] = [
-  { label: "Sage Harmony", value: "#2f6f5e", description: "Hijau persahabatan tulus" },
-  { label: "Warm Amber", value: "#d97706", description: "Jingga hangat persaudaraan" },
-  { label: "Sky Denim", value: "#0284c7", description: "Biru langit kebersamaan" },
-  { label: "Berry Sweet", value: "#be185d", description: "Merah buah manis" },
+  { label: "Sage Harmony", value: "#2f6f5e", description: "Hijau sage persahabatan tulus & damai" },
+  { label: "Warm Amber", value: "#d97706", description: "Kuning jingga hangat persaudaraan" },
+  { label: "Sky Denim", value: "#0284c7", description: "Biru langit kebersamaan & petualangan" },
+  { label: "Berry Sweet", value: "#be185d", description: "Merah buah manis ceria" },
+  { label: "Olive Companion", value: "#4d7c0f", description: "Hijau zaitun kesetiaan abadi" },
+  { label: "Sunset Ochre", value: "#ea580c", description: "Jingga senja kenangan masa muda" },
+  { label: "Dusty Rose", value: "#e11d48", description: "Merah mawar persahabatan tulus" },
+  { label: "Slate Trust", value: "#475569", description: "Abu-abu slate kepercayaan kokoh" },
 ];
+
 
 export const BACKGROUND_COLOR_PRESETS: ColorPreset[] = [
   { label: "Blush Rose", value: "#fdf4f5", description: "Merah muda lembut klasik" },

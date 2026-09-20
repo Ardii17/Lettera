@@ -8,13 +8,14 @@ import { TemplateThumbnail } from "./template-thumbnail";
 export function TemplateCard({ template }: { template: TemplateMeta }) {
   return (
     <article className="group flex flex-col rounded-2xl border border-line bg-paper p-4 transition-colors hover:border-line-strong">
-      <Link
-        href={`/templates/${template.slug}`}
-        className="block rounded-xl"
-        aria-label={`Lihat detail ${template.name}`}
-      >
+      <div className="relative overflow-hidden rounded-xl">
         <TemplateThumbnail template={template} />
-      </Link>
+        <Link
+          href={`/templates/${template.slug}`}
+          className="absolute inset-0 z-10"
+          aria-label={`Lihat detail ${template.name}`}
+        />
+      </div>
 
       <div className="flex flex-1 flex-col px-1 pt-5">
         <div className="flex items-start justify-between gap-3">

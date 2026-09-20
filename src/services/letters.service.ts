@@ -132,3 +132,36 @@ export async function getPublicLetter(token: string): Promise<PublicLetter | nul
     createdAt: row.created_at,
   };
 }
+
+/**
+ * Memuat informasi surat untuk halaman pembayaran checkout.
+ */
+export async function getLetterForPayment(token: string) {
+  if (!isValidPublicToken(token)) return null;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("letters")
+    .select("*")
+    .eq("public_token", token)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  const templateRows = await getTemplateRowsById();
+  const templateRow = templateRows.get(data.template_id);
+  const slug = templateRow?.slug ?? "";
+  const meta = slug ? getTemplate(slug) : null;
+
+  return {
+    id: data.id,
+    publicToken: data.public_token,
+    templateSlug: slug,
+    templateName: meta?.name ?? templateRow?.name ?? "Digital Letter",
+    title: data.title ?? meta?.name ?? "Digital Letter",
+    amount: data.amount ?? 15000,
+    paymentStatus: data.payment_status ?? "pending",
+    content: asContent(data.content),
+    recipient: meta ? recipientOf(meta, asContent(data.content)) : "",
+  };
+}

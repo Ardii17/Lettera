@@ -14,5 +14,5 @@ export const LETTER_LIMITS = {
   maxFieldsPerLetter: 80,
 } as const;
 
-/** Route yang membutuhkan sesi login. Dipakai middleware + layout dashboard. */
-export const PROTECTED_PREFIXES = ["/dashboard"] as const;
+/** Route privat (kosong karena auth dihapus). */
+export const PROTECTED_PREFIXES = [] as const;

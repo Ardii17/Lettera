@@ -129,7 +129,28 @@ export function ImageUploadField({
 
       {/* Case 1: Foto sudah ada (terunggah) */}
       {value ? (
-        <div className="rounded-2xl border border-seal-200/80 bg-white p-3 shadow-xs transition-all overflow-hidden">
+        <div className="relative rounded-2xl border border-seal-200/80 bg-white p-3 shadow-xs transition-all overflow-hidden">
+          {/* Loading overlay saat user mengganti foto */}
+          {isBusy && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/90 backdrop-blur-xs gap-2 p-3 text-center">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-seal-100">
+                <Spinner className="h-5 w-5 text-seal-700" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-xs font-bold text-seal-900">
+                  {status === "compressing"
+                    ? "Sedang mengompres foto..."
+                    : "Sedang mengunggah foto..."}
+                </p>
+                <p className="text-[11px] text-seal-700 font-medium">
+                  {status === "compressing"
+                    ? "Menjaga resolusi foto tetap tajam & jernih..."
+                    : "Proses upload sedang berjalan, mohon tunggu sebentar..."}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-3.5">
             {/* Thumbnail preview */}
             <div className="relative h-20 w-24 sm:h-16 sm:w-20 shrink-0 overflow-hidden rounded-xl border border-line bg-neutral-100 shadow-inner">
@@ -144,7 +165,7 @@ export function ImageUploadField({
             <div className="min-w-0 flex-1 w-full overflow-hidden">
               <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
                 <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
-                <span className="truncate">Foto tersimpan di Supabase</span>
+                <span className="truncate">Foto berhasil diunggah</span>
               </div>
 
               {compressionStats && (
@@ -164,7 +185,7 @@ export function ImageUploadField({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isBusy}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-seal-700 hover:text-seal-900 transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-seal-700 hover:text-seal-900 transition-colors disabled:opacity-50"
                 >
                   <RefreshCw className="h-3 w-3 shrink-0" />
                   Ganti Foto
@@ -177,7 +198,7 @@ export function ImageUploadField({
                     setCompressionStats(null);
                   }}
                   disabled={isBusy}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-rose-600 hover:text-rose-800 transition-colors"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-rose-600 hover:text-rose-800 transition-colors disabled:opacity-50"
                 >
                   <Trash2 className="h-3 w-3 shrink-0" />
                   Hapus
@@ -193,19 +214,27 @@ export function ImageUploadField({
           className={cn(
             "group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-4 sm:p-5 text-center transition-all overflow-hidden",
             isBusy
-              ? "border-seal-300 bg-seal-50/40 cursor-wait"
+              ? "border-seal-400 bg-seal-50/70 cursor-wait ring-2 ring-seal-200"
               : "border-seal-200/80 bg-[#fdf8f9] hover:border-seal-400 hover:bg-[#fbf0f2]",
           )}
         >
           {isBusy ? (
-            <div className="flex flex-col items-center gap-2 py-2 px-2 text-center">
-              <Spinner className="h-6 w-6 text-seal-600" />
-              <p className="text-xs font-semibold text-seal-800 break-words">
-                {status === "compressing"
-                  ? "Mengompres foto (menjaga kualitas tetap jernih)..."
-                  : "Mengunggah foto ke Supabase Storage..."}
-              </p>
-              <p className="text-[11px] text-ink-muted">Mohon tunggu sebentar</p>
+            <div className="flex flex-col items-center gap-2.5 py-3 px-2 text-center">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-seal-100/90 shadow-xs">
+                <Spinner className="h-6 w-6 text-seal-700" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-xs font-bold text-seal-900 break-words">
+                  {status === "compressing"
+                    ? "Sedang mengompres foto..."
+                    : "Sedang mengunggah foto..."}
+                </p>
+                <p className="text-[11px] text-seal-700 font-medium">
+                  {status === "compressing"
+                    ? "Menjaga kualitas tetap jernih & resolusi tajam..."
+                    : "Proses upload sedang berjalan, mohon tunggu sebentar..."}
+                </p>
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2 py-1 px-2 text-center">

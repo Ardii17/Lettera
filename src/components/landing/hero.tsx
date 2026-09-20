@@ -28,7 +28,7 @@ export function Hero() {
           </div>
 
           <p className="mt-6 text-sm text-ink-muted">
-            Gratis, siap dalam dua menit, dan hanya bisa dibuka lewat tautan yang kamu bagikan.
+            Siap dalam dua menit, dan hanya bisa dibuka lewat tautan yang kamu bagikan.
           </p>
         </div>
 
@@ -39,7 +39,10 @@ export function Hero() {
           >
             <div className="aspect-20/23 relative">
               <div className="thumb-canvas absolute top-0 left-0">
-                <TemplateRenderer template="romantic" data={romanticTemplate.sample} />
+                <TemplateRenderer
+                  template="romantic"
+                  data={{ ...romanticTemplate.sample, bgMusicUrl: "", musicTitle: "" }}
+                />
               </div>
             </div>
           </div>

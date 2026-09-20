@@ -17,6 +17,9 @@ import type { TemplateMeta } from "@/templates/types";
 import type { LetterContent } from "@/types/letter";
 import { DynamicForm, type LetterFormValues } from "./dynamic-form";
 import { RomanticBuilderForm } from "./romantic-builder-form";
+import { BirthdayBuilderForm } from "./birthday-builder-form";
+import { GraduationBuilderForm } from "./graduation-builder-form";
+import { FriendshipBuilderForm } from "./friendship-builder-form";
 import { PreviewPanel } from "./preview-panel";
 import { FinalPreviewModal } from "./final-preview-modal";
 
@@ -24,13 +27,11 @@ type Mode = "create" | "edit";
 
 export function LetterBuilder({
   template,
-  isAuthenticated,
   mode = "create",
   letterId,
   initialContent,
 }: {
   template: TemplateMeta;
-  isAuthenticated: boolean;
   mode?: Mode;
   letterId?: string;
   initialContent?: LetterContent;
@@ -79,50 +80,48 @@ export function LetterBuilder({
     }
   };
 
-  const handleFinalSubmit = form.handleSubmit((content) => {
-    setFormError(null);
+  const handleConfirmPreview = () => {
+    form.handleSubmit((content) => {
+      setFormError(null);
 
-    if (!isAuthenticated) {
-      draft.save(content);
-      router.push(`/login?next=/create/${template.slug}`);
-      return;
-    }
+      startTransition(async () => {
+        const result =
+          mode === "create"
+            ? await createLetterAction({ templateSlug: template.slug, content })
+            : await updateLetterAction({ id: letterId, templateSlug: template.slug, content });
 
-    startTransition(async () => {
-      const result =
-        mode === "create"
-          ? await createLetterAction({ templateSlug: template.slug, content })
-          : await updateLetterAction({ id: letterId, templateSlug: template.slug, content });
-
-      if (!result.ok) {
-        setShowFinalPreview(false);
-        setFormError(result.error);
-        if (result.fieldErrors) {
-          for (const [name, messages] of Object.entries(result.fieldErrors)) {
-            if (messages?.[0]) form.setError(name, { message: messages[0] });
+        if (!result.ok) {
+          setShowFinalPreview(false);
+          setFormError(result.error);
+          if (result.fieldErrors) {
+            for (const [name, messages] of Object.entries(result.fieldErrors)) {
+              if (messages?.[0]) form.setError(name, { message: messages[0] });
+            }
           }
+          return;
         }
-        return;
-      }
 
-      if (mode === "create" && "token" in result.data) {
-        draft.clear();
-        router.push(`/created/${result.data.templateSlug}/${result.data.token}`);
-      } else {
-        router.push("/dashboard/letters");
-      }
-      router.refresh();
-    });
-  });
+        if (mode === "create" && "token" in result.data) {
+          draft.clear();
+          setShowFinalPreview(false);
+          router.push(`/pay/${result.data.templateSlug}/${result.data.token}`);
+        } else {
+          router.push("/templates");
+        }
+        router.refresh();
+      });
+    })();
+  };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleOpenFinalPreview();
-      }}
-      noValidate
-    >
+    <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleOpenFinalPreview();
+        }}
+        noValidate
+      >
       {/* Mobile: editor dan preview bergantian. Desktop: dua panel berdampingan. */}
       <div className="mb-5 flex gap-2 lg:hidden" role="tablist" aria-label="Tampilan builder">
         <button
@@ -155,7 +154,7 @@ export function LetterBuilder({
         </button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start">
         <div className={cn(tab === "editor" ? "block" : "hidden lg:block", "min-w-0 w-full")}>
           <div className="rounded-2xl border border-line bg-paper p-4 sm:p-7 min-w-0 w-full overflow-hidden">
             <div className="mb-6 flex items-start justify-between gap-3 sm:gap-4">
@@ -177,6 +176,30 @@ export function LetterBuilder({
 
             {template.slug === "romantic" ? (
               <RomanticBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "birthday" ? (
+              <BirthdayBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "graduation" ? (
+              <GraduationBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "friendship" ? (
+              <FriendshipBuilderForm
                 register={form.register}
                 setValue={form.setValue}
                 watch={form.watch}
@@ -216,25 +239,36 @@ export function LetterBuilder({
               </Link>
             </div>
 
-            {!isAuthenticated ? (
-              <p className="mt-4 text-sm text-ink-muted">
-                Tulisanmu tersimpan di perangkat ini. Kami hanya meminta akun saat surat dibuat.
-              </p>
-            ) : null}
+            <p className="mt-4 text-sm text-ink-muted">
+              Draf tersimpan otomatis di perangkatmu. Pembayaran QRIS dilakukan setelah konfirmasi pratinjau.
+            </p>
           </div>
         </div>
 
-        <div className={cn(tab === "preview" ? "block" : "hidden lg:block", "min-w-0 w-full h-full")}>
-          <div className="lg:sticky lg:top-6 space-y-3">
-            <div className="flex justify-end">
+        {/* Panel Pratinjau (Mengapung/Sticky di Desktop) */}
+        <div
+          className={cn(
+            tab === "preview" ? "block" : "hidden lg:block",
+            "min-w-0 w-full lg:sticky lg:top-20 z-10",
+          )}
+        >
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
+                  Pratinjau Langsung
+                </span>
+              </div>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
                 onClick={handleOpenFinalPreview}
                 title="Buka pratinjau dalam layar penuh"
+                className="bg-white/95 backdrop-blur-xs hover:bg-page shadow-2xs text-xs font-medium"
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-3.5 w-3.5" />
                 Pratinjau Layar Penuh
               </Button>
             </div>
@@ -245,18 +279,19 @@ export function LetterBuilder({
           </div>
         </div>
       </div>
+    </form>
 
       {/* Fullscreen Final Confirmation Preview Modal */}
       <FinalPreviewModal
         isOpen={showFinalPreview}
         onClose={() => setShowFinalPreview(false)}
-        onConfirm={handleFinalSubmit}
+        onConfirm={handleConfirmPreview}
         templateSlug={template.slug}
         templateName={template.name}
         data={values as LetterContent}
         isPending={pending}
         mode={mode}
       />
-    </form>
+    </>
   );
 }

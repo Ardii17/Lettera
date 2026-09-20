@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { buttonStyles } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/auth/session";
 import { siteConfig } from "@/lib/constants";
 import { MobileNav } from "./mobile-nav";
 
@@ -11,9 +10,7 @@ const links = [
   { label: "Tentang", href: "/about" },
 ];
 
-export async function SiteHeader() {
-  const user = await getCurrentUser();
-
+export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line/80 bg-page/85 backdrop-blur-md">
       <Container className="relative flex h-16 items-center justify-between gap-4">
@@ -37,21 +34,12 @@ export async function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 sm:flex">
-          {user ? (
-            <Link href="/dashboard" className={buttonStyles({ variant: "outline", size: "sm" })}>
-              Dashboard
-            </Link>
-          ) : (
-            <Link href="/login" className={buttonStyles({ variant: "ghost", size: "sm" })}>
-              Masuk
-            </Link>
-          )}
           <Link href="/templates" className={buttonStyles({ size: "sm" })}>
             Tulis surat
           </Link>
         </div>
 
-        <MobileNav links={links} isAuthenticated={Boolean(user)} />
+        <MobileNav links={links} />
       </Container>
     </header>
   );

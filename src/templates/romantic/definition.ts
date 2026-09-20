@@ -603,8 +603,7 @@ export const romanticTemplate: TemplateMeta = {
     cardColor: "#ffffff",
     textColor: "#3e1b24",
     bodyTextColor: "#54333b",
-    musicTitle: "Can't Help Falling in Love (Romantic Piano)",
-    bgMusicUrl:
-      "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
+    musicTitle: "",
+    bgMusicUrl: "",
   },
 };
