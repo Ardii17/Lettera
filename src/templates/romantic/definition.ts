@@ -1,0 +1,95 @@
+import type { TemplateMeta } from "../types";
+
+export const romanticTemplate: TemplateMeta = {
+  slug: "romantic",
+  name: "Romantic Letter",
+  category: "Romansa",
+  tagline: "Tenang, hangat, dan personal — untuk kalimat yang sulit diucapkan langsung.",
+  description:
+    "Surat dengan tipografi serif lembut, ruang kosong yang lega, dan aksen segel lilin. Cocok untuk anniversary, permintaan maaf yang tulus, atau sekadar mengatakan hal yang belum sempat terucap.",
+  cardAccent: "bg-seal-100 text-seal-700",
+  highlights: [
+    "Tiga pilihan nuansa warna kertas",
+    "Kutipan pembuka yang menyatu dengan tata letak",
+    "Tanda tangan tulisan tangan",
+  ],
+  fields: [
+    {
+      name: "recipientName",
+      label: "Nama penerima",
+      type: "text",
+      placeholder: "Triani",
+      required: true,
+      maxLength: 60,
+      isRecipient: true,
+    },
+    {
+      name: "title",
+      label: "Judul surat",
+      type: "text",
+      placeholder: "Untuk kamu yang selalu pulang",
+      required: true,
+      maxLength: 80,
+    },
+    {
+      name: "message",
+      label: "Isi surat",
+      type: "textarea",
+      placeholder: "Tulis apa yang ingin kamu sampaikan…",
+      helperText: "Pisahkan paragraf dengan satu baris kosong.",
+      required: true,
+      maxLength: 4000,
+      rows: 10,
+    },
+    {
+      name: "quote",
+      label: "Kutipan",
+      type: "text",
+      placeholder: "Dan aku memilih kamu, berkali-kali.",
+      maxLength: 160,
+    },
+    {
+      name: "senderName",
+      label: "Nama pengirim",
+      type: "text",
+      placeholder: "Raka",
+      required: true,
+      maxLength: 60,
+    },
+    {
+      name: "signature",
+      label: "Tanda tangan",
+      type: "text",
+      placeholder: "Selalu, Raka",
+      helperText: "Ditampilkan dengan gaya tulisan tangan.",
+      maxLength: 60,
+    },
+    {
+      name: "letterDate",
+      label: "Tanggal",
+      type: "date",
+    },
+    {
+      name: "mood",
+      label: "Nuansa kertas",
+      type: "select",
+      defaultValue: "blush",
+      options: [
+        { label: "Blush — merah muda lembut", value: "blush" },
+        { label: "Midnight — biru malam", value: "midnight" },
+        { label: "Sage — hijau tenang", value: "sage" },
+      ],
+    },
+  ],
+  sample: {
+    recipientName: "Triani",
+    title: "Untuk kamu yang selalu pulang",
+    message:
+      "Aku menulis ini di jam yang biasanya kita habiskan untuk berdebat soal hal-hal kecil. Ternyata rumah bukan tempat, ya. Rumah itu kamu yang menunggu cerita hariku selesai.\n\nTerima kasih sudah bertahan di hari-hari yang tidak selalu mudah. Aku tidak janji akan selalu benar, tapi aku janji akan selalu pulang.",
+    quote: "Dan aku memilih kamu, berkali-kali.",
+    senderName: "Raka",
+    signature: "Selalu, Raka",
+    letterDate: "2026-09-20",
+    mood: "blush",
+  },
+};

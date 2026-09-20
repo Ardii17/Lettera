@@ -1,0 +1,77 @@
+import type { TemplateMeta } from "../types";
+
+export const birthdayTemplate: TemplateMeta = {
+  slug: "birthday",
+  name: "Birthday Letter",
+  category: "Perayaan",
+  tagline: "Ramai, cerah, dan menyenangkan — ucapan yang tidak tenggelam di grup chat.",
+  description:
+    "Kartu ulang tahun digital dengan angka usia berukuran besar, konfeti, dan blok warna yang berani. Dibuat untuk dibuka lewat ponsel dan langsung membuat orangnya tersenyum.",
+  cardAccent: "bg-gold/15 text-gold",
+  highlights: ["Angka usia sebagai elemen utama", "Konfeti yang tidak mengganggu teks", "Sapaan pembuka yang bisa diubah"],
+  fields: [
+    {
+      name: "recipientName",
+      label: "Nama yang berulang tahun",
+      type: "text",
+      placeholder: "Dinda",
+      required: true,
+      maxLength: 60,
+      isRecipient: true,
+    },
+    {
+      name: "age",
+      label: "Usia",
+      type: "number",
+      placeholder: "24",
+      required: true,
+      min: 1,
+      max: 120,
+      helperText: "Ditampilkan besar di tengah kartu.",
+    },
+    {
+      name: "greeting",
+      label: "Sapaan",
+      type: "text",
+      placeholder: "Selamat ulang tahun!",
+      required: true,
+      maxLength: 60,
+      defaultValue: "Selamat ulang tahun!",
+    },
+    {
+      name: "message",
+      label: "Pesan",
+      type: "textarea",
+      placeholder: "Tulis harapan dan doamu…",
+      required: true,
+      maxLength: 3000,
+      rows: 9,
+    },
+    {
+      name: "quote",
+      label: "Harapan singkat",
+      type: "text",
+      placeholder: "Semoga tahun ini sebaik tawamu.",
+      maxLength: 160,
+    },
+    {
+      name: "senderName",
+      label: "Dari",
+      type: "text",
+      placeholder: "Geng Kosan",
+      required: true,
+      maxLength: 60,
+    },
+    { name: "letterDate", label: "Tanggal", type: "date" },
+  ],
+  sample: {
+    recipientName: "Dinda",
+    age: 24,
+    greeting: "Selamat ulang tahun!",
+    message:
+      "Dua puluh empat dan masih jadi orang yang paling cepat bilang \u201Cayo berangkat\u201D setiap kali ada yang butuh teman. Kami beruntung.\n\nTahun ini semoga kamu dapat lebih banyak istirahat, lebih sedikit overthinking, dan tetap sempat makan siang tepat waktu.",
+    quote: "Semoga tahun ini sebaik tawamu.",
+    senderName: "Geng Kosan",
+    letterDate: "2026-09-20",
+  },
+};
