@@ -1,4 +1,5 @@
 import type { TemplateMeta } from "../types";
+import { FRIENDSHIP_COLOR_PRESETS } from "../color-presets";
 
 export const friendshipTemplate: TemplateMeta = {
   slug: "friendship",
@@ -10,6 +11,35 @@ export const friendshipTemplate: TemplateMeta = {
   cardAccent: "bg-sage/15 text-sage",
   highlights: ["Kotak kenangan terpisah dari isi surat", "Detail 'berteman sejak'", "Nada santai tanpa terlihat berantakan"],
   fields: [
+    {
+      name: "primaryColor",
+      label: "Warna Aksen Utama",
+      type: "color",
+      defaultValue: "#4a7c59",
+      helperText: "Warna badge pertemanan, tanda tangan, dan aksen kartu.",
+      colorPresets: FRIENDSHIP_COLOR_PRESETS,
+    },
+    {
+      name: "backgroundColor",
+      label: "Warna Latar Belakang",
+      type: "color",
+      defaultValue: "#fdf3e3",
+      helperText: "Warna latar kanvas di balik surat pertemanan.",
+    },
+    {
+      name: "cardColor",
+      label: "Warna Kartu Surat",
+      type: "color",
+      defaultValue: "#ffffff",
+      helperText: "Warna dasar kartu surat pertemanan.",
+    },
+    {
+      name: "textColor",
+      label: "Warna Teks Utama",
+      type: "color",
+      defaultValue: "#25211a",
+      helperText: "Warna nama teman dan pesan surat.",
+    },
     {
       name: "recipientName",
       label: "Nama teman",
@@ -61,6 +91,10 @@ export const friendshipTemplate: TemplateMeta = {
     { name: "letterDate", label: "Tanggal", type: "date" },
   ],
   sample: {
+    primaryColor: "#4a7c59",
+    backgroundColor: "#fdf3e3",
+    cardColor: "#ffffff",
+    textColor: "#25211a",
     recipientName: "Bagas",
     friendsSince: "2015, kelas 10 IPA 3",
     message:

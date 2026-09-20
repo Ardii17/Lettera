@@ -20,7 +20,7 @@ export function PreviewPanel({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-2xl border border-line bg-paper shadow-lift",
+        "overflow-hidden overflow-x-hidden rounded-2xl border border-line bg-paper shadow-lift",
         className,
       )}
     >
@@ -28,7 +28,7 @@ export function PreviewPanel({
         <p className="text-sm font-medium text-ink">Pratinjau</p>
         <p className="text-xs text-ink-muted">Persis seperti yang akan dilihat penerima</p>
       </div>
-      <div className="max-h-[70vh] overflow-y-auto overscroll-contain">
+      <div className="max-h-[calc(100vh-8.5rem)] overflow-y-auto overflow-x-hidden overscroll-contain">
         <TemplateRenderer template={template} data={data} />
       </div>
     </div>

@@ -11,7 +11,7 @@ export const LETTER_LIMITS = {
   shortText: 120,
   quote: 240,
   message: 4000,
-  maxFieldsPerLetter: 32,
+  maxFieldsPerLetter: 80,
 } as const;
 
 /** Route yang membutuhkan sesi login. Dipakai middleware + layout dashboard. */

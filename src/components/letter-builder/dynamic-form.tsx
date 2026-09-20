@@ -1,7 +1,8 @@
 "use client";
 
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { ColorPickerField } from "@/components/ui/color-picker-field";
 import type { TemplateField } from "@/templates/types";
 import type { LetterContent } from "@/types/letter";
 
@@ -14,11 +15,15 @@ export type LetterFormValues = LetterContent;
 export function DynamicForm({
   fields,
   register,
+  setValue,
+  watch,
   errors,
   idPrefix = "field",
 }: {
   fields: TemplateField[];
   register: UseFormRegister<LetterFormValues>;
+  setValue?: UseFormSetValue<LetterFormValues>;
+  watch?: UseFormWatch<LetterFormValues>;
   errors: FieldErrors<LetterFormValues>;
   idPrefix?: string;
 }) {
@@ -64,6 +69,17 @@ export function DynamicForm({
               <Input type="number" inputMode="numeric" min={field.min} max={field.max} {...shared} />
             ) : field.type === "date" ? (
               <Input type="date" {...shared} />
+            ) : field.type === "color" ? (
+              setValue && watch ? (
+                <ColorPickerField
+                  value={(watch(field.name) as string) || (field.defaultValue as string) || "#c03a52"}
+                  onChange={(hex) => setValue(field.name, hex, { shouldValidate: true, shouldDirty: true })}
+                  presets={field.colorPresets}
+                  helperText={field.helperText}
+                />
+              ) : (
+                <Input type="color" {...shared} />
+              )
             ) : (
               <Input type="text" maxLength={field.maxLength} {...shared} />
             )}

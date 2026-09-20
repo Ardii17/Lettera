@@ -1,4 +1,5 @@
 import type { TemplateMeta } from "../types";
+import { GRADUATION_COLOR_PRESETS } from "../color-presets";
 
 export const graduationTemplate: TemplateMeta = {
   slug: "graduation",
@@ -10,6 +11,35 @@ export const graduationTemplate: TemplateMeta = {
   cardAccent: "bg-ink text-paper",
   highlights: ["Bingkai bergaya sertifikat", "Nama dan gelar sebagai fokus utama", "Cocok dicetak maupun dibaca di layar"],
   fields: [
+    {
+      name: "primaryColor",
+      label: "Warna Aksen Utama",
+      type: "color",
+      defaultValue: "#caa64f",
+      helperText: "Warna bingkai sertifikat, aksen gelar, dan ikon toga.",
+      colorPresets: GRADUATION_COLOR_PRESETS,
+    },
+    {
+      name: "backgroundColor",
+      label: "Warna Latar Belakang",
+      type: "color",
+      defaultValue: "#141a30",
+      helperText: "Warna latar kanvas di balik kartu kelulusan.",
+    },
+    {
+      name: "cardColor",
+      label: "Warna Kartu Sertifikat",
+      type: "color",
+      defaultValue: "#1b2340",
+      helperText: "Warna dasar piagam kartu kelulusan.",
+    },
+    {
+      name: "textColor",
+      label: "Warna Teks Utama",
+      type: "color",
+      defaultValue: "#e7dcbb",
+      helperText: "Warna teks nama wisudawan dan isi pesan selamat.",
+    },
     {
       name: "recipientName",
       label: "Nama wisudawan",
@@ -62,6 +92,10 @@ export const graduationTemplate: TemplateMeta = {
     { name: "letterDate", label: "Tanggal", type: "date" },
   ],
   sample: {
+    primaryColor: "#caa64f",
+    backgroundColor: "#141a30",
+    cardColor: "#1b2340",
+    textColor: "#e7dcbb",
     recipientName: "Alifa Rahmadani",
     achievement: "Sarjana Ilmu Komputer",
     institution: "Universitas Brawijaya",

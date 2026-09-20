@@ -4,7 +4,7 @@ import { forwardRef, useId, type InputHTMLAttributes, type ReactNode, type Selec
 import { cn } from "@/lib/utils/cn";
 
 const control =
-  "w-full rounded-xl border border-line bg-paper px-4 py-3 text-[0.95rem] text-ink placeholder:text-ink-muted/70 transition-colors focus:border-seal-400 focus:outline-none focus-visible:outline-none aria-[invalid=true]:border-seal-400";
+  "w-full min-w-0 rounded-xl border border-line bg-paper px-4 py-3 text-[0.95rem] text-ink placeholder:text-ink-muted/70 transition-colors focus:border-seal-400 focus:outline-none focus-visible:outline-none aria-[invalid=true]:border-seal-400";
 
 export function Field({
   label,

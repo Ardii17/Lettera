@@ -47,6 +47,15 @@ function fieldSchema(field: TemplateField): z.ZodTypeAny {
       : z.union([z.literal(""), base]).optional().default("");
   }
 
+  if (field.type === "color") {
+    const pattern = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+    const base = z.string().regex(pattern, `${label} harus berupa kode warna hex valid (#RRGGBB).`);
+    const fallback = String(field.defaultValue ?? "#c03a52");
+    return field.required
+      ? base
+      : z.union([z.literal(""), base]).optional().default(fallback);
+  }
+
   const max = field.maxLength ?? 500;
   const base = z.string().trim().max(max, `${label} maksimal ${max} karakter.`);
   return field.required
@@ -73,6 +82,7 @@ export function buildDefaultValues(
     if (field.defaultValue !== undefined) values[field.name] = field.defaultValue;
     else if (field.type === "select") values[field.name] = field.options?.[0]?.value ?? "";
     else if (field.type === "number") values[field.name] = "" as unknown as number;
+    else if (field.type === "color") values[field.name] = String(field.defaultValue ?? "#c03a52");
     else values[field.name] = "";
   }
 

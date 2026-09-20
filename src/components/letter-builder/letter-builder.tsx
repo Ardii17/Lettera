@@ -11,11 +11,14 @@ import { ErrorNotice } from "@/components/ui/states";
 import { Spinner } from "@/components/ui/spinner";
 import { useLocalDraft } from "@/hooks/use-local-draft";
 import { buildContentSchema, buildDefaultValues } from "@/lib/validations/letter-content";
+import { cn } from "@/lib/utils/cn";
 import { createLetterAction, updateLetterAction } from "@/services/letters.actions";
 import type { TemplateMeta } from "@/templates/types";
 import type { LetterContent } from "@/types/letter";
 import { DynamicForm, type LetterFormValues } from "./dynamic-form";
+import { RomanticBuilderForm } from "./romantic-builder-form";
 import { PreviewPanel } from "./preview-panel";
+import { FinalPreviewModal } from "./final-preview-modal";
 
 type Mode = "create" | "edit";
 
@@ -36,6 +39,7 @@ export function LetterBuilder({
   const draft = useLocalDraft<LetterContent>(`lettera:draft:${template.slug}`);
   const [tab, setTab] = useState<"editor" | "preview">("editor");
   const [formError, setFormError] = useState<string | null>(null);
+  const [showFinalPreview, setShowFinalPreview] = useState(false);
   const [pending, startTransition] = useTransition();
 
   const schema = useMemo(() => buildContentSchema(template.fields), [template.fields]);
@@ -67,7 +71,15 @@ export function LetterBuilder({
     return () => clearTimeout(timer);
   }, [values, mode, draft]);
 
-  const onSubmit = form.handleSubmit((content) => {
+  const handleOpenFinalPreview = async () => {
+    setFormError(null);
+    const isValid = await form.trigger();
+    if (isValid) {
+      setShowFinalPreview(true);
+    }
+  };
+
+  const handleFinalSubmit = form.handleSubmit((content) => {
     setFormError(null);
 
     if (!isAuthenticated) {
@@ -83,6 +95,7 @@ export function LetterBuilder({
           : await updateLetterAction({ id: letterId, templateSlug: template.slug, content });
 
       if (!result.ok) {
+        setShowFinalPreview(false);
         setFormError(result.error);
         if (result.fieldErrors) {
           for (const [name, messages] of Object.entries(result.fieldErrors)) {
@@ -103,7 +116,13 @@ export function LetterBuilder({
   });
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleOpenFinalPreview();
+      }}
+      noValidate
+    >
       {/* Mobile: editor dan preview bergantian. Desktop: dua panel berdampingan. */}
       <div className="mb-5 flex gap-2 lg:hidden" role="tablist" aria-label="Tampilan builder">
         <button
@@ -136,12 +155,12 @@ export function LetterBuilder({
         </button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start">
-        <div className={tab === "editor" ? "block" : "hidden lg:block"}>
-          <div className="rounded-2xl border border-line bg-paper p-5 sm:p-7">
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div>
-                <h2 className="font-display text-xl font-semibold text-ink">{template.name}</h2>
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+        <div className={cn(tab === "editor" ? "block" : "hidden lg:block", "min-w-0 w-full")}>
+          <div className="rounded-2xl border border-line bg-paper p-4 sm:p-7 min-w-0 w-full overflow-hidden">
+            <div className="mb-6 flex items-start justify-between gap-3 sm:gap-4">
+              <div className="min-w-0 flex-1">
+                <h2 className="font-display text-xl font-semibold text-ink truncate">{template.name}</h2>
                 <p className="mt-1 text-sm text-ink-soft">{template.tagline}</p>
               </div>
               <Button
@@ -149,18 +168,31 @@ export function LetterBuilder({
                 size="sm"
                 onClick={() => form.reset(template.sample)}
                 title="Isi form dengan contoh isi surat"
+                className="shrink-0"
               >
                 <Wand2 className="h-4 w-4" aria-hidden />
                 Contoh
               </Button>
             </div>
 
-            <DynamicForm
-              fields={template.fields}
-              register={form.register}
-              errors={form.formState.errors}
-              idPrefix={template.slug}
-            />
+            {template.slug === "romantic" ? (
+              <RomanticBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : (
+              <DynamicForm
+                fields={template.fields}
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            )}
 
             {formError ? (
               <div className="mt-6">
@@ -168,12 +200,18 @@ export function LetterBuilder({
               </div>
             ) : null}
 
-            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-line pt-6">
-              <Button type="submit" size="lg" disabled={pending}>
-                {pending ? <Spinner /> : null}
-                {mode === "create" ? "Buat digital letter" : "Simpan perubahan"}
+            <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3 border-t border-line pt-6">
+              <Button
+                type="button"
+                size="lg"
+                onClick={handleOpenFinalPreview}
+                disabled={pending}
+                className="w-full sm:w-auto bg-seal-600 hover:bg-seal-700 text-white shadow-sm"
+              >
+                {pending ? <Spinner /> : <Eye className="h-4 w-4" />}
+                {mode === "create" ? "Pratinjau & Konfirmasi" : "Pratinjau & Simpan"}
               </Button>
-              <Link href="/templates" className={buttonStyles({ variant: "ghost", size: "lg" })}>
+              <Link href="/templates" className={buttonStyles({ variant: "ghost", size: "lg", className: "w-full sm:w-auto text-center" })}>
                 Ganti template
               </Link>
             </div>
@@ -186,14 +224,39 @@ export function LetterBuilder({
           </div>
         </div>
 
-        <div className={tab === "preview" ? "block" : "hidden lg:block"}>
-          <PreviewPanel
-            template={template.slug}
-            data={values as LetterContent}
-            className="lg:sticky lg:top-24"
-          />
+        <div className={cn(tab === "preview" ? "block" : "hidden lg:block", "min-w-0 w-full h-full")}>
+          <div className="lg:sticky lg:top-6 space-y-3">
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleOpenFinalPreview}
+                title="Buka pratinjau dalam layar penuh"
+              >
+                <Eye className="h-4 w-4" />
+                Pratinjau Layar Penuh
+              </Button>
+            </div>
+            <PreviewPanel
+              template={template.slug}
+              data={values as LetterContent}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Fullscreen Final Confirmation Preview Modal */}
+      <FinalPreviewModal
+        isOpen={showFinalPreview}
+        onClose={() => setShowFinalPreview(false)}
+        onConfirm={handleFinalSubmit}
+        templateSlug={template.slug}
+        templateName={template.name}
+        data={values as LetterContent}
+        isPending={pending}
+        mode={mode}
+      />
     </form>
   );
 }

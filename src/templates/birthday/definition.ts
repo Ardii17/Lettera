@@ -1,4 +1,5 @@
 import type { TemplateMeta } from "../types";
+import { BIRTHDAY_COLOR_PRESETS } from "../color-presets";
 
 export const birthdayTemplate: TemplateMeta = {
   slug: "birthday",
@@ -10,6 +11,35 @@ export const birthdayTemplate: TemplateMeta = {
   cardAccent: "bg-gold/15 text-gold",
   highlights: ["Angka usia sebagai elemen utama", "Konfeti yang tidak mengganggu teks", "Sapaan pembuka yang bisa diubah"],
   fields: [
+    {
+      name: "primaryColor",
+      label: "Warna Aksen Utama",
+      type: "color",
+      defaultValue: "#e8453c",
+      helperText: "Warna angka perayaan, sapaan, dan aksen kartu.",
+      colorPresets: BIRTHDAY_COLOR_PRESETS,
+    },
+    {
+      name: "backgroundColor",
+      label: "Warna Latar Belakang",
+      type: "color",
+      defaultValue: "#fff6e3",
+      helperText: "Warna latar kanvas di balik kartu ucapan.",
+    },
+    {
+      name: "cardColor",
+      label: "Warna Kartu Ucapan",
+      type: "color",
+      defaultValue: "#ffffff",
+      helperText: "Warna dasar kartu ucapan ulang tahun.",
+    },
+    {
+      name: "textColor",
+      label: "Warna Teks Utama",
+      type: "color",
+      defaultValue: "#1f1b16",
+      helperText: "Warna nama penerima dan pesan ucapan.",
+    },
     {
       name: "recipientName",
       label: "Nama yang berulang tahun",
@@ -65,6 +95,10 @@ export const birthdayTemplate: TemplateMeta = {
     { name: "letterDate", label: "Tanggal", type: "date" },
   ],
   sample: {
+    primaryColor: "#e8453c",
+    backgroundColor: "#fff6e3",
+    cardColor: "#ffffff",
+    textColor: "#1f1b16",
     recipientName: "Dinda",
     age: 24,
     greeting: "Selamat ulang tahun!",

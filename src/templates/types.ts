@@ -1,6 +1,6 @@
 import type { LetterContent } from "@/types/letter";
 
-export type TemplateFieldType = "text" | "textarea" | "date" | "select" | "number";
+export type TemplateFieldType = "text" | "textarea" | "date" | "select" | "number" | "color";
 
 export interface TemplateFieldOption {
   label: string;
@@ -23,6 +23,10 @@ export interface TemplateField {
   defaultValue?: string | number;
   /** Field ini dipakai membentuk judul otomatis ("Surat untuk ..."). */
   isRecipient?: boolean;
+  /** Kategori atau section grup dalam form builder. */
+  section?: string;
+  /** Pilihan warna preset untuk field bertipe 'color'. */
+  colorPresets?: Array<{ label: string; value: string }>;
 }
 
 /**

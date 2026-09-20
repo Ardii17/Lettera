@@ -11,6 +11,10 @@ const defaults = {
   quote: "",
   senderName: "Pengirim",
   letterDate: "",
+  primaryColor: "#e8453c",
+  backgroundColor: "#fff6e3",
+  cardColor: "#ffffff",
+  textColor: "#1f1b16",
 };
 
 /** Posisi konfeti ditulis statis supaya render server dan client identik. */
@@ -33,12 +37,19 @@ export function BirthdayTemplate({
   className?: string;
 }) {
   const letter = withDefaults(defaults, data);
+  const primaryColor = String(letter.primaryColor || "#e8453c");
+  const backgroundColor = String(letter.backgroundColor || "#fff6e3");
+  const cardColor = String(letter.cardColor || "#ffffff");
+  const textColor = String(letter.textColor || "#1f1b16");
   const paragraphs = toParagraphs(String(letter.message));
   const date = formatDate(String(letter.letterDate));
   const age = Number(letter.age);
 
   return (
-    <article className={cn("relative w-full overflow-hidden bg-[#fff6e3] px-5 py-12 sm:px-8 sm:py-16", className)}>
+    <article
+      className={cn("relative w-full overflow-hidden px-5 py-12 sm:px-8 sm:py-16", className)}
+      style={{ backgroundColor }}
+    >
       <div aria-hidden className="pointer-events-none absolute inset-0">
         {CONFETTI.map((piece, index) => (
           <span
@@ -56,29 +67,48 @@ export function BirthdayTemplate({
         ))}
       </div>
 
-      <div className="relative mx-auto max-w-[36rem] rounded-[2.5rem] bg-white px-6 py-10 shadow-paper sm:px-12 sm:py-14">
-        <p className="text-center text-lg font-semibold tracking-tight text-[#e8453c] sm:text-xl">
+      <div
+        className="relative mx-auto max-w-[36rem] rounded-[2.5rem] px-6 py-10 shadow-paper sm:px-12 sm:py-14"
+        style={{ backgroundColor: cardColor }}
+      >
+        <p
+          className="text-center text-lg font-semibold tracking-tight sm:text-xl"
+          style={{ color: primaryColor }}
+        >
           {String(letter.greeting)}
         </p>
 
         <div className="mt-6 flex justify-center">
           <div className="relative flex h-40 w-40 items-center justify-center rounded-full bg-[#fff0d6] sm:h-48 sm:w-48">
-            <span className="absolute inset-3 rounded-full border-2 border-dashed border-[#f0b429]" aria-hidden />
-            <span className="relative text-[4.5rem] leading-none font-bold tracking-tighter text-[#e8453c] tabular-nums sm:text-[5.5rem]">
+            <span
+              className="absolute inset-3 rounded-full border-2 border-dashed"
+              style={{ borderColor: primaryColor }}
+              aria-hidden
+            />
+            <span
+              className="relative text-[4.5rem] leading-none font-bold tracking-tighter tabular-nums sm:text-[5.5rem]"
+              style={{ color: primaryColor }}
+            >
               {Number.isFinite(age) && age > 0 ? age : "?"}
             </span>
           </div>
         </div>
 
-        <h1 className="mt-8 text-center font-display text-[2rem] leading-tight font-semibold text-[#1f1b16] sm:text-[2.4rem]">
+        <h1
+          className="mt-8 text-center font-display text-[2rem] leading-tight font-semibold sm:text-[2.4rem]"
+          style={{ color: textColor }}
+        >
           {String(letter.recipientName)}
         </h1>
 
-        <div className="mt-8 space-y-5 text-[1.02rem] leading-[1.85] text-[#42392f]">
+        <div
+          className="mt-8 space-y-5 text-[1.02rem] leading-[1.85]"
+          style={{ color: textColor }}
+        >
           {paragraphs.length > 0 ? (
             paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)
           ) : (
-            <p className="text-[#8b8175]">Tulisanmu akan muncul di sini.</p>
+            <p className="opacity-60">Tulisanmu akan muncul di sini.</p>
           )}
         </div>
 

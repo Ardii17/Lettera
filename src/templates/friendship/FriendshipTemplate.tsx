@@ -11,6 +11,10 @@ const defaults = {
   quote: "",
   senderName: "Pengirim",
   letterDate: "",
+  primaryColor: "#4a7c59",
+  backgroundColor: "#fdf3e3",
+  cardColor: "#ffffff",
+  textColor: "#25211a",
 };
 
 export function FriendshipTemplate({
@@ -21,12 +25,22 @@ export function FriendshipTemplate({
   className?: string;
 }) {
   const letter = withDefaults(defaults, data);
+  const primaryColor = String(letter.primaryColor || "#4a7c59");
+  const backgroundColor = String(letter.backgroundColor || "#fdf3e3");
+  const cardColor = String(letter.cardColor || "#ffffff");
+  const textColor = String(letter.textColor || "#25211a");
   const paragraphs = toParagraphs(String(letter.message));
   const date = formatDate(String(letter.letterDate));
 
   return (
-    <article className={cn("w-full bg-[#fdf3e3] px-5 py-14 sm:px-8 sm:py-16", className)}>
-      <div className="relative mx-auto max-w-[36rem] -rotate-[1.2deg] rounded-2xl bg-white px-6 py-11 shadow-paper sm:px-12 sm:py-14">
+    <article
+      className={cn("w-full px-5 py-14 sm:px-8 sm:py-16", className)}
+      style={{ backgroundColor }}
+    >
+      <div
+        className="relative mx-auto max-w-[36rem] -rotate-[1.2deg] rounded-2xl px-6 py-11 shadow-paper sm:px-12 sm:py-14"
+        style={{ backgroundColor: cardColor }}
+      >
         <span
           aria-hidden
           className="absolute -top-3 left-8 h-6 w-24 rotate-[-6deg] bg-[#e8dcc0]/80"
@@ -36,22 +50,35 @@ export function FriendshipTemplate({
           className="absolute -top-3 right-8 h-6 w-20 rotate-[5deg] bg-[#e8dcc0]/80"
         />
 
-        <p className="text-sm text-[#9a8e7a]">Halo,</p>
-        <h1 className="mt-1 font-hand text-[2.8rem] leading-none text-[#25211a] sm:text-[3.4rem]">
+        <p className="text-sm opacity-60">Halo,</p>
+        <h1
+          className="mt-1 font-hand text-[2.8rem] leading-none sm:text-[3.4rem]"
+          style={{ color: textColor }}
+        >
           {String(letter.recipientName)}
         </h1>
 
         {String(letter.friendsSince).trim() ? (
-          <p className="mt-4 inline-block rounded-full bg-[#f4ece0] px-3 py-1 text-sm text-[#6d6252]">
+          <p
+            className="mt-4 inline-block rounded-full px-3 py-1 text-sm font-medium border"
+            style={{
+              color: primaryColor,
+              backgroundColor: `${primaryColor}14`,
+              borderColor: `${primaryColor}30`,
+            }}
+          >
             berteman sejak {String(letter.friendsSince)}
           </p>
         ) : null}
 
-        <div className="mt-7 space-y-5 text-[1.02rem] leading-[1.85] text-[#3d372e]">
+        <div
+          className="mt-7 space-y-5 text-[1.02rem] leading-[1.85]"
+          style={{ color: textColor }}
+        >
           {paragraphs.length > 0 ? (
             paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>)
           ) : (
-            <p className="text-[#9a8e7a]">Tulisanmu akan muncul di sini.</p>
+            <p className="opacity-60">Tulisanmu akan muncul di sini.</p>
           )}
         </div>
 
