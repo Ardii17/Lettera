@@ -335,6 +335,6 @@ export const starlightLoveTemplate: TemplateMeta = {
     textColor: "#fef3c7",
     bodyTextColor: "#cbd5e1",
     musicTitle: "Starlight Lofi Piano & Music Box",
-    bgMusicUrl: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792cb.mp3",
+    bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   },
 };

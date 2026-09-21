@@ -262,6 +262,6 @@ export const apologyTemplate: TemplateMeta = {
     bodyTextColor: "#3e5148",
     musicTitle: "Peaceful Piano Reflections",
     bgMusicUrl:
-      "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   },
 };

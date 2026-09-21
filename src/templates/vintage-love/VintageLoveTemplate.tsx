@@ -180,7 +180,7 @@ function VintageLoveTemplateInner({ data, className }: VintageLoveTemplateProps)
     >
       {/* Audio Elemen Tersembunyi (hanya aktif di luar katalog dan jika ada URL) */}
       {!isThumbnail && pathname !== "/templates" && content.bgMusicUrl && (
-        <audio ref={audioRef} src={content.bgMusicUrl} loop preload="auto" />
+        <audio ref={audioRef} src={content.bgMusicUrl} loop preload="none" />
       )}
 
       {/* Floating Vinyl Music Button (hanya tampil di surat publik / detail / pratinjau penuh) */}

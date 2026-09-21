@@ -480,6 +480,6 @@ export const royalGardenWeddingTemplate: TemplateMeta = {
     textColor: "#064e3b",
     bodyTextColor: "#374151",
     musicTitle: "A Thousand Years (Cello & Piano Orchestra)",
-    bgMusicUrl: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c3c3167123.mp3",
+    bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   },
 };

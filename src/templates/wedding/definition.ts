@@ -618,6 +618,6 @@ export const weddingTemplate: TemplateMeta = {
     bodyTextColor: "#524b43",
     musicTitle: "A Thousand Years (Piano Instrumental)",
     bgMusicUrl:
-      "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   },
 };

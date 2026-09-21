@@ -578,7 +578,7 @@ export const artExhibitionTemplate: TemplateMeta = {
     backgroundColor: "#09090b",
     cardColor: "#18181b",
     textColor: "#fafafa",
-    musicUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-amp-strings-10711.mp3",
+    musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     musicTitle: "Ambient Nocturne in D Minor",
   },
 };

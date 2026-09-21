@@ -2,6 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { getTemplate, listTemplates } from "@/templates/registry";
 import type { TemplateMeta } from "@/templates/types";
 import type { TemplateRow } from "@/types/database";
@@ -76,6 +77,10 @@ const DEFAULT_TEMPLATE_METAS: Record<string, { id: string; sort_order: number }>
   "starlight-love": { id: "00000000-0000-4000-8000-000000000008", sort_order: 8 },
   "love-mixtape": { id: "00000000-0000-4000-8000-000000000009", sort_order: 9 },
   "love-scrapbook": { id: "00000000-0000-4000-8000-000000000010", sort_order: 10 },
+  "royal-garden-wedding": { id: "00000000-0000-4000-8000-000000000011", sort_order: 11 },
+  "art-exhibition": { id: "00000000-0000-4000-8000-000000000012", sort_order: 12 },
+  "neon-bash": { id: "00000000-0000-4000-8000-000000000013", sort_order: 13 },
+  "gala-award": { id: "00000000-0000-4000-8000-000000000014", sort_order: 14 },
 };
 
 export async function getTemplateRowBySlug(slug: string): Promise<TemplateRow | null> {
@@ -93,8 +98,10 @@ export async function getTemplateRowBySlug(slug: string): Promise<TemplateRow | 
 
   // Coba masukkan row baru ke DB jika belum ada
   try {
-    const supabase = await createClient();
-    const { data: inserted } = await supabase
+    const supabase = process.env.SUPABASE_SERVICE_ROLE_KEY
+      ? createAdminClient()
+      : await createClient();
+    const { data: inserted, error: upsertError } = await supabase
       .from("templates")
       .upsert(
         {
@@ -111,7 +118,7 @@ export async function getTemplateRowBySlug(slug: string): Promise<TemplateRow | 
       .select()
       .single();
 
-    if (inserted) return inserted;
+    if (!upsertError && inserted) return inserted;
   } catch {
     // Abaikan error upsert dan gunakan fallback
   }

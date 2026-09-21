@@ -335,6 +335,6 @@ export const vintageLoveTemplate: TemplateMeta = {
     textColor: "#3e1b24",
     bodyTextColor: "#4a3b32",
     musicTitle: "Romantic Music Box & Cello",
-    bgMusicUrl: "https://cdn.pixabay.com/download/audio/2022/05/16/audio_c0c1b72e04.mp3",
+    bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   },
 };

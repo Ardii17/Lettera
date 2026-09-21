@@ -354,6 +354,6 @@ export const loveScrapbookTemplate: TemplateMeta = {
     textColor: "#27272a",
     bodyTextColor: "#4b5563",
     musicTitle: "Acoustic Ukulele & Coffee Morning",
-    bgMusicUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
+    bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
   },
 };

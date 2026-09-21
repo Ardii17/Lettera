@@ -550,7 +550,7 @@ export const galaAwardTemplate: TemplateMeta = {
     backgroundColor: "#0a0a0e",
     cardColor: "#14141c",
     textColor: "#fdfcf7",
-    musicUrl: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c3c3167123.mp3?filename=a-thousand-years-cello-and-piano-orchestra-124991.mp3",
+    musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     musicTitle: "Grand Imperial Waltz Symphony",
   },
 };

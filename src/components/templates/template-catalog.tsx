@@ -132,7 +132,7 @@ export function TemplateCatalog({ templates }: TemplateCatalogProps) {
   );
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {/* Bar Navigasi Kategori & Search */}
       <div className="flex flex-col gap-5 border-b border-line pb-6 md:flex-row md:items-center md:justify-between">
         {/* Tab Pills Navigasi Kategori */}

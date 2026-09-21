@@ -310,7 +310,7 @@ function WeddingTemplateInner({ data, className }: WeddingTemplateProps) {
     >
       {/* Audio Elemen Tersembunyi (hanya jika ada musik dan bukan thumbnail/katalog) */}
       {!isThumbnail && pathname !== "/templates" && content.bgMusicUrl && (
-        <audio ref={audioRef} src={content.bgMusicUrl} loop preload="auto" />
+        <audio ref={audioRef} src={content.bgMusicUrl} loop preload="none" />
       )}
 
       {/* Floating Music Button (Hanya tampil pada detail pratinjau / surat publik, tidak pernah di halaman katalog) */}

@@ -306,7 +306,7 @@ export function GraduationTemplate({
             ref={audioRef}
             src={String(letter.bgMusicUrl)}
             loop
-            preload="metadata"
+            preload="none"
           />
           <div className="fixed bottom-6 right-6 z-40 max-w-[calc(100vw-3rem)]">
             <button

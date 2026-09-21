@@ -91,7 +91,7 @@ export default async function TemplateDetailPage({ params }: PageProps) {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-line bg-paper shadow-lift">
+        <div className="overflow-hidden sticky top-20 rounded-2xl border border-line bg-paper shadow-lift">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <p className="text-sm font-medium text-ink">Pratinjau isi contoh</p>
             <p className="text-xs text-ink-muted">Bisa digulir</p>
