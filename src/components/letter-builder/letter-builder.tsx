@@ -19,17 +19,38 @@ import { DynamicForm, type LetterFormValues } from "./dynamic-form";
 import { RomanticBuilderForm } from "./romantic-builder-form";
 import { BirthdayBuilderForm } from "./birthday-builder-form";
 import { GraduationBuilderForm } from "./graduation-builder-form";
+import { GrandLaureateBuilderForm } from "./grand-laureate-builder-form";
+import { SummitAchievementBuilderForm } from "./summit-achievement-builder-form";
 import { FriendshipBuilderForm } from "./friendship-builder-form";
 import { WeddingBuilderForm } from "./wedding-builder-form";
 import { ApologyBuilderForm } from "./apology-builder-form";
+import { KintsugiRepairBuilderForm } from "./kintsugi-repair-builder-form";
+import { SafeHarborBuilderForm } from "./safe-harbor-builder-form";
+import { SolsticeThawBuilderForm } from "./solstice-thaw-builder-form";
 import { VintageLoveBuilderForm } from "./vintage-love-builder-form";
 import { StarlightLoveBuilderForm } from "./starlight-love-builder-form";
 import { LoveMixtapeBuilderForm } from "./love-mixtape-builder-form";
 import { LoveScrapbookBuilderForm } from "./love-scrapbook-builder-form";
+import { MuseumOfUsBuilderForm } from "./museum-of-us-builder-form";
+import { SecretHerbariumBuilderForm } from "./secret-herbarium-builder-form";
+import { ParfumDamourBuilderForm } from "./parfum-damour-builder-form";
+import { ExLibrisBuilderForm } from "./ex-libris-builder-form";
+import { TourbillonLoveBuilderForm } from "./tourbillon-love-builder-form";
+import { CartographyLoveBuilderForm } from "./cartography-love-builder-form";
+import { SymphonyLoveBuilderForm } from "./symphony-love-builder-form";
+import { HauteJoaillerieBuilderForm } from "./haute-joaillerie-builder-form";
 import { RoyalGardenWeddingBuilderForm } from "./royal-garden-wedding-builder-form";
 import { ArtExhibitionBuilderForm } from "./art-exhibition-builder-form";
 import { NeonBashBuilderForm } from "./neon-bash-builder-form";
 import { GalaAwardBuilderForm } from "./gala-award-builder-form";
+import { HeritageWeddingBuilderForm } from "./heritage-wedding-builder-form";
+import { AmalfiWeddingBuilderForm } from "./amalfi-wedding-builder-form";
+import { ChateauWeddingBuilderForm } from "./chateau-wedding-builder-form";
+import { BirthdayGazetteBuilderForm } from "./birthday-gazette-builder-form";
+import { CelestialBirthdayBuilderForm } from "./celestial-birthday-builder-form";
+import { BirthdayPassportBuilderForm } from "./birthday-passport-builder-form";
+import { BirthdayCinemaBuilderForm } from "./birthday-cinema-builder-form";
+import { BirthdayFestivalBuilderForm } from "./birthday-festival-builder-form";
 import { PreviewPanel } from "./preview-panel";
 import { FinalPreviewModal } from "./final-preview-modal";
 
@@ -200,8 +221,64 @@ export function LetterBuilder({
                 errors={form.formState.errors}
                 idPrefix={template.slug}
               />
+            ) : template.slug === "birthday-gazette" ? (
+              <BirthdayGazetteBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "celestial-birthday" ? (
+              <CelestialBirthdayBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "birthday-passport" ? (
+              <BirthdayPassportBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "birthday-cinema" ? (
+              <BirthdayCinemaBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "birthday-festival" ? (
+              <BirthdayFestivalBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
             ) : template.slug === "graduation" ? (
               <GraduationBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "grand-laureate" ? (
+              <GrandLaureateBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "summit-achievement" ? (
+              <SummitAchievementBuilderForm
                 register={form.register}
                 setValue={form.setValue}
                 watch={form.watch}
@@ -226,6 +303,30 @@ export function LetterBuilder({
               />
             ) : template.slug === "apology" ? (
               <ApologyBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "kintsugi-repair" ? (
+              <KintsugiRepairBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "safe-harbor" ? (
+              <SafeHarborBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "solstice-thaw" ? (
+              <SolsticeThawBuilderForm
                 register={form.register}
                 setValue={form.setValue}
                 watch={form.watch}
@@ -264,8 +365,96 @@ export function LetterBuilder({
                 errors={form.formState.errors}
                 idPrefix={template.slug}
               />
+            ) : template.slug === "museum-of-us" ? (
+              <MuseumOfUsBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "secret-herbarium" ? (
+              <SecretHerbariumBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "parfum-damour" ? (
+              <ParfumDamourBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "ex-libris" ? (
+              <ExLibrisBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "tourbillon-love" ? (
+              <TourbillonLoveBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "cartography-love" ? (
+              <CartographyLoveBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "symphony-love" ? (
+              <SymphonyLoveBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "haute-joaillerie" ? (
+              <HauteJoaillerieBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
             ) : template.slug === "royal-garden-wedding" ? (
               <RoyalGardenWeddingBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "heritage-wedding" ? (
+              <HeritageWeddingBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "amalfi-wedding" ? (
+              <AmalfiWeddingBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "chateau-wedding" ? (
+              <ChateauWeddingBuilderForm
                 register={form.register}
                 setValue={form.setValue}
                 watch={form.watch}

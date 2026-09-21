@@ -22,7 +22,7 @@ export function LetterQrCard({ url, templateSlug, recipient }: LetterQrCardProps
       width: 640,
       margin: 2,
       color: {
-        dark: "#241d33", // Warna ink Lettera
+        dark: "#4A3527", // Warna Dark Brown Lettera
         light: "#ffffff",
       },
       errorCorrectionLevel: "H",

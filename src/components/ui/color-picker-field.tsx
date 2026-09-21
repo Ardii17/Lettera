@@ -87,7 +87,7 @@ export function ColorPickerField({
       </div>
 
       {/* Custom Color Picker & Hex Input Bar */}
-      <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-2.5 rounded-xl border border-seal-100 bg-[#fdf8f9] p-2.5 sm:p-3 overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-2.5 rounded-xl border border-seal-100 bg-seal-50 p-2.5 sm:p-3 overflow-hidden">
         {/* Native picker trigger button */}
         <button
           type="button"

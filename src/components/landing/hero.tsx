@@ -40,8 +40,8 @@ export function Hero() {
                 </span>
                 <span className="text-xs text-ink-muted">/ surat</span>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-0.5 text-xs font-bold text-rose-700 border border-rose-200">
-                <Tag className="h-3 w-3" />
+              <span className="inline-flex items-center gap-1 rounded-full bg-seal-100 px-2.5 py-0.5 text-xs font-bold text-seal-800 border border-seal-200">
+                <Tag className="h-3 w-3 text-seal-600" />
                 HEMAT 70%
               </span>
             </div>

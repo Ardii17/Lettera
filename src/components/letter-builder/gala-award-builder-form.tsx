@@ -10,7 +10,6 @@ import type {
 import {
   Calendar,
   Clock,
-  Palette,
   Award,
   ImageIcon,
   Sparkles,

@@ -1,34 +1,48 @@
 @import "tailwindcss";
 
 /*
- * Design tokens — "stationery" direction.
- * Halaman bernuansa kertas gading / ivory (#F4EEE2), surat terasa seperti kertas putih (#ffffff),
- * aksen memakai warna wax seal.
+ * Design tokens — Warm Stationery, Dark Brown, Bronze & Champagne Palette.
+ * Background: #F4EEE2 (Kertas gading / warm ivory)
+ * Dark Brown: #4A3527 (Espresso hangat / tipografi utama)
+ * Bronze: #A87550 (Aksen wax seal & tombol primer)
+ * Champagne: #D9B994 (Aksen sekunder, border, & highlight lembut)
  */
 @theme {
   --color-page: #F4EEE2;
-  --color-page-deep: #EBE2D3;
+  --color-page-deep: #EAE0D0;
   --color-primary: #F4EEE2;
   --color-paper: #ffffff;
-  --color-ink: #241d33;
-  --color-ink-soft: #5c5470;
-  --color-ink-muted: #8b849c;
-  --color-line: #E8DFD1;
-  --color-line-strong: #D8CEBD;
 
-  --color-seal-50: #fdf1f3;
-  --color-seal-100: #fadfe4;
-  --color-seal-200: #f2bfc8;
-  --color-seal-400: #d9657a;
-  --color-seal-500: #c03a52;
-  --color-seal-600: #a32b42;
-  --color-seal-700: #821f33;
+  /* Dark brown typography tokens */
+  --color-ink: #4A3527;
+  --color-ink-soft: #6E533F;
+  --color-ink-muted: #967C69;
+
+  /* Warm line & borders */
+  --color-line: #E4D7C3;
+  --color-line-strong: #D1BFA6;
+
+  /* Bronze & Champagne accent scale (replacing previous red seal) */
+  --color-seal-50: #FBF7F0;
+  --color-seal-100: #F3E7D5;
+  --color-seal-200: #E6CEB0;
+  --color-seal-300: #D9B994;
+  --color-seal-400: #BF8C62;
+  --color-seal-500: #A87550;
+  --color-seal-600: #8E5C38;
+  --color-seal-700: #704423;
+  --color-seal-800: #523118;
+
+  /* Explicit palette aliases */
+  --color-dark-brown: #4A3527;
+  --color-bronze: #A87550;
+  --color-champagne: #D9B994;
 
   --color-sage: #2f6f5e;
   --color-gold: #b8912f;
 
-  --shadow-lift: 0 1px 2px rgb(36 29 51 / 0.04), 0 12px 32px -12px rgb(36 29 51 / 0.18);
-  --shadow-paper: 0 1px 1px rgb(36 29 51 / 0.03), 0 24px 60px -24px rgb(36 29 51 / 0.25);
+  --shadow-lift: 0 1px 2px rgb(74 53 39 / 0.05), 0 12px 32px -12px rgb(74 53 39 / 0.15);
+  --shadow-paper: 0 1px 1px rgb(74 53 39 / 0.04), 0 24px 60px -24px rgb(74 53 39 / 0.22);
 
   --animate-settle: settle 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-rise: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -93,7 +107,7 @@
   }
 
   ::selection {
-    background-color: var(--color-seal-100);
+    background-color: var(--color-seal-200);
     color: var(--color-ink);
   }
 
@@ -136,7 +150,7 @@
   .envelope-lining {
     background-image: radial-gradient(
         circle at 15% 15%,
-        color-mix(in srgb, var(--color-seal-100) 70%, transparent),
+        color-mix(in srgb, var(--color-seal-300) 50%, transparent),
         transparent 45%
       ),
       radial-gradient(circle at 85% 0%, var(--color-page-deep), transparent 50%);
