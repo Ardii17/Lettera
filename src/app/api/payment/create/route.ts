@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLetterForPayment } from "@/services/letters.service";
-import { createQrisCharge } from "@/lib/payment/midtrans";
+import { createSnapTransaction } from "@/lib/payment/midtrans";
 
 export async function POST(request: Request) {
   try {
@@ -31,29 +31,28 @@ export async function POST(request: Request) {
       });
     }
 
-    const chargeResult = await createQrisCharge({
+    const snapResult = await createSnapTransaction({
       orderId: letter.publicToken,
       amount: letter.amount,
       templateName: letter.templateName,
-      customerName: letter.payerName || "Pelanggan Lettera",
-      customerEmail: letter.payerEmail || "pembeli@lettera.my.id",
     });
 
     return NextResponse.json({
-      ok: chargeResult.ok,
+      ok: snapResult.ok,
       isPaid: false,
-      qrUrl: chargeResult.qrUrl,
-      qrString: chargeResult.qrString,
-      expiresAt: chargeResult.expiresAt,
-      isMock: chargeResult.isMock,
-      error: chargeResult.error,
+      snapToken: snapResult.snapToken,
+      redirectUrl: snapResult.redirectUrl,
+      clientKey: snapResult.clientKey,
+      snapScriptUrl: snapResult.snapScriptUrl,
+      isMock: snapResult.isMock,
+      error: snapResult.error,
     });
   } catch (err: unknown) {
     console.error("[api/payment/create] Error:", err);
     return NextResponse.json(
       {
         ok: false,
-        error: "Terjadi kesalahan saat memproses pembuatan QRIS.",
+        error: "Terjadi kesalahan saat memproses pembuatan pembayaran QRIS.",
       },
       { status: 500 },
     );

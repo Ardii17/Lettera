@@ -5,45 +5,59 @@ export interface MidtransConfig {
   clientKey: string;
   isProduction: boolean;
   baseUrl: string;
+  snapBaseUrl: string;
+  snapScriptUrl: string;
 }
 
 export function getMidtransConfig(): MidtransConfig {
   const serverKey = process.env.MIDTRANS_SERVER_KEY ?? "";
   const clientKey = process.env.MIDTRANS_CLIENT_KEY ?? "";
-  const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true";
+
+  // Otomatis deteksi mode Production jika serverKey berawalan 'Mid-server-' atau env bernilai 'true'
+  const isProduction =
+    process.env.MIDTRANS_IS_PRODUCTION === "true" ||
+    (serverKey.startsWith("Mid-server-") && !serverKey.startsWith("SB-"));
+
   const baseUrl = isProduction
     ? "https://api.midtrans.com"
     : "https://api.sandbox.midtrans.com";
 
-  return { serverKey, clientKey, isProduction, baseUrl };
+  const snapBaseUrl = isProduction
+    ? "https://app.midtrans.com"
+    : "https://app.sandbox.midtrans.com";
+
+  const snapScriptUrl = isProduction
+    ? "https://app.midtrans.com/snap/snap.js"
+    : "https://app.sandbox.midtrans.com/snap/snap.js";
+
+  return { serverKey, clientKey, isProduction, baseUrl, snapBaseUrl, snapScriptUrl };
 }
 
-export interface CreateQrisParams {
+export interface CreateSnapParams {
   orderId: string;
   amount: number;
   templateName?: string;
-  customerName?: string;
-  customerEmail?: string;
 }
 
-export interface QrisTransactionResult {
+export interface SnapTransactionResult {
   ok: boolean;
   orderId: string;
-  qrUrl: string;
-  qrString?: string;
-  expiresAt?: string;
+  snapToken?: string;
+  redirectUrl?: string;
+  clientKey: string;
+  snapScriptUrl: string;
   isMock: boolean;
   error?: string;
 }
 
 /**
- * Membuat transaksi QRIS Dinamis ke Midtrans Core API.
- * Jika MIDTRANS_SERVER_KEY belum diisi di environment, sistem otomatis masuk ke
- * mode demo/simulasi agar pengembangan dan pengujian lokal tetap dapat berjalan.
+ * Membuat transaksi QRIS resmi di Midtrans melalui Snap API.
+ * Snap API aktif secara bawaan untuk semua akun Midtrans (Sandbox maupun Production)
+ * dengan nominal tagihan otomatis terkunci (tanpa bisa diketik manual oleh pembeli).
  */
-export async function createQrisCharge(
-  params: CreateQrisParams,
-): Promise<QrisTransactionResult> {
+export async function createSnapTransaction(
+  params: CreateSnapParams,
+): Promise<SnapTransactionResult> {
   const config = getMidtransConfig();
 
   // Mode Fallback / Mock jika Server Key belum dikonfigurasi
@@ -51,9 +65,10 @@ export async function createQrisCharge(
     return {
       ok: true,
       orderId: params.orderId,
-      qrUrl: "/images/qris-code.jpeg",
-      qrString: "00020101021226570011ID.LETTERA.MOCK.QRIS5405150005802ID5914LETTERA STUDIO6007JAKARTA6304ABCD",
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(),
+      snapToken: "mock-snap-token",
+      redirectUrl: "",
+      clientKey: config.clientKey,
+      snapScriptUrl: config.snapScriptUrl,
       isMock: true,
     };
   }
@@ -62,14 +77,9 @@ export async function createQrisCharge(
     const authHeader = `Basic ${Buffer.from(`${config.serverKey}:`).toString("base64")}`;
 
     const payload = {
-      payment_type: "qris",
       transaction_details: {
         order_id: params.orderId,
         gross_amount: params.amount,
-      },
-      customer_details: {
-        first_name: params.customerName?.trim() || "Pelanggan Lettera",
-        email: params.customerEmail?.trim() || "pembeli@lettera.my.id",
       },
       item_details: [
         {
@@ -79,12 +89,10 @@ export async function createQrisCharge(
           name: `Penerbitan Surat ${params.templateName || "Digital"}`,
         },
       ],
-      qris: {
-        acquirer: "gopay",
-      },
+      enabled_payments: ["qris", "gopay", "shopeepay"],
     };
 
-    const response = await fetch(`${config.baseUrl}/v2/charge`, {
+    const response = await fetch(`${config.snapBaseUrl}/snap/v1/transactions`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -96,53 +104,36 @@ export async function createQrisCharge(
 
     const data = await response.json();
 
-    if (!response.ok || (data.status_code !== "201" && data.status_code !== "200")) {
-      // Jika order ID sudah pernah dibuat, coba ambil statusnya
-      if (data.status_code === "406" || data.status_message?.toLowerCase().includes("duplicate")) {
-        const qrUrl = data.actions?.find((a: { name: string; url: string }) => a.name === "generate-qr-code")?.url;
-        if (qrUrl) {
-          return {
-            ok: true,
-            orderId: params.orderId,
-            qrUrl,
-            qrString: data.qr_string,
-            expiresAt: data.expiry_time,
-            isMock: false,
-          };
-        }
-      }
-
-      console.error("[Midtrans charge error]", data);
+    if (!response.ok || !data.token) {
+      console.error("[Midtrans Snap error]", data);
       return {
         ok: false,
         orderId: params.orderId,
-        qrUrl: "/images/qris-code.jpeg",
+        clientKey: config.clientKey,
+        snapScriptUrl: config.snapScriptUrl,
         isMock: false,
-        error: data.status_message || "Gagal membuat barcode QRIS di Midtrans.",
+        error: data.error_messages?.join(", ") || "Gagal membuat transaksi di Midtrans.",
       };
     }
-
-    const qrUrl =
-      data.actions?.find((a: { name: string; url: string }) => a.name === "generate-qr-code")?.url ||
-      data.qr_url ||
-      "/images/qris-code.jpeg";
 
     return {
       ok: true,
       orderId: params.orderId,
-      qrUrl,
-      qrString: data.qr_string,
-      expiresAt: data.expiry_time,
+      snapToken: data.token,
+      redirectUrl: data.redirect_url,
+      clientKey: config.clientKey,
+      snapScriptUrl: config.snapScriptUrl,
       isMock: false,
     };
-  } catch (error: unknown) {
-    console.error("[Midtrans connection error]", error);
+  } catch (err: unknown) {
+    console.error("[Midtrans Snap connection error]", err);
     return {
       ok: false,
       orderId: params.orderId,
-      qrUrl: "/images/qris-code.jpeg",
+      clientKey: config.clientKey,
+      snapScriptUrl: config.snapScriptUrl,
       isMock: false,
-      error: error instanceof Error ? error.message : "Gagal terhubung ke server Midtrans.",
+      error: err instanceof Error ? err.message : "Gagal terhubung ke Midtrans.",
     };
   }
 }
