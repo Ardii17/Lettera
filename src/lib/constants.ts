@@ -3,7 +3,11 @@ export const siteConfig = {
   tagline: "Create Something They'll Remember.",
   description:
     "Tulis surat digital dengan template yang indah, lihat hasilnya secara langsung, lalu bagikan lewat satu tautan.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL &&
+    !process.env.NEXT_PUBLIC_SITE_URL.includes("lettera-ivory")
+      ? process.env.NEXT_PUBLIC_SITE_URL
+      : "https://lettera.my.id",
   locale: "id_ID",
 } as const;
 

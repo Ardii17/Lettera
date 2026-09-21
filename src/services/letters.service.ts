@@ -20,8 +20,9 @@ function asContent(value: unknown): LetterContent {
   return result;
 }
 
-export function buildShareUrl(templateSlug: string, token: string) {
-  return `${siteConfig.url}/letter/${templateSlug}/${token}`;
+export function buildShareUrl(templateSlug: string, token: string, baseUrl?: string) {
+  const origin = baseUrl ? baseUrl.replace(/\/+$/, "") : siteConfig.url;
+  return `${origin}/letter/${templateSlug}/${token}`;
 }
 
 async function toSummary(rows: LetterRow[]): Promise<LetterSummary[]> {

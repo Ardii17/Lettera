@@ -6,6 +6,7 @@ import { buttonStyles } from "@/components/ui/button";
 import { ShareActions } from "@/components/ui/share-actions";
 import { LetterQrCard } from "@/components/ui/letter-qr-card";
 import { TemplateThumbnail } from "@/components/templates/template-thumbnail";
+import { headers } from "next/headers";
 import { recipientOf } from "@/lib/validations/letter-content";
 import { buildShareUrl, getPublicLetter } from "@/services/letters.service";
 import { getTemplate } from "@/templates/registry";
@@ -26,7 +27,15 @@ export default async function LetterCreatedPage({
 
   if (!template || !letter || letter.templateSlug !== templateSlug) notFound();
 
-  const shareUrl = buildShareUrl(templateSlug, token);
+  const headerList = await headers();
+  const host = headerList.get("x-forwarded-host") || headerList.get("host");
+  const proto = headerList.get("x-forwarded-proto") || "https";
+  const origin =
+    host && !host.includes("lettera-ivory")
+      ? `${proto}://${host}`
+      : undefined;
+
+  const shareUrl = buildShareUrl(templateSlug, token, origin);
   const letterPath = `/letter/${templateSlug}/${token}`;
   const recipient = recipientOf(template, letter.content);
 
