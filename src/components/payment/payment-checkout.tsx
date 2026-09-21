@@ -414,17 +414,6 @@ export function PaymentCheckout({
                 </div>
               </div>
             )}
-
-            {/* Supported Providers */}
-            <div className="rounded-2xl bg-page p-4 text-xs text-ink-muted leading-relaxed">
-              <div className="flex items-center gap-2 font-semibold text-ink mb-1.5">
-                <Wallet className="h-4 w-4 text-seal-600" />
-                <span>Mendukung Seluruh Aplikasi Finansial Indonesia:</span>
-              </div>
-              <p>
-                BCA Mobile, Mandiri Livin&rsquo;, BRImo, BNI Mobile, GoPay, OVO, Dana, ShopeePay, LinkAja, serta semua aplikasi m-Banking yang memiliki fitur scan QRIS.
-              </p>
-            </div>
           </div>
 
           {/* Kolom Kanan: Rincian Pesanan & Tombol Periksa Status (Tanpa Form Identitas) */}

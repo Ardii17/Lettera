@@ -103,12 +103,12 @@ export async function createSnapTransaction(
       ],
     };
 
-    // Jika user secara spesifik mendefinisikan MIDTRANS_ENABLED_PAYMENTS di .env, gunakan itu.
-    // Jika tidak, biarkan kosong agar Midtrans otomatis menampilkan seluruh channel yang sudah aktif
-    // di Dashboard Merchant Production (mencegah error 'No payment channels available').
-    if (process.env.MIDTRANS_ENABLED_PAYMENTS) {
-      payload.enabled_payments = process.env.MIDTRANS_ENABLED_PAYMENTS.split(",").map((s) => s.trim());
-    }
+    // Mengunci pembayaran HANYA ke QRIS.
+    // Dengan hanya menentukan 1 metode (qris), Midtrans Snap secara otomatis
+    // MELOMPATI halaman pemilihan metode dan LANGSUNG memunculkan barcode QRIS di layar!
+    payload.enabled_payments = process.env.MIDTRANS_ENABLED_PAYMENTS
+      ? process.env.MIDTRANS_ENABLED_PAYMENTS.split(",").map((s) => s.trim())
+      : ["qris"];
 
     const response = await fetch(`${config.snapBaseUrl}/snap/v1/transactions`, {
       method: "POST",
