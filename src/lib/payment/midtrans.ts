@@ -11,17 +11,24 @@ export interface MidtransConfig {
 
 export function getMidtransConfig(): MidtransConfig {
   const serverKey = process.env.MIDTRANS_SERVER_KEY ?? "";
-  const clientKey = process.env.MIDTRANS_CLIENT_KEY ?? "";
+  const clientKey =
+    process.env.MIDTRANS_CLIENT_KEY ??
+    process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY ??
+    "";
 
-  // Jika serverKey berawalan SB- atau MIDTRANS_IS_PRODUCTION eksplisit bernilai 'false', gunakan Sandbox
-  const isSandbox =
+  // Mode Sandbox aktif jika:
+  // 1. process.env.MIDTRANS_IS_PRODUCTION === "false"
+  // 2. ATAU serverKey diawali "SB-"
+  const isExplicitSandbox =
     process.env.MIDTRANS_IS_PRODUCTION === "false" ||
     serverKey.startsWith("SB-");
 
+  // Mode Production aktif jika BUKAN explicit sandbox DAN
+  // (MIDTRANS_IS_PRODUCTION === "true" ATAU serverKey diawali "Mid-server-")
   const isProduction =
-    !isSandbox &&
+    !isExplicitSandbox &&
     (process.env.MIDTRANS_IS_PRODUCTION === "true" ||
-      (serverKey.startsWith("Mid-server-") && !serverKey.startsWith("SB-")));
+      serverKey.startsWith("Mid-server-"));
 
   const baseUrl = isProduction
     ? "https://api.midtrans.com"

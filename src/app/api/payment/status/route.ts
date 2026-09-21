@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLetterForPayment } from "@/services/letters.service";
-import { checkMidtransStatus } from "@/lib/payment/midtrans";
+import { checkMidtransStatus, getMidtransConfig } from "@/lib/payment/midtrans";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -35,8 +35,10 @@ export async function GET(request: Request) {
       });
     }
 
-    // Jika mode simulasi bayar (untuk pengujian sandbox/demo)
-    if (simulate) {
+    const midtransConfig = getMidtransConfig();
+
+    // Jika mode simulasi bayar (HANYA diizinkan saat Sandbox / Testing, dicegah di Production)
+    if (simulate && !midtransConfig.isProduction) {
       const supabase = await createClient();
       await supabase
         .from("letters")

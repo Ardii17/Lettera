@@ -72,6 +72,7 @@ export function PaymentCheckout({
   amount,
   snapScriptUrl,
   clientKey,
+  isProduction = false,
 }: PaymentCheckoutProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -248,8 +249,9 @@ export function PaymentCheckout({
     }
   };
 
-  // 6. Fitur Simulasi Pembayaran Sukses (Sandbox / Demo)
+  // 6. Fitur Simulasi Pembayaran Sukses (Sandbox / Demo only)
   const handleSimulateSuccess = async () => {
+    if (isProduction) return;
     setSimulating(true);
     setError(null);
     try {
@@ -350,8 +352,8 @@ export function PaymentCheckout({
                 <p className="text-sm font-semibold text-ink">Menyiapkan QRIS Dinamis Midtrans...</p>
                 <p className="text-xs text-ink-muted">Mengunci nominal {formattedAmount}</p>
               </div>
-            ) : isMock ? (
-              /* Fallback / Mock View jika Midtrans key belum diisi */
+            ) : isMock && !isProduction ? (
+              /* Fallback / Mock View jika Midtrans key belum diisi (hanya pada mode development/sandbox) */
               <div className="space-y-4">
                 <div className="relative mx-auto flex max-w-[320px] flex-col items-center overflow-hidden rounded-2xl border-2 border-dashed border-seal-200 bg-white p-4 shadow-sm">
                   <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-slate-50">
