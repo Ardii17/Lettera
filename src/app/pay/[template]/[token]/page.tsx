@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/container";
 import { PaymentCheckout } from "@/components/payment/payment-checkout";
 import { getLetterForPayment } from "@/services/letters.service";
 import { getTemplate } from "@/templates/registry";
+import { getMidtransConfig } from "@/lib/payment/midtrans";
 
 export const metadata: Metadata = {
   title: "Pembayaran QRIS — Lettera",
@@ -28,6 +29,8 @@ export default async function PaymentPage({
     redirect(`/created/${templateSlug}/${token}`);
   }
 
+  const { snapScriptUrl, clientKey, isProduction } = getMidtransConfig();
+
   return (
     <Container className="py-6 sm:py-12">
       <PaymentCheckout
@@ -37,6 +40,9 @@ export default async function PaymentPage({
         title={letter.title}
         recipient={letter.recipient}
         amount={letter.amount}
+        snapScriptUrl={snapScriptUrl}
+        clientKey={clientKey}
+        isProduction={isProduction}
       />
     </Container>
   );

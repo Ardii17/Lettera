@@ -13,10 +13,15 @@ export function getMidtransConfig(): MidtransConfig {
   const serverKey = process.env.MIDTRANS_SERVER_KEY ?? "";
   const clientKey = process.env.MIDTRANS_CLIENT_KEY ?? "";
 
-  // Otomatis deteksi mode Production jika serverKey berawalan 'Mid-server-' atau env bernilai 'true'
+  // Jika serverKey berawalan SB- atau MIDTRANS_IS_PRODUCTION eksplisit bernilai 'false', gunakan Sandbox
+  const isSandbox =
+    process.env.MIDTRANS_IS_PRODUCTION === "false" ||
+    serverKey.startsWith("SB-");
+
   const isProduction =
-    process.env.MIDTRANS_IS_PRODUCTION === "true" ||
-    (serverKey.startsWith("Mid-server-") && !serverKey.startsWith("SB-"));
+    !isSandbox &&
+    (process.env.MIDTRANS_IS_PRODUCTION === "true" ||
+      (serverKey.startsWith("Mid-server-") && !serverKey.startsWith("SB-")));
 
   const baseUrl = isProduction
     ? "https://api.midtrans.com"

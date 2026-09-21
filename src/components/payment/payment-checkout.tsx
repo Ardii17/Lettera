@@ -58,6 +58,9 @@ interface PaymentCheckoutProps {
   title: string;
   recipient?: string;
   amount: number;
+  snapScriptUrl: string;
+  clientKey: string;
+  isProduction?: boolean;
 }
 
 export function PaymentCheckout({
@@ -67,6 +70,8 @@ export function PaymentCheckout({
   title,
   recipient,
   amount,
+  snapScriptUrl,
+  clientKey,
 }: PaymentCheckoutProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -79,8 +84,6 @@ export function PaymentCheckout({
   // Dynamic QRIS Snap State dari Midtrans
   const [snapToken, setSnapToken] = useState<string | null>(null);
   const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
-  const [snapScriptUrl, setSnapScriptUrl] = useState<string>("https://app.midtrans.com/snap/snap.js");
-  const [clientKey, setClientKey] = useState<string>("");
   const [isMock, setIsMock] = useState<boolean>(false);
   const [loadingPayment, setLoadingPayment] = useState<boolean>(true);
   const [scriptLoaded, setScriptLoaded] = useState<boolean>(false);
@@ -119,8 +122,6 @@ export function PaymentCheckout({
         if (data.ok) {
           if (data.snapToken) setSnapToken(data.snapToken);
           if (data.redirectUrl) setRedirectUrl(data.redirectUrl);
-          if (data.snapScriptUrl) setSnapScriptUrl(data.snapScriptUrl);
-          if (data.clientKey) setClientKey(data.clientKey);
           setIsMock(Boolean(data.isMock));
         } else {
           setError(data.error || "Gagal menginisialisasi pembayaran Midtrans.");
@@ -142,26 +143,41 @@ export function PaymentCheckout({
 
   // 2. Embed Snap UI jika snapToken & script sudah siap
   useEffect(() => {
-    if (!snapToken || !scriptLoaded || isMock) return;
+    if (!snapToken || isMock) return;
 
-    if (window.snap && typeof window.snap.embed === "function") {
-      try {
-        window.snap.embed(snapToken, {
-          embedId: "snap-container",
-          onSuccess: () => {
-            setPaymentSuccess(true);
-            router.push(`/created/${templateSlug}/${token}`);
-          },
-          onPending: (result) => {
-            console.log("Midtrans payment pending:", result);
-          },
-          onError: (err) => {
-            console.error("Midtrans payment error:", err);
-          },
-        });
-      } catch (e) {
-        console.error("Gagal melakukan embed Snap:", e);
+    function doEmbed() {
+      if (typeof window !== "undefined" && window.snap && typeof window.snap.embed === "function") {
+        try {
+          window.snap.embed(snapToken!, {
+            embedId: "snap-container",
+            onSuccess: () => {
+              setPaymentSuccess(true);
+              router.push(`/created/${templateSlug}/${token}`);
+            },
+            onPending: (result) => {
+              console.log("Midtrans payment pending:", result);
+            },
+            onError: (err) => {
+              console.error("Midtrans payment error:", err);
+            },
+          });
+        } catch (e) {
+          console.error("Gagal melakukan embed Snap:", e);
+        }
       }
+    }
+
+    if (scriptLoaded || (typeof window !== "undefined" && window.snap)) {
+      doEmbed();
+    } else {
+      const timer = setInterval(() => {
+        if (typeof window !== "undefined" && window.snap) {
+          clearInterval(timer);
+          setScriptLoaded(true);
+          doEmbed();
+        }
+      }, 250);
+      return () => clearInterval(timer);
     }
   }, [snapToken, scriptLoaded, isMock, templateSlug, token, router]);
 
@@ -259,6 +275,7 @@ export function PaymentCheckout({
       {/* Load Midtrans Snap JS */}
       {snapScriptUrl && (
         <Script
+          id="midtrans-snap-script"
           src={snapScriptUrl}
           data-client-key={clientKey}
           strategy="afterInteractive"
