@@ -59,8 +59,8 @@ export function FinalPreviewModal({
       aria-labelledby="preview-modal-title"
       className="fixed inset-0 z-50 flex flex-col bg-page overflow-y-auto animate-in fade-in duration-200"
     >
-      {/* ================= STICKY TOP CONFIRMATION BAR ================= */}
-      <header className="sticky top-0 z-50 border-b border-line bg-white/95 px-4 py-3 shadow-md backdrop-blur-md dark:bg-neutral-900/95 sm:px-6">
+      {/* ================= STICKY TOP CONFIRMATION BAR (DESKTOP / TABLET ONLY) ================= */}
+      <header className="hidden sm:block sticky top-0 z-50 border-b border-line bg-white/95 px-4 py-3 shadow-md backdrop-blur-md dark:bg-neutral-900/95 sm:px-6">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
           
           {/* Warning disclaimer info */}
@@ -119,7 +119,7 @@ export function FinalPreviewModal({
       </main>
 
       {/* ================= BOTTOM CONFIRMATION FLOATING BAR (MOBILE FRIENDLY) ================= */}
-      <footer className="sticky bottom-0 z-40 border-t border-line bg-white/95 px-4 py-3 shadow-lg backdrop-blur-md dark:bg-neutral-900/95 sm:hidden">
+      <footer className="sticky bottom-0 z-40 border-t border-line bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-lg backdrop-blur-md dark:bg-neutral-900/95 sm:hidden">
         <div className="flex items-center gap-2">
           <Button
             type="button"

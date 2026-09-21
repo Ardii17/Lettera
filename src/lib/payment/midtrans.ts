@@ -88,7 +88,7 @@ export async function createSnapTransaction(
   try {
     const authHeader = `Basic ${Buffer.from(`${config.serverKey}:`).toString("base64")}`;
 
-    const payload = {
+    const payload: Record<string, unknown> = {
       transaction_details: {
         order_id: params.orderId,
         gross_amount: params.amount,
@@ -101,8 +101,14 @@ export async function createSnapTransaction(
           name: `Penerbitan Surat ${params.templateName || "Digital"}`,
         },
       ],
-      enabled_payments: ["qris", "gopay", "shopeepay"],
     };
+
+    // Jika user secara spesifik mendefinisikan MIDTRANS_ENABLED_PAYMENTS di .env, gunakan itu.
+    // Jika tidak, biarkan kosong agar Midtrans otomatis menampilkan seluruh channel yang sudah aktif
+    // di Dashboard Merchant Production (mencegah error 'No payment channels available').
+    if (process.env.MIDTRANS_ENABLED_PAYMENTS) {
+      payload.enabled_payments = process.env.MIDTRANS_ENABLED_PAYMENTS.split(",").map((s) => s.trim());
+    }
 
     const response = await fetch(`${config.snapBaseUrl}/snap/v1/transactions`, {
       method: "POST",
