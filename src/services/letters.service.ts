@@ -161,6 +161,8 @@ export async function getLetterForPayment(token: string) {
     title: data.title ?? meta?.name ?? "Digital Letter",
     amount: data.amount ?? 15000,
     paymentStatus: data.payment_status ?? "pending",
+    payerName: data.payer_name ?? "",
+    payerEmail: data.payer_email ?? "",
     content: asContent(data.content),
     recipient: meta ? recipientOf(meta, asContent(data.content)) : "",
   };

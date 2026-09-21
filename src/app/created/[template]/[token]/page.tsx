@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/container";
 import { buttonStyles } from "@/components/ui/button";
 import { ShareActions } from "@/components/ui/share-actions";
+import { LetterQrCard } from "@/components/ui/letter-qr-card";
 import { TemplateThumbnail } from "@/components/templates/template-thumbnail";
 import { recipientOf } from "@/lib/validations/letter-content";
 import { buildShareUrl, getPublicLetter } from "@/services/letters.service";
@@ -50,6 +51,10 @@ export default async function LetterCreatedPage({
 
           <div className="mt-6">
             <ShareActions url={shareUrl} letterPath={letterPath} recipient={recipient} />
+          </div>
+
+          <div className="mt-6">
+            <LetterQrCard url={shareUrl} templateSlug={templateSlug} recipient={recipient} />
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3 border-t border-line pt-8">
