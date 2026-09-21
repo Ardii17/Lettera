@@ -5,7 +5,6 @@ import { useSearchParams, usePathname } from "next/navigation";
 import {
   Calendar,
   Clock,
-  MapPin,
   Check,
   Copy,
   ExternalLink,
@@ -14,9 +13,9 @@ import {
   Play,
   Award,
   ChevronRight,
-  ShieldAlert,
-  HeartHandshake,
+  ShieldCheck,
   Crown,
+  Scroll,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { toParagraphs } from "@/lib/utils/format";
@@ -136,7 +135,6 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  // Mode Thumbnail atau Katalog: isolasi audio & modal fixed
   const isThumbnail =
     Boolean(data._isThumbnail) ||
     pathname === "/templates" ||
@@ -158,11 +156,9 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
     !isThumbnail &&
     !isEditorPreview;
 
-  // Nama tamu dinamis
   const guestParam = searchParams.get("to");
   const displayedRecipient = guestParam || content.recipientName;
 
-  // State
   const [isOpen, setIsOpen] = useState(!shouldStartClosed);
   const [copied, setCopied] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -170,7 +166,6 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Countdown effect
   useEffect(() => {
     if (!content.targetDateIso) return;
     setCountdown(computeCountdown(content.targetDateIso));
@@ -182,7 +177,6 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
     return () => clearInterval(interval);
   }, [content.targetDateIso]);
 
-  // Handle audio play/pause
   const toggleAudio = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -193,7 +187,6 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
     }
   };
 
-  // Salin nomor rekening donasi
   const handleCopyAccount = () => {
     if (!content.charityAccountNo) return;
     navigator.clipboard.writeText(content.charityAccountNo);
@@ -217,98 +210,154 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
       style={bgStyle}
       className={cn(
         "relative min-h-screen w-full font-serif antialiased selection:bg-amber-500/40 selection:text-white",
-        isThumbnail ? "overflow-hidden text-[11px] p-4" : "p-4 sm:p-6 md:p-12",
+        isThumbnail ? "overflow-hidden text-[11px] p-3" : "p-4 sm:p-8 md:p-14",
         className,
       )}
     >
-      {/* Background Subtle Gold Dust & Velvet Texture */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent opacity-80" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#d4af3708_1px,transparent_1px),linear-gradient(to_bottom,#d4af3708_1px,transparent_1px)] bg-[size:5rem_5rem]" />
+      {/* Background Obsidian Stardust & Filigree Lights */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,#d4af3715,transparent_60%),radial-gradient(circle_at_bottom,#581c2518,transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#d4af370a_1px,transparent_1px),linear-gradient(to_bottom,#d4af370a_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
-      <div className="relative mx-auto max-w-3xl space-y-10 sm:space-y-14">
+      {/* Floating Audio Player */}
+      {showFloatingAudio && (
+        <>
+          <audio ref={audioRef} src={content.musicUrl} loop preload="none" />
+          <button
+            type="button"
+            onClick={toggleAudio}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-amber-500/60 bg-[#0a0a0e]/95 px-4 py-2.5 text-xs text-amber-200 backdrop-blur-md shadow-[0_4px_25px_rgba(212,175,55,0.3)] hover:scale-105 transition-all duration-200"
+            aria-label={isPlaying ? "Jeda orkestra" : "Putar orkestra waltz"}
+          >
+            {isPlaying ? (
+              <>
+                <Pause className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                <span className="font-sans text-[11px] font-semibold tracking-wider uppercase">Orchestra: On</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3.5 h-3.5 text-amber-400" />
+                <span className="font-sans text-[11px] font-semibold tracking-wider uppercase">Play Orchestra</span>
+              </>
+            )}
+          </button>
+        </>
+      )}
+
+      <div className="relative mx-auto max-w-4xl space-y-12">
         {/* ============================================================ */}
-        {/* HERO SECTION: BLACK VELVET & GOLDEN CREST SEAL CARD         */}
+        {/* 1. HERO SECTION: OBSIDIAN & LIQUID GOLD IMPERIAL FOLIO       */}
         {/* ============================================================ */}
         <section
           style={cardBgStyle}
-          className="relative overflow-hidden rounded-2xl border-2 border-amber-500/40 shadow-[0_15px_50px_-10px_rgba(212,175,55,0.25)] backdrop-blur-md p-6 sm:p-10 space-y-8"
+          className="relative overflow-hidden rounded-3xl border-2 border-amber-500/50 shadow-[0_20px_60px_-15px_rgba(212,175,55,0.3)] backdrop-blur-md p-6 sm:p-12 space-y-8"
         >
-          {/* Art Deco Geometric Corner Ornaments */}
-          <div className="pointer-events-none absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-amber-400/60" />
-          <div className="pointer-events-none absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-amber-400/60" />
-          <div className="pointer-events-none absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-amber-400/60" />
-          <div className="pointer-events-none absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-amber-400/60" />
+          {/* 24K Gold Corner Accents */}
+          <div className="pointer-events-none absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-amber-400" />
+          <div className="pointer-events-none absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-amber-400" />
+          <div className="pointer-events-none absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-amber-400" />
+          <div className="pointer-events-none absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-amber-400" />
 
-          {/* Top Invitation Tagline */}
-          <div className="border-b border-amber-500/20 pb-4 flex flex-wrap items-center justify-between gap-2 text-xs tracking-[0.25em] uppercase font-sans text-amber-300/80">
-            <div className="flex items-center gap-2">
-              <Crown className="w-4 h-4 text-amber-400" />
-              <span>{content.galaTagline || "Annual Distinction Awards"}</span>
+          {/* Crest & Latin Honor Header */}
+          <div className="flex flex-col items-center text-center space-y-3 pt-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-950/40 px-4 py-1.5 text-[10px] font-sans tracking-[0.3em] uppercase text-amber-300 shadow-inner">
+              <Crown className="w-3.5 h-3.5 text-amber-400" />
+              <span>{content.goldenCrestTitle || "HONORIS CAUSA // EXCELLENCE"}</span>
             </div>
-            <span className="text-amber-500/60 font-mono text-[11px]">{content.invitationNo || "INV-GALA-001"}</span>
+
+            <p className="font-sans text-xs tracking-[0.25em] text-amber-400/80 uppercase font-medium">
+              {content.galaTagline}
+            </p>
+
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-extralight tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-400 uppercase leading-tight pt-1">
+              {content.galaTitle}
+            </h1>
+
+            <p className="font-sans text-xs text-stone-400">
+              Diselenggarakan oleh <span className="text-amber-200 font-semibold">{content.hostCommittee}</span>
+            </p>
           </div>
 
-          {/* Card Body */}
-          <div className="space-y-6 text-center pt-2">
-            {/* Golden Crest Seal */}
-            <div className="inline-flex flex-col items-center justify-center">
-              <div className="relative w-20 h-20 rounded-full border-2 border-amber-400 bg-gradient-to-br from-amber-300 via-amber-600 to-amber-900 flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.4)] ring-4 ring-amber-500/20">
-                <Award className="w-10 h-10 text-zinc-950 drop-shadow-sm" />
-              </div>
-              <div className="mt-3 text-[10px] tracking-[0.3em] uppercase text-amber-300/90 font-sans font-semibold">
-                {content.goldenCrestTitle || "EXCELLENCE // DISTINCTION"}
-              </div>
-            </div>
-
-            <div className="space-y-2 max-w-xl mx-auto">
-              <p className="text-xs uppercase tracking-[0.3em] text-amber-400/80 font-sans">
-                The Board of Trustees Cordially Invites
-              </p>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif tracking-tight text-white uppercase font-light leading-tight">
-                {content.galaTitle}
-              </h1>
-              <p className="text-sm sm:text-base text-zinc-400 font-sans">
-                Under the Esteemed Patronage of <span className="text-amber-200 font-medium">{content.chairpersonName}</span>
+          {/* Guest Dignitary Admission Parchment */}
+          <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-b from-[#181824] to-[#0e0e14] p-6 text-center space-y-4 max-w-xl mx-auto shadow-inner">
+            <div className="space-y-1">
+              <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-500/70 font-semibold">
+                Undangan Kehormatan Diberikan Kepada:
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-normal text-amber-100 italic">
+                {displayedRecipient}
+              </h3>
+              <p className="font-sans text-xs text-stone-400">
+                Atas dedikasi, kontribusi, dan komitmen kemanusiaan yang luhur
               </p>
             </div>
 
-            {/* Guest Welcome Banner */}
-            <div className="rounded-xl border border-amber-500/30 bg-zinc-950/70 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
-              <div className="space-y-1">
-                <span className="text-[11px] uppercase tracking-widest text-amber-400/70 font-sans">
-                  Tamu Kehormatan / Honored Guest
+            {!isOpen && !isThumbnail ? (
+              <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-600 text-stone-950 font-sans font-bold text-xs uppercase tracking-widest shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition-all"
+              >
+                <Award className="w-4 h-4" />
+                <span>Buka Lembaran Titah Gala</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <div className="inline-flex items-center gap-1.5 text-xs font-sans text-amber-400">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Protokol Gala Telah Diaktifkan</span>
+              </div>
+            )}
+          </div>
+
+          {/* Footer Metadata */}
+          <div className="border-t border-amber-500/20 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 font-sans text-xs text-stone-400">
+            <div className="flex items-center gap-3 text-amber-300/80">
+              <Calendar className="w-3.5 h-3.5 text-amber-400" />
+              <span>{content.eventDate}</span>
+              <span className="text-amber-500/40">•</span>
+              <Clock className="w-3.5 h-3.5 text-amber-400" />
+              <span>{content.eventTime}</span>
+            </div>
+            <span className="font-mono text-[11px] text-amber-500/60">{content.invitationNo}</span>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* 2. LUXURY GOLDEN CHRONOMETER COUNTDOWN DIALS                 */}
+        {/* ============================================================ */}
+        <section className="rounded-3xl border border-amber-500/30 bg-[#0e0e14] p-8 text-center space-y-6 shadow-lg">
+          <div className="space-y-1">
+            <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-400 font-semibold">
+              Chronometer Kehormatan
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-light text-amber-100 italic">
+              Menghitung Waktu Menuju Malam Penganugerahan
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-2">
+            {[
+              { val: countdown.days, label: "Hari", latin: "DIES" },
+              { val: countdown.hours, label: "Jam", latin: "HORAE" },
+              { val: countdown.minutes, label: "Menit", latin: "MINUTA" },
+              { val: countdown.seconds, label: "Detik", latin: "SECUNDA" },
+            ].map((unit, idx) => (
+              <div
+                key={idx}
+                className="relative flex h-24 w-24 sm:h-28 sm:w-28 flex-col items-center justify-center rounded-full border-2 border-amber-500/50 bg-gradient-to-b from-[#181822] to-[#0c0c12] shadow-[0_0_20px_rgba(212,175,55,0.15)]"
+              >
+                <div className="absolute inset-1 rounded-full border border-amber-400/20" />
+                <span className="text-2xl sm:text-3xl font-light text-amber-200">
+                  {String(unit.val).padStart(2, "0")}
                 </span>
-                <div className="text-base sm:text-lg font-serif font-medium text-white flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-amber-400" />
-                  <span>{displayedRecipient}</span>
-                </div>
+                <span className="font-sans text-[9px] uppercase tracking-wider text-amber-400/80 font-bold">
+                  {unit.label}
+                </span>
+                <span className="font-mono text-[7px] tracking-widest text-stone-500">
+                  {unit.latin}
+                </span>
               </div>
-
-              {!isOpen && !isThumbnail && (
-                <button
-                  type="button"
-                  onClick={() => setIsOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-zinc-950 text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95"
-                >
-                  <span>Buka Undangan Gala</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-
-            {/* Date & Location Specs */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 text-xs text-zinc-400 font-sans border-t border-amber-500/20">
-              <div className="flex items-center gap-3 mx-auto sm:mx-0">
-                <Calendar className="w-4 h-4 text-amber-400" />
-                <span>{content.eventDate}</span>
-                <span className="text-zinc-600">|</span>
-                <Clock className="w-4 h-4 text-amber-400" />
-                <span>{content.eventTime}</span>
-              </div>
-              <div className="text-amber-400/70 text-xs font-sans tracking-wider mx-auto sm:mx-0">
-                {content.venueName}
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -316,415 +365,283 @@ function GalaAwardTemplateInner({ data, className }: GalaAwardTemplateProps) {
         {/* INTERACTIVE CONTENT (REVEALED WHEN OPENED OR THUMBNAIL)      */}
         {/* ============================================================ */}
         {(isOpen || isThumbnail) && (
-          <div className="space-y-12 sm:space-y-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-            {/* 1. SAMBUTAN RESMI DEWAN PEMBINA */}
+          <div className="space-y-16 animate-in fade-in duration-700">
+            {/* 3. EXECUTIVE INVITATION LETTERHEAD & DECREE */}
             <section
               style={cardBgStyle}
-              className="rounded-2xl border border-amber-500/30 p-6 sm:p-10 space-y-6 relative overflow-hidden"
+              className="rounded-3xl border border-amber-500/30 p-8 sm:p-14 space-y-8 relative overflow-hidden"
             >
-              <div className="flex items-center justify-between border-b border-amber-500/20 pb-4">
-                <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                  01 // Formal Address
+              <div className="text-center space-y-2 border-b border-amber-500/20 pb-6">
+                <Scroll className="w-6 h-6 text-amber-400 mx-auto" />
+                <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-amber-400/80 block">
+                  Surat Titah Resmi Dewan Pembina
                 </span>
-                <span className="text-xs text-zinc-400 font-sans">
-                  {content.hostCommittee}
-                </span>
+                <h3 className="text-2xl sm:text-3xl font-light text-amber-100">
+                  Keputusan & Undangan Kehormatan
+                </h3>
               </div>
 
-              <div className="prose prose-invert max-w-none text-zinc-300 font-serif leading-relaxed text-base sm:text-lg space-y-4">
-                {toParagraphs(content.invitationLetter).map((paragraph, idx) => (
-                  <p key={idx} className="first-letter:text-4xl first-letter:font-serif first-letter:text-amber-400 first-letter:float-left first-letter:mr-2">
-                    {paragraph}
+              <div className="space-y-4 text-base sm:text-lg leading-relaxed text-stone-300 max-w-3xl mx-auto">
+                {toParagraphs(content.invitationLetter).map((para, idx) => (
+                  <p key={idx} className={idx === 0 ? "first-letter:text-4xl first-letter:text-amber-400 first-letter:float-left first-letter:mr-2" : ""}>
+                    {para}
                   </p>
                 ))}
               </div>
 
-              <div className="border-t border-amber-500/20 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-sans text-zinc-400">
-                <div>
-                  Hormat kami, <span className="text-amber-300 font-medium">{content.senderName}</span>
+              <div className="border-t border-amber-500/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div className="space-y-0.5">
+                  <p className="font-sans text-xs text-stone-400">Atas Nama Komite Kehormatan,</p>
+                  <p className="text-lg text-amber-200 font-semibold">{content.chairpersonName}</p>
+                  <p className="font-sans text-[11px] text-stone-500">The Board of Trustees & Foundation Council</p>
                 </div>
-                <div className="text-zinc-500">
-                  {content.venueFloor}
+                <div className="shrink-0 flex items-center gap-2 rounded-full border border-amber-500/40 px-4 py-1.5 font-sans text-xs text-amber-300">
+                  <ShieldCheck className="w-4 h-4 text-amber-400" />
+                  <span>Verified Executive Decree</span>
                 </div>
               </div>
             </section>
 
-            {/* 2. LIVE GOLDEN COUNTDOWN TIMER */}
-            {content.targetDateIso && (
-              <section
-                style={cardBgStyle}
-                className="rounded-2xl border-2 border-amber-500/40 p-6 sm:p-8 space-y-6 text-center shadow-[0_0_35px_-10px_rgba(212,175,55,0.2)]"
-              >
-                <div className="space-y-1">
-                  <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                    Countdown to the Grand Soirée
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-serif text-white uppercase font-light">
-                    Hitung Mundur Menuju Malam Gala
-                  </h3>
-                </div>
-
-                {countdown.isExpired ? (
-                  <div className="inline-block rounded-lg bg-amber-950/60 border border-amber-600 px-6 py-3 text-amber-200 font-sans text-sm">
-                    Malam penganugerahan telah resmi berlangsung. Selamat menikmati resepsi agung.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto">
-                    {[
-                      { label: "Hari", value: countdown.days },
-                      { label: "Jam", value: countdown.hours },
-                      { label: "Menit", value: countdown.minutes },
-                      { label: "Detik", value: countdown.seconds },
-                    ].map((item) => (
-                      <div
-                        key={item.label}
-                        className="rounded-xl border border-amber-500/30 bg-zinc-950/80 p-3 sm:p-4 text-center shadow-inner"
-                      >
-                        <div
-                          suppressHydrationWarning
-                          className="text-2xl sm:text-4xl font-serif font-bold text-amber-300 tracking-tight"
-                        >
-                          {String(item.value).padStart(2, "0")}
-                        </div>
-                        <div className="text-[10px] sm:text-xs uppercase tracking-wider text-zinc-400 mt-1 font-sans">
-                          {item.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </section>
-            )}
-
-            {/* 3. GALERI 3 FOTO RED CARPET & BALLROOM */}
+            {/* 4. DIPLOMATIC FIVE-COURSE BANQUET ITINERARY */}
             <section className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-amber-500/20 pb-4">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                    02 // Gala Highlights
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-serif text-white font-light mt-1">
-                    Kemegahan Malam Penganugerahan
-                  </h3>
-                </div>
-                <span className="text-xs text-amber-400/80 font-sans">3 Prestigious Frames</span>
+              <div className="text-center space-y-2">
+                <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-400 font-bold block">
+                  Susunan Agenda Malam
+                </span>
+                <h3 className="text-3xl sm:text-4xl font-light text-amber-100 italic">
+                  Imperial Banquet & Ceremony Program
+                </h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  {
-                    url: content.photo1Url,
-                    title: content.photo1Title,
-                    caption: content.photo1Caption,
-                    badge: "PINNACLE #01",
-                  },
-                  {
-                    url: content.photo2Url,
-                    title: content.photo2Title,
-                    caption: content.photo2Caption,
-                    badge: "PINNACLE #02",
-                  },
-                  {
-                    url: content.photo3Url,
-                    title: content.photo3Title,
-                    caption: content.photo3Caption,
-                    badge: "PINNACLE #03",
-                  },
-                ].map((p, idx) => (
+                  { time: content.session1Time, title: content.session1Title, desc: content.session1Desc, course: "COURSE I // SOIRÉE" },
+                  { time: content.session2Time, title: content.session2Title, desc: content.session2Desc, course: "COURSE II // IMPERIAL DINNER" },
+                  { time: content.session3Time, title: content.session3Title, desc: content.session3Desc, course: "COURSE III // AWARD CONFERMENT" },
+                  { time: content.session4Time, title: content.session4Title, desc: content.session4Desc, course: "COURSE IV // CHARITY WALTZ" },
+                ].map((item, idx) => (
                   <div
                     key={idx}
                     style={cardBgStyle}
-                    className="group rounded-xl border border-amber-500/30 overflow-hidden flex flex-col transition-all duration-300 hover:border-amber-400 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                    className="rounded-3xl border border-amber-500/30 p-6 sm:p-8 space-y-3 shadow-md hover:border-amber-400 transition-colors flex flex-col justify-between"
                   >
-                    <div className="relative aspect-4/5 overflow-hidden bg-zinc-950">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={p.url}
-                        alt={p.title || "Gala Photo"}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute top-3 left-3 bg-zinc-950/80 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-sans text-amber-300 border border-amber-500/40">
-                        {p.badge}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between font-sans text-xs">
+                        <span className="font-semibold text-amber-300 bg-amber-950/60 border border-amber-500/30 px-3 py-1 rounded-full">
+                          {item.time}
+                        </span>
+                        <span className="font-mono text-[10px] tracking-wider uppercase text-stone-400">
+                          {item.course}
+                        </span>
                       </div>
-                    </div>
-                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
-                      <div>
-                        <h4 className="text-base font-serif text-white font-medium group-hover:text-amber-300 transition-colors">
-                          {p.title}
-                        </h4>
-                        <p className="text-xs text-zinc-400 font-sans leading-relaxed mt-2 border-t border-amber-500/20 pt-2">
-                          {p.caption}
-                        </p>
-                      </div>
+                      <h4 className="text-xl font-normal text-amber-100 pt-1">
+                        {item.title}
+                      </h4>
+                      <p className="font-sans text-xs text-stone-400 leading-relaxed">
+                        {item.desc}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             </section>
 
-            {/* 4. RUNDOWN 4 SESI ACARA GALA */}
-            <section
-              style={cardBgStyle}
-              className="rounded-2xl border border-amber-500/30 p-6 sm:p-10 space-y-8"
-            >
-              <div className="flex items-center justify-between border-b border-amber-500/20 pb-4">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                    03 // Order of Proceedings
+            {/* 5. HALL OF DISTINCTION: FRAMED HONOREES GALLERY */}
+            {(content.photo1Url || content.photo2Url || content.photo3Url) && (
+              <section className="space-y-6">
+                <div className="text-center space-y-2">
+                  <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-400 font-bold block">
+                    Galeri Kemegahan Malam
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-serif text-white font-light mt-1">
-                    Susunan Acara Malam Gala
+                  <h3 className="text-3xl sm:text-4xl font-light text-amber-100 italic">
+                    The Hall of Distinction & Heritage
                   </h3>
                 </div>
-                <Clock className="w-5 h-5 text-amber-400" />
-              </div>
 
-              <div className="space-y-6">
-                {[
-                  {
-                    num: "01",
-                    time: content.session1Time,
-                    title: content.session1Title,
-                    desc: content.session1Desc,
-                  },
-                  {
-                    num: "02",
-                    time: content.session2Time,
-                    title: content.session2Title,
-                    desc: content.session2Desc,
-                  },
-                  {
-                    num: "03",
-                    time: content.session3Time,
-                    title: content.session3Title,
-                    desc: content.session3Desc,
-                  },
-                  {
-                    num: "04",
-                    time: content.session4Time,
-                    title: content.session4Title,
-                    desc: content.session4Desc,
-                  },
-                ].map((s) => (
-                  <div
-                    key={s.num}
-                    className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-start border-b border-amber-500/20 pb-5 last:border-b-0 last:pb-0"
-                  >
-                    <div className="sm:col-span-3 text-xs font-sans text-amber-400 font-bold tracking-wider">
-                      {s.time}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {content.photo1Url && (
+                    <div className="rounded-3xl bg-[#0f0f15] border-2 border-amber-500/50 p-4 shadow-[0_10px_30px_rgba(212,175,55,0.2)] space-y-3">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-stone-900 border border-amber-500/30">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={content.photo1Url}
+                          alt={content.photo1Title || "Photo 1"}
+                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        />
+                      </div>
+                      <div className="bg-[#181822] p-3 rounded-xl border border-amber-500/20 text-center space-y-1">
+                        <p className="text-sm font-semibold text-amber-200">{content.photo1Title}</p>
+                        <p className="font-sans text-[11px] text-stone-400 italic">&ldquo;{content.photo1Caption}&rdquo;</p>
+                      </div>
                     </div>
-                    <div className="sm:col-span-9 space-y-1">
-                      <h4 className="text-base font-serif text-white font-medium">{s.title}</h4>
-                      <p className="text-xs text-zinc-400 leading-relaxed font-sans">{s.desc}</p>
+                  )}
+
+                  {content.photo2Url && (
+                    <div className="rounded-3xl bg-[#0f0f15] border-2 border-amber-500/50 p-4 shadow-[0_10px_30px_rgba(212,175,55,0.2)] space-y-3">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-stone-900 border border-amber-500/30">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={content.photo2Url}
+                          alt={content.photo2Title || "Photo 2"}
+                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        />
+                      </div>
+                      <div className="bg-[#181822] p-3 rounded-xl border border-amber-500/20 text-center space-y-1">
+                        <p className="text-sm font-semibold text-amber-200">{content.photo2Title}</p>
+                        <p className="font-sans text-[11px] text-stone-400 italic">&ldquo;{content.photo2Caption}&rdquo;</p>
+                      </div>
                     </div>
+                  )}
+
+                  {content.photo3Url && (
+                    <div className="rounded-3xl bg-[#0f0f15] border-2 border-amber-500/50 p-4 shadow-[0_10px_30px_rgba(212,175,55,0.2)] space-y-3">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-stone-900 border border-amber-500/30">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={content.photo3Url}
+                          alt={content.photo3Title || "Photo 3"}
+                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        />
+                      </div>
+                      <div className="bg-[#181822] p-3 rounded-xl border border-amber-500/20 text-center space-y-1">
+                        <p className="text-sm font-semibold text-amber-200">{content.photo3Title}</p>
+                        <p className="font-sans text-[11px] text-stone-400 italic">&ldquo;{content.photo3Caption}&rdquo;</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* 6. STRICT BLACK-TIE PROTOCOL & VENUE SPREAD */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Dress Code Protocol */}
+              <div
+                style={cardBgStyle}
+                className="rounded-3xl border border-amber-500/30 p-8 space-y-6 flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-400 font-bold block">
+                    Protokol Busana Resmi
+                  </span>
+                  <h4 className="text-2xl font-light text-amber-100">
+                    {content.dressCodeTitle}
+                  </h4>
+                  <p className="font-sans text-xs text-stone-400 leading-relaxed">
+                    {content.dressCodeNotes}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-2 font-sans text-xs">
+                  <div className="flex items-center gap-2.5 bg-[#0e0e14] p-3 rounded-xl border border-amber-500/20">
+                    <span className="h-5 w-5 rounded-full bg-[#d4af37] border border-amber-200 shadow-sm" />
+                    <span className="text-stone-300 font-medium">24K Gold</span>
                   </div>
-                ))}
-              </div>
-            </section>
-
-            {/* 5. VENUE & GOOGLE MAPS NAVIGATION */}
-            <section
-              style={cardBgStyle}
-              className="rounded-2xl border border-amber-500/30 p-6 sm:p-10 space-y-6"
-            >
-              <div className="flex items-center justify-between border-b border-amber-500/20 pb-4">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                    04 // Grand Ballroom Venue
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-serif text-white font-light mt-1">
-                    Lokasi & Peta Navigasi
-                  </h3>
+                  <div className="flex items-center gap-2.5 bg-[#0e0e14] p-3 rounded-xl border border-amber-500/20">
+                    <span className="h-5 w-5 rounded-full bg-[#0a0a0c] border border-stone-600 shadow-sm" />
+                    <span className="text-stone-300 font-medium">Obsidian</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 bg-[#0e0e14] p-3 rounded-xl border border-amber-500/20">
+                    <span className="h-5 w-5 rounded-full bg-[#581c25] border border-stone-600 shadow-sm" />
+                    <span className="text-stone-300 font-medium">Burgundy</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 bg-[#0e0e14] p-3 rounded-xl border border-amber-500/20">
+                    <span className="h-5 w-5 rounded-full bg-[#fbfbf7] border border-stone-300 shadow-sm" />
+                    <span className="text-stone-300 font-medium">Pearl White</span>
+                  </div>
                 </div>
-                <MapPin className="w-5 h-5 text-amber-400" />
               </div>
 
-              <div className="space-y-3">
-                <div className="text-xl font-serif text-white font-medium">{content.venueName}</div>
-                <div className="text-xs font-sans text-amber-300/80">{content.venueFloor}</div>
-                <p className="text-sm text-zinc-400 leading-relaxed font-sans">{content.venueAddress}</p>
-              </div>
+              {/* Venue & Coordinates */}
+              <div
+                style={cardBgStyle}
+                className="rounded-3xl border border-amber-500/30 p-8 space-y-6 flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-400 font-bold block">
+                    Lokasi Perhelatan
+                  </span>
+                  <h4 className="text-2xl font-light text-amber-100">
+                    {content.venueName}
+                  </h4>
+                  <p className="font-sans text-xs text-amber-300 font-semibold">
+                    {content.venueFloor}
+                  </p>
+                  <p className="font-sans text-xs text-stone-400 leading-relaxed">
+                    {content.venueAddress}
+                  </p>
+                </div>
 
-              {content.mapsUrl && (
-                <div className="pt-2">
+                {content.mapsUrl && (
                   <a
                     href={content.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-amber-600 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-white text-xs font-sans tracking-widest uppercase transition-all duration-300 border border-amber-400/40 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-600 text-stone-950 font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:scale-105 transition-all"
                   >
-                    <ExternalLink className="w-4 h-4 text-amber-200" />
-                    <span>Petunjuk Rute (Google Maps)</span>
+                    <ExternalLink className="w-4 h-4" />
+                    <span>Petunjuk Lokasi (Google Maps)</span>
                   </a>
-                </div>
-              )}
+                )}
+              </div>
             </section>
 
-            {/* 6. DRESS CODE & DONASI YAYASAN AMAL */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              {/* Dress Code Section */}
+            {/* 7. PHILANTHROPY ENDOWMENT FUND CARD */}
+            {content.charityAccountNo && (
               <section
                 style={cardBgStyle}
-                className="rounded-2xl border border-amber-500/30 p-6 sm:p-8 space-y-6 flex flex-col justify-between"
+                className="rounded-3xl border-2 border-amber-500/40 p-8 sm:p-12 text-center space-y-6 max-w-2xl mx-auto shadow-[0_0_40px_rgba(212,175,55,0.2)]"
               >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
-                    <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                      05 // Dress Code
-                    </span>
-                    <ShieldAlert className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-serif text-white font-medium">{content.dressCodeTitle}</h4>
-                    <p className="text-xs text-zinc-400 mt-2 leading-relaxed font-sans">{content.dressCodeNotes}</p>
-                  </div>
-                </div>
-
-                {/* Swatches */}
-                <div className="space-y-2 pt-4 border-t border-amber-500/20">
-                  <span className="text-[10px] uppercase font-sans tracking-widest text-zinc-500">
-                    Recommended Attire Palette
+                <div className="space-y-1">
+                  <span className="font-sans text-[10px] tracking-[0.25em] uppercase text-amber-400 font-bold">
+                    Dana Amal & Filantropi Pendidikan
                   </span>
-                  <div className="grid grid-cols-4 gap-2">
-                    {[
-                      { hex: content.paletteColor1, name: content.paletteName1 },
-                      { hex: content.paletteColor2, name: content.paletteName2 },
-                      { hex: content.paletteColor3, name: content.paletteName3 },
-                      { hex: content.paletteColor4, name: content.paletteName4 },
-                    ].map((swatch, i) => (
-                      <div key={i} className="space-y-1.5 text-center">
-                        <div
-                          style={{ backgroundColor: swatch.hex }}
-                          className="h-10 w-full rounded-md border border-amber-500/40 shadow-sm"
-                        />
-                        <div className="text-[9px] font-sans text-zinc-400 truncate">{swatch.name}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              {/* Donasi Filantropi */}
-              <section
-                style={cardBgStyle}
-                className="rounded-2xl border border-amber-500/30 p-6 sm:p-8 space-y-6 flex flex-col justify-between"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
-                    <span className="text-xs uppercase tracking-[0.25em] text-amber-400 font-sans font-semibold">
-                      06 // Philanthropy Pledge
-                    </span>
-                    <HeartHandshake className="w-4 h-4 text-amber-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-serif text-white font-medium">
-                      {content.charityBankName || "Philanthropy Fund"}
-                    </h4>
-                    <p className="text-xs text-zinc-400 mt-2 leading-relaxed font-sans">{content.charityNote}</p>
-                  </div>
+                  <h4 className="text-2xl sm:text-3xl font-light text-amber-100 italic">
+                    {content.charityBankName}
+                  </h4>
+                  <p className="font-sans text-xs text-stone-400 max-w-md mx-auto pt-1">
+                    {content.charityNote}
+                  </p>
                 </div>
 
-                {content.charityAccountNo && (
-                  <div className="rounded-xl border border-amber-500/30 bg-zinc-950/80 p-4 space-y-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-amber-400/80 font-sans">
-                          Nomor Rekening Donasi
-                        </div>
-                        <div className="text-base font-mono font-bold text-white tracking-wider">
-                          {content.charityAccountNo}
-                        </div>
-                        <div className="text-xs text-zinc-400 font-sans mt-0.5">
-                          a.n. {content.charityAccountName}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleCopyAccount}
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-sans font-bold transition-all",
-                          copied
-                            ? "bg-emerald-950 border border-emerald-600 text-emerald-300"
-                            : "bg-amber-950/80 hover:bg-amber-900 border border-amber-500/50 text-amber-200",
-                        )}
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Tersalin</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>Salin</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </section>
-            </div>
+                <div className="bg-[#0c0c12] p-5 rounded-2xl border border-amber-500/30 font-mono space-y-1 max-w-md mx-auto">
+                  <p className="text-xl font-bold text-amber-200 tracking-widest">{content.charityAccountNo}</p>
+                  <p className="font-sans text-xs text-stone-400">a.n. {content.charityAccountName}</p>
+                </div>
 
-            {/* FOOTER */}
-            <footer className="text-center py-8 space-y-3 border-t border-amber-500/20 font-sans text-xs text-zinc-500">
-              <p className="tracking-widest uppercase">
-                {content.galaTitle} &bull; {content.hostCommittee}
-              </p>
-              <p className="text-[11px] text-zinc-600">
-                Lettera Prestige Invitation Engine &copy; 2026. All Rights Reserved.
-              </p>
-            </footer>
+                <button
+                  type="button"
+                  onClick={handleCopyAccount}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-amber-950/80 hover:bg-amber-900 border border-amber-500/50 text-amber-200 font-sans text-xs uppercase tracking-wider transition-all"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-4 h-4 text-amber-400" />
+                      <span>Nomor Rekening Tersalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>Salin Rekening Filantropi</span>
+                    </>
+                  )}
+                </button>
+              </section>
+            )}
           </div>
         )}
       </div>
-
-      {/* ============================================================ */}
-      {/* FLOATING ORCHESTRA AUDIO PLAYER (ISOLATED DARI /templates)   */}
-      {/* ============================================================ */}
-      {showFloatingAudio && (
-        <aside
-          aria-label="Pemutar Audio Gala"
-          className="fixed bottom-5 right-5 z-40 animate-in fade-in slide-in-from-bottom-3 duration-500"
-        >
-          <audio ref={audioRef} src={content.musicUrl} loop preload="none" />
-          <button
-            type="button"
-            onClick={toggleAudio}
-            className="group flex items-center gap-3 bg-zinc-950/90 hover:bg-zinc-900 text-amber-200 border border-amber-500/40 px-4 py-2.5 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 ring-1 ring-amber-400/40"
-          >
-            <div className="relative flex items-center justify-center">
-              <span
-                className={cn(
-                  "w-3 h-3 rounded-full bg-amber-400 transition-opacity",
-                  isPlaying ? "animate-ping opacity-75" : "opacity-0",
-                )}
-              />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
-            </div>
-            <span className="text-xs font-sans tracking-wider max-w-[140px] truncate">
-              {content.musicTitle || "Orchestral Symphony"}
-            </span>
-            <div className="p-1 rounded-full bg-zinc-800 group-hover:bg-amber-500 group-hover:text-zinc-950 transition-colors">
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
-            </div>
-          </button>
-        </aside>
-      )}
     </div>
   );
 }
 
-export function GalaAwardTemplate(props: GalaAwardTemplateProps) {
+export function GalaAwardTemplate({
+  data,
+  className,
+}: GalaAwardTemplateProps) {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-[400px] flex items-center justify-center bg-zinc-950 text-amber-400 font-serif text-sm">
-          Loading Grand Gala Invitation...
-        </div>
-      }
-    >
-      <GalaAwardTemplateInner {...props} />
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0e]" />}>
+      <GalaAwardTemplateInner data={data} className={className} />
     </Suspense>
   );
 }

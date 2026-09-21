@@ -3,21 +3,16 @@
 import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import {
-  Calendar,
-  Clock,
-  MapPin,
   Check,
   Copy,
   ExternalLink,
   Sparkles,
-  Pause,
   Play,
-  Ticket,
   ChevronRight,
   Zap,
   Disc,
-  PartyPopper,
   Flame,
+  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { toParagraphs } from "@/lib/utils/format";
@@ -137,7 +132,6 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  // Mode Thumbnail atau Katalog: isolasi audio & modal fixed
   const isThumbnail =
     Boolean(data._isThumbnail) ||
     pathname === "/templates" ||
@@ -159,11 +153,9 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
     !isThumbnail &&
     !isEditorPreview;
 
-  // Nama tamu dinamis
   const guestParam = searchParams.get("to");
   const displayedRecipient = guestParam || content.recipientName;
 
-  // State
   const [isOpen, setIsOpen] = useState(!shouldStartClosed);
   const [copied, setCopied] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -171,7 +163,6 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Countdown effect
   useEffect(() => {
     if (!content.targetDateIso) return;
     setCountdown(computeCountdown(content.targetDateIso));
@@ -183,7 +174,6 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
     return () => clearInterval(interval);
   }, [content.targetDateIso]);
 
-  // Handle audio play/pause
   const toggleAudio = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -194,7 +184,6 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
     }
   };
 
-  // Salin nomor rekening/e-wallet
   const handleCopyAccount = () => {
     if (!content.giftAccountNo) return;
     navigator.clipboard.writeText(content.giftAccountNo);
@@ -218,73 +207,96 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
       style={bgStyle}
       className={cn(
         "relative min-h-screen w-full font-sans antialiased selection:bg-fuchsia-500 selection:text-white",
-        isThumbnail ? "overflow-hidden text-[11px] p-4" : "p-4 sm:p-6 md:p-12",
+        isThumbnail ? "overflow-hidden text-[11px] p-3" : "p-4 sm:p-8 md:p-14",
         className,
       )}
     >
-      {/* Cyber Neon Background Lights */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,#ff007f15,transparent_50%),radial-gradient(circle_at_bottom_left,#00f2fe15,transparent_50%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#1e1e3820_1px,transparent_1px),linear-gradient(to_bottom,#1e1e3820_1px,transparent_1px)] bg-[size:3rem_3rem]" />
+      {/* Cyber Neon Background Aura & Glow Grids */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,#ff007f18,transparent_50%),radial-gradient(ellipse_at_bottom,#00f2fe18,transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#00f2fe08_1px,transparent_1px),linear-gradient(to_bottom,#ff007f08_1px,transparent_1px)] bg-[size:3rem_3rem]" />
 
-      <div className="relative mx-auto max-w-3xl space-y-10 sm:space-y-14">
+      {/* Floating Audio Beats Button */}
+      {showFloatingAudio && (
+        <>
+          <audio ref={audioRef} src={content.musicUrl} loop preload="none" />
+          <button
+            type="button"
+            onClick={toggleAudio}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-cyan-400 bg-zinc-950/90 px-4 py-2.5 text-xs text-cyan-300 backdrop-blur-md shadow-[0_0_20px_rgba(0,242,254,0.4)] hover:scale-105 transition-all duration-200"
+            aria-label={isPlaying ? "Mute synthwave" : "Play synthwave beat"}
+          >
+            {isPlaying ? (
+              <>
+                <Disc className="w-4 h-4 text-fuchsia-400 animate-spin" />
+                <span className="font-mono text-[11px] font-bold tracking-wider uppercase">Beats: ON</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-4 h-4 text-cyan-400" />
+                <span className="font-mono text-[11px] font-bold tracking-wider uppercase">Drop Beat</span>
+              </>
+            )}
+          </button>
+        </>
+      )}
+
+      <div className="relative mx-auto max-w-4xl space-y-12">
         {/* ============================================================ */}
-        {/* HERO SECTION: VIP FESTIVAL PASS & BACKSTAGE LANYARD         */}
+        {/* 1. HERO SECTION: VIP FESTIVAL LANYARD & HOLOGRAPHIC PASS    */}
         {/* ============================================================ */}
-        <section
-          style={cardBgStyle}
-          className="relative overflow-hidden rounded-2xl border-2 border-fuchsia-500/40 shadow-[0_0_50px_-12px_rgba(255,0,127,0.3)] backdrop-blur-md"
-        >
-          {/* Lanyard Top Clip Bar */}
-          <div className="flex justify-center pt-3 pb-1">
-            <div className="w-16 h-3 rounded-full bg-zinc-800 border border-zinc-700 shadow-inner flex items-center justify-center">
-              <div className="w-6 h-1 rounded-full bg-zinc-600" />
+        <section className="relative mx-auto max-w-xl">
+          {/* Lanyard Fabric Strap Visual Hanging Down */}
+          <div className="flex flex-col items-center">
+            <div className="w-12 h-10 bg-gradient-to-b from-fuchsia-600 to-cyan-500 rounded-t-sm shadow-md flex items-center justify-center">
+              <div className="w-4 h-6 border-x-2 border-zinc-900/40" />
+            </div>
+            <div className="w-20 h-4 bg-zinc-800 rounded-md border border-zinc-700 shadow-inner flex items-center justify-center">
+              <div className="w-8 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#00f2fe]" />
             </div>
           </div>
 
-          {/* Top Hologram Strip */}
-          <div className="bg-gradient-to-r from-cyan-500/20 via-fuchsia-500/30 to-cyan-500/20 px-6 py-3 flex items-center justify-between border-y border-fuchsia-500/30 text-xs font-mono tracking-widest text-cyan-300">
-            <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-fuchsia-400 animate-pulse" />
-              <span className="uppercase font-bold">{content.partySub || "Sweet 17 Cyberpunk Odyssey"}</span>
-            </div>
-            <span className="text-fuchsia-400 font-bold">{content.ticketCode || "NEON-PASS-2026"}</span>
-          </div>
-
-          {/* Main Card Content */}
-          <div className="p-6 sm:p-10 space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-950/80 border border-fuchsia-500/50 text-fuchsia-300 text-xs font-mono font-medium">
-                  <Flame className="w-3.5 h-3.5 text-amber-400" />
-                  <span>{content.ageCelebration || "Sweet 17"}</span>
-                </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-300 drop-shadow-[0_0_25px_rgba(255,0,127,0.4)]">
-                  {content.partyTitle}
-                </h1>
-                <p className="text-sm sm:text-base text-zinc-300 font-mono">
-                  Hosted by <span className="text-cyan-400 font-bold">{content.celebrantName}</span>
-                </p>
+          {/* Holographic Lanyard Badge Card */}
+          <div
+            style={cardBgStyle}
+            className="relative overflow-hidden rounded-3xl border-2 border-fuchsia-500/60 shadow-[0_0_60px_-10px_rgba(255,0,127,0.4)] backdrop-blur-md p-6 sm:p-10 space-y-6 -mt-1"
+          >
+            {/* Top Pass Status */}
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-4 font-mono text-xs">
+              <div className="inline-flex items-center gap-2 rounded-full bg-fuchsia-950/60 border border-fuchsia-500/50 px-3 py-1 text-fuchsia-300 font-bold tracking-widest text-[10px] uppercase shadow-[0_0_10px_rgba(255,0,127,0.3)]">
+                <Zap className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+                <span>{content.vipBadge}</span>
               </div>
-
-              {/* VIP Glowing Stamp */}
-              <div className="shrink-0 self-start border-2 border-dashed border-cyan-400/80 bg-cyan-950/40 text-cyan-300 px-4 py-3 rounded-xl text-center font-mono text-[11px] tracking-widest uppercase space-y-1 shadow-[0_0_20px_rgba(0,242,254,0.3)]">
-                <div className="font-bold flex items-center justify-center gap-1">
-                  <Disc className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
-                  <span>VIP PASS</span>
-                </div>
-                <div className="text-white font-extrabold text-xs">{content.vipBadge || "ALL ACCESS"}</div>
-              </div>
+              <span className="text-cyan-400 font-bold tracking-widest text-[11px]">{content.ticketCode}</span>
             </div>
 
-            {/* Guest Welcome Banner */}
-            <div className="rounded-xl border border-fuchsia-500/30 bg-zinc-950/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <span className="text-[11px] uppercase tracking-wider text-fuchsia-400/80 font-mono">
-                  VIP Guest Access
-                </span>
-                <div className="text-base sm:text-xl font-bold text-white flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-cyan-400" />
-                  <span>{displayedRecipient}</span>
+            {/* Title & Celebrant Heading */}
+            <div className="text-center space-y-2">
+              <span className="font-mono text-xs uppercase tracking-[0.3em] text-cyan-400 font-semibold block">
+                {content.partySub}
+              </span>
+              <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white italic drop-shadow-[0_0_25px_rgba(0,242,254,0.4)]">
+                {content.partyTitle}
+              </h1>
+              <p className="font-mono text-sm text-fuchsia-400 font-bold">
+                Starring <span className="text-white underline decoration-cyan-400 decoration-2">{content.celebrantName}</span>
+              </p>
+            </div>
+
+            {/* VIP Guest Pass Barcode Stub */}
+            <div className="rounded-2xl border border-dashed border-cyan-500/40 bg-zinc-950/80 p-5 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-center sm:text-left">
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-mono tracking-widest uppercase text-zinc-500">
+                    VIP Guestlist Attendee
+                  </span>
+                  <p className="text-lg font-bold text-cyan-300 flex items-center justify-center sm:justify-start gap-2">
+                    <Sparkles className="w-4 h-4 text-fuchsia-400" />
+                    <span>{displayedRecipient}</span>
+                  </p>
+                </div>
+                <div className="font-mono text-[10px] text-zinc-400 sm:text-right">
+                  <p className="text-fuchsia-400 font-bold">ACCESS: ALL AREAS</p>
+                  <p>{content.eventDate}</p>
                 </div>
               </div>
 
@@ -292,29 +304,51 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
                 <button
                   type="button"
                   onClick={() => setIsOpen(true)}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-fuchsia-600 to-cyan-600 hover:from-fuchsia-500 hover:to-cyan-500 text-white text-xs font-mono font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_25px_rgba(255,0,127,0.5)] hover:scale-105 active:scale-95"
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-fuchsia-600 via-pink-600 to-cyan-500 text-white font-mono font-bold text-xs uppercase tracking-widest shadow-[0_0_25px_rgba(255,0,127,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
-                  <Ticket className="w-4 h-4" />
-                  <span>Claim VIP Pass & Enter</span>
+                  <Flame className="w-4 h-4 text-amber-300" />
+                  <span>Tap to Activate VIP Wristband</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}
             </div>
 
-            {/* Date & Location Specs */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1 text-xs text-zinc-400 font-mono border-t border-zinc-800/80">
-              <div className="flex items-center gap-3">
-                <Calendar className="w-4 h-4 text-cyan-400" />
-                <span>{content.eventDate}</span>
-                <span className="text-zinc-600">|</span>
-                <Clock className="w-4 h-4 text-fuchsia-400" />
-                <span>{content.eventTime}</span>
-              </div>
-              <div className="flex items-center gap-2 tracking-widest text-[10px] text-zinc-500">
-                <span>|||| |||||| ||| ||||| ||||</span>
-                <span>{content.ticketCode}</span>
-              </div>
+            {/* Barcode Strip */}
+            <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between font-mono text-[10px] text-zinc-500">
+              <span className="tracking-widest">||| |||| || | ||||| |||</span>
+              <span className="uppercase text-cyan-400 font-semibold">{content.eventTime}</span>
             </div>
+          </div>
+        </section>
+
+        {/* ============================================================ */}
+        {/* 2. NEON LED STAGE DIGITAL COUNTDOWN TIMER                     */}
+        {/* ============================================================ */}
+        <section className="rounded-2xl border-2 border-cyan-500/30 bg-zinc-950/90 p-6 shadow-[0_0_30px_-5px_rgba(0,242,254,0.2)] text-center space-y-4">
+          <div className="flex items-center justify-center gap-2 font-mono text-xs uppercase tracking-widest text-cyan-400 font-bold">
+            <Radio className="w-4 h-4 text-fuchsia-400 animate-pulse" />
+            <span>Festival Stage Countdown Clock</span>
+          </div>
+
+          <div className="grid grid-cols-4 gap-3 sm:gap-6 max-w-lg mx-auto">
+            {[
+              { val: countdown.days, label: "DAYS" },
+              { val: countdown.hours, label: "HOURS" },
+              { val: countdown.minutes, label: "MINS" },
+              { val: countdown.seconds, label: "SECS" },
+            ].map((unit, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl border border-fuchsia-500/30 bg-zinc-900/80 p-3 sm:p-4 shadow-[inset_0_0_15px_rgba(255,0,127,0.15)] flex flex-col items-center justify-center"
+              >
+                <span className="font-mono text-2xl sm:text-4xl font-black text-white drop-shadow-[0_0_12px_#00f2fe]">
+                  {String(unit.val).padStart(2, "0")}
+                </span>
+                <span className="font-mono text-[9px] sm:text-[10px] uppercase font-bold text-fuchsia-400 tracking-wider mt-1">
+                  {unit.label}
+                </span>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -322,425 +356,275 @@ function NeonBashTemplateInner({ data, className }: NeonBashTemplateProps) {
         {/* INTERACTIVE CONTENT (REVEALED WHEN OPENED OR THUMBNAIL)      */}
         {/* ============================================================ */}
         {(isOpen || isThumbnail) && (
-          <div className="space-y-12 sm:space-y-16 animate-in fade-in slide-in-from-bottom-8 duration-700">
-            {/* 1. PARTY MESSAGE & CELEBRATION MANIFESTO */}
+          <div className="space-y-16 animate-in fade-in duration-700">
+            {/* 3. BIRTHDAY MESSAGE CALLOUT */}
             <section
               style={cardBgStyle}
-              className="rounded-2xl border border-zinc-800 p-6 sm:p-10 space-y-6 relative overflow-hidden"
+              className="rounded-3xl border border-zinc-800 p-6 sm:p-10 space-y-6 relative overflow-hidden"
             >
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
-                <span className="text-xs uppercase tracking-[0.2em] text-cyan-400 font-mono font-bold">
-                  01 // Celebration Message
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-fuchsia-600/10 rounded-full blur-2xl" />
+              <div className="space-y-2">
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-400 font-semibold block">
+                  A Message From The Celebrant
                 </span>
-                <span className="text-xs text-fuchsia-400 font-mono font-semibold">
-                  #PartyVibes
-                </span>
+                <h3 className="text-2xl sm:text-3xl font-black uppercase text-white italic">
+                  Let’s Light Up The Night!
+                </h3>
               </div>
 
-              <div className="prose prose-invert max-w-none text-zinc-200 font-sans leading-relaxed text-base sm:text-lg space-y-4">
-                {toParagraphs(content.partyMessage).map((paragraph, idx) => (
-                  <p key={idx} className="first-letter:text-3xl first-letter:font-mono first-letter:text-cyan-400 first-letter:mr-1">
-                    {paragraph}
-                  </p>
+              <div className="space-y-4 font-sans text-base text-zinc-300 leading-relaxed max-w-2xl">
+                {toParagraphs(content.partyMessage).map((para, idx) => (
+                  <p key={idx}>{para}</p>
                 ))}
               </div>
 
-              <div className="border-t border-zinc-800 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-mono text-zinc-400">
-                <div>
-                  See you on the dance floor! Love, <span className="text-fuchsia-400 font-bold">{content.senderName}</span>
-                </div>
-                <div className="text-cyan-400">
-                  {content.venueName}
-                </div>
+              <div className="pt-4 border-t border-zinc-800 flex items-center justify-between font-mono text-xs text-zinc-400">
+                <span>With Love, <strong className="text-fuchsia-400">{content.senderName}</strong></span>
+                <span className="text-cyan-400">#NatashaSweet17</span>
               </div>
             </section>
 
-            {/* 2. LIVE NEON COUNTDOWN TIMER */}
-            {content.targetDateIso && (
-              <section
-                style={cardBgStyle}
-                className="rounded-2xl border-2 border-cyan-500/40 p-6 sm:p-8 space-y-6 text-center shadow-[0_0_35px_-10px_rgba(0,242,254,0.3)]"
-              >
-                <div className="space-y-1">
-                  <span className="text-xs uppercase tracking-[0.25em] text-cyan-400 font-mono font-bold">
-                    Countdown to Midnight Odyssey
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold uppercase text-white tracking-tight">
-                    Hitung Mundur Pesta Dimulai
-                  </h3>
-                </div>
-
-                {countdown.isExpired ? (
-                  <div className="inline-block rounded-xl bg-fuchsia-950/60 border border-fuchsia-500 px-6 py-3 text-fuchsia-300 font-mono text-sm font-bold animate-pulse">
-                    The Party is LIVE NOW! Let&apos;s dance under the neon lights!
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto">
-                    {[
-                      { label: "Hari", value: countdown.days, color: "text-cyan-400" },
-                      { label: "Jam", value: countdown.hours, color: "text-fuchsia-400" },
-                      { label: "Menit", value: countdown.minutes, color: "text-amber-400" },
-                      { label: "Detik", value: countdown.seconds, color: "text-emerald-400" },
-                    ].map((item) => (
-                      <div
-                        key={item.label}
-                        className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-3 sm:p-4 text-center shadow-inner"
-                      >
-                        <div
-                          suppressHydrationWarning
-                          className={cn("text-2xl sm:text-4xl font-mono font-black tracking-tight", item.color)}
-                        >
-                          {String(item.value).padStart(2, "0")}
-                        </div>
-                        <div className="text-[10px] sm:text-xs uppercase tracking-wider text-zinc-400 mt-1 font-mono">
-                          {item.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </section>
-            )}
-
-            {/* 3. 3 FOTO POLAROID RETRO GLOW */}
+            {/* 4. FESTIVAL STAGE LINEUP & SET TIMES TIMETABLE */}
             <section className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-zinc-800 pb-4">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-fuchsia-400 font-mono font-bold">
-                    02 // Photo Vault
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+                <div className="space-y-1">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-fuchsia-400 font-bold block">
+                    Festival Run of Show
                   </span>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white uppercase tracking-tight mt-1">
-                    Kenangan & Neon Highlights
+                  <h3 className="text-2xl sm:text-3xl font-black uppercase text-white italic">
+                    Stage Schedule & Set Times
                   </h3>
                 </div>
-                <span className="text-xs text-cyan-400 font-mono">3 Polaroid Memories</span>
+                <div className="hidden sm:flex items-center gap-1.5 font-mono text-xs text-cyan-400">
+                  <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+                  <span>LIVE ROOFTOP STAGE</span>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  {
-                    url: content.photo1Url,
-                    title: content.photo1Title,
-                    caption: content.photo1Caption,
-                    glow: "hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(0,242,254,0.3)]",
-                    badge: "VIBE #01",
-                  },
-                  {
-                    url: content.photo2Url,
-                    title: content.photo2Title,
-                    caption: content.photo2Caption,
-                    glow: "hover:border-fuchsia-400 hover:shadow-[0_0_30px_rgba(255,0,127,0.3)]",
-                    badge: "VIBE #02",
-                  },
-                  {
-                    url: content.photo3Url,
-                    title: content.photo3Title,
-                    caption: content.photo3Caption,
-                    glow: "hover:border-amber-400 hover:shadow-[0_0_30px_rgba(251,191,36,0.3)]",
-                    badge: "VIBE #03",
-                  },
-                ].map((p, idx) => (
+                  { time: content.session1Time, title: content.session1Title, desc: content.session1Desc, stage: "STAGE 01 // WELCOME FOYER", color: "border-cyan-500/40 text-cyan-300" },
+                  { time: content.session2Time, title: content.session2Title, desc: content.session2Desc, stage: "STAGE 02 // BEATS & BITES", color: "border-fuchsia-500/40 text-fuchsia-300" },
+                  { time: content.session3Time, title: content.session3Title, desc: content.session3Desc, stage: "STAGE 03 // MAIN HIGHLIGHT", color: "border-amber-400/40 text-amber-300" },
+                  { time: content.session4Time, title: content.session4Title, desc: content.session4Desc, stage: "STAGE 04 // MIDNIGHT RAVE", color: "border-pink-500/40 text-pink-300" },
+                ].map((set, idx) => (
                   <div
                     key={idx}
                     style={cardBgStyle}
                     className={cn(
-                      "group rounded-2xl border border-zinc-800 overflow-hidden flex flex-col transition-all duration-300 transform hover:-translate-y-1",
-                      p.glow,
+                      "rounded-2xl border p-5 space-y-2 shadow-lg hover:border-cyan-400 transition-colors",
+                      set.color.split(" ")[0],
                     )}
                   >
-                    <div className="relative aspect-4/5 overflow-hidden bg-zinc-950 p-2.5 pb-0">
-                      <div className="relative h-full w-full overflow-hidden rounded-xl">
+                    <div className="flex items-center justify-between font-mono text-xs">
+                      <span className="font-bold text-white bg-zinc-950 px-2.5 py-1 rounded border border-zinc-800">
+                        {set.time}
+                      </span>
+                      <span className={cn("text-[10px] tracking-wider uppercase font-semibold", set.color.split(" ")[1])}>
+                        {set.stage}
+                      </span>
+                    </div>
+                    <h4 className="text-lg font-bold text-white pt-1">{set.title}</h4>
+                    <p className="font-sans text-xs text-zinc-400 leading-relaxed">{set.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 5. POLAROID PARTY MEMORY REEL (DIAGONAL ANGLED STRIP) */}
+            {(content.photo1Url || content.photo2Url || content.photo3Url) && (
+              <section className="space-y-6">
+                <div className="space-y-1">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-400 font-bold block">
+                    Party Visual Reel
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-black uppercase text-white italic">
+                    Memories & Vibes
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  {content.photo1Url && (
+                    <div className="group rounded-2xl bg-zinc-900 border-2 border-cyan-500/40 p-3 shadow-[0_0_20px_rgba(0,242,254,0.2)] hover:-translate-y-2 transition-transform duration-300">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-950">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={p.url}
-                          alt={p.title || "Party Photo"}
+                          src={content.photo1Url}
+                          alt={content.photo1Title || "Photo 1"}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-mono text-cyan-300 border border-cyan-500/40">
-                          {p.badge}
-                        </div>
+                      </div>
+                      <div className="p-2 text-center space-y-0.5">
+                        <p className="font-mono text-xs font-bold text-cyan-300">{content.photo1Title}</p>
+                        <p className="font-sans text-[11px] text-zinc-400 italic">&ldquo;{content.photo1Caption}&rdquo;</p>
                       </div>
                     </div>
-                    <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h4 className="text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
-                          {p.title}
-                        </h4>
-                        <p className="text-xs text-zinc-400 leading-relaxed mt-1">{p.caption}</p>
+                  )}
+
+                  {content.photo2Url && (
+                    <div className="group rounded-2xl bg-zinc-900 border-2 border-fuchsia-500/40 p-3 shadow-[0_0_20px_rgba(255,0,127,0.2)] hover:-translate-y-2 transition-transform duration-300">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-950">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={content.photo2Url}
+                          alt={content.photo2Title || "Photo 2"}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-2 text-center space-y-0.5">
+                        <p className="font-mono text-xs font-bold text-fuchsia-300">{content.photo2Title}</p>
+                        <p className="font-sans text-[11px] text-zinc-400 italic">&ldquo;{content.photo2Caption}&rdquo;</p>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  )}
 
-            {/* 4. RUNDOWN PESTA (4 SESI ACARA) */}
-            <section
-              style={cardBgStyle}
-              className="rounded-2xl border border-zinc-800 p-6 sm:p-10 space-y-8"
-            >
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-cyan-400 font-mono font-bold">
-                    03 // Party Timeline
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-white uppercase tracking-tight mt-1">
-                    Susunan Acara Malam Pesta
-                  </h3>
-                </div>
-                <PartyPopper className="w-5 h-5 text-fuchsia-400" />
-              </div>
-
-              <div className="space-y-6">
-                {[
-                  {
-                    num: "01",
-                    time: content.session1Time,
-                    title: content.session1Title,
-                    desc: content.session1Desc,
-                    color: "text-cyan-400",
-                  },
-                  {
-                    num: "02",
-                    time: content.session2Time,
-                    title: content.session2Title,
-                    desc: content.session2Desc,
-                    color: "text-fuchsia-400",
-                  },
-                  {
-                    num: "03",
-                    time: content.session3Time,
-                    title: content.session3Title,
-                    desc: content.session3Desc,
-                    color: "text-amber-400",
-                  },
-                  {
-                    num: "04",
-                    time: content.session4Time,
-                    title: content.session4Title,
-                    desc: content.session4Desc,
-                    color: "text-emerald-400",
-                  },
-                ].map((s) => (
-                  <div
-                    key={s.num}
-                    className="grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-start border-b border-zinc-800/60 pb-5 last:border-b-0 last:pb-0"
-                  >
-                    <div className={cn("sm:col-span-3 text-xs font-mono font-bold", s.color)}>
-                      {s.time}
+                  {content.photo3Url && (
+                    <div className="group rounded-2xl bg-zinc-900 border-2 border-emerald-400/40 p-3 shadow-[0_0_20px_rgba(57,255,20,0.2)] hover:-translate-y-2 transition-transform duration-300">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-zinc-950">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={content.photo3Url}
+                          alt={content.photo3Title || "Photo 3"}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-2 text-center space-y-0.5">
+                        <p className="font-mono text-xs font-bold text-emerald-300">{content.photo3Title}</p>
+                        <p className="font-sans text-[11px] text-zinc-400 italic">&ldquo;{content.photo3Caption}&rdquo;</p>
+                      </div>
                     </div>
-                    <div className="sm:col-span-9 space-y-1">
-                      <h4 className="text-base font-bold text-white">{s.title}</h4>
-                      <p className="text-xs text-zinc-400 leading-relaxed font-sans">{s.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* 5. VENUE & GOOGLE MAPS NAVIGATION */}
-            <section
-              style={cardBgStyle}
-              className="rounded-2xl border border-zinc-800 p-6 sm:p-10 space-y-6"
-            >
-              <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
-                <div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-fuchsia-400 font-mono font-bold">
-                    04 // Party Venue
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-white uppercase tracking-tight mt-1">
-                    Lokasi Rooftop & Peta
-                  </h3>
+                  )}
                 </div>
-                <MapPin className="w-5 h-5 text-cyan-400" />
+              </section>
+            )}
+
+            {/* 6. DRESS CODE & VIP PERKS + ROOFTOP LOCATION & GIFT WALLET */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Dress Code & Neon Palette */}
+              <div
+                style={cardBgStyle}
+                className="rounded-3xl border border-zinc-800 p-6 sm:p-8 space-y-6 flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-fuchsia-400 font-bold block">
+                    Dress Code Protocol
+                  </span>
+                  <h4 className="text-xl font-bold text-white">
+                    {content.dressCodeTitle}
+                  </h4>
+                  <p className="font-sans text-xs text-zinc-400 leading-relaxed">
+                    {content.dressCodeNotes}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-2 font-mono text-[10px]">
+                  <div className="flex items-center gap-2 bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+                    <span className="h-4 w-4 rounded-full bg-[#00f2fe] shadow-[0_0_8px_#00f2fe]" />
+                    <span className="text-zinc-300">Cyan Glow</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+                    <span className="h-4 w-4 rounded-full bg-[#ff007f] shadow-[0_0_8px_#ff007f]" />
+                    <span className="text-zinc-300">Hot Magenta</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+                    <span className="h-4 w-4 rounded-full bg-[#39ff14] shadow-[0_0_8px_#39ff14]" />
+                    <span className="text-zinc-300">Laser Lime</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+                    <span className="h-4 w-4 rounded-full bg-[#12121e] border border-zinc-700" />
+                    <span className="text-zinc-300">Pitch Noir</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-3">
-                <div className="text-xl font-bold text-white">{content.venueName}</div>
-                <div className="text-xs font-mono text-cyan-300">{content.venueFloor}</div>
-                <p className="text-sm text-zinc-400 leading-relaxed">{content.venueAddress}</p>
-              </div>
+              {/* Venue & Maps */}
+              <div
+                style={cardBgStyle}
+                className="rounded-3xl border border-zinc-800 p-6 sm:p-8 space-y-6 flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-cyan-400 font-bold block">
+                    Venue Radar Coordinates
+                  </span>
+                  <h4 className="text-xl font-bold text-white">
+                    {content.venueName}
+                  </h4>
+                  <p className="font-mono text-xs text-fuchsia-400 font-bold">
+                    {content.venueFloor}
+                  </p>
+                  <p className="font-sans text-xs text-zinc-400 leading-relaxed">
+                    {content.venueAddress}
+                  </p>
+                </div>
 
-              {content.mapsUrl && (
-                <div className="pt-2">
+                {content.mapsUrl && (
                   <a
                     href={content.mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-fuchsia-600 hover:from-cyan-500 hover:to-fuchsia-500 text-white text-xs font-mono font-bold tracking-wider uppercase transition-all duration-300 shadow-[0_0_20px_rgba(0,242,254,0.4)] hover:scale-105 active:scale-95"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-mono text-xs uppercase font-bold tracking-wider shadow-[0_0_20px_rgba(0,242,254,0.3)] hover:scale-105 transition-all"
                   >
-                    <ExternalLink className="w-4 h-4 text-white" />
-                    <span>Buka Rute di Google Maps</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Open Radar Maps</span>
                   </a>
-                </div>
-              )}
+                )}
+              </div>
             </section>
 
-            {/* 6. DRESS CODE & KADO DIGITAL (E-WALLET) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              {/* Dress Code */}
+            {/* 7. VIP GIFT WALLET CARD */}
+            {content.giftAccountNo && (
               <section
                 style={cardBgStyle}
-                className="rounded-2xl border border-zinc-800 p-6 sm:p-8 space-y-6 flex flex-col justify-between"
+                className="rounded-3xl border border-cyan-500/30 p-6 sm:p-8 text-center space-y-4 max-w-xl mx-auto shadow-[0_0_30px_rgba(0,242,254,0.15)]"
               >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-xs uppercase tracking-[0.2em] text-cyan-400 font-mono font-bold">
-                      05 // Dress Code
-                    </span>
-                    <Flame className="w-4 h-4 text-fuchsia-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white">{content.dressCodeTitle}</h4>
-                    <p className="text-xs text-zinc-400 mt-2 leading-relaxed">{content.dressCodeNotes}</p>
-                  </div>
-                </div>
-
-                {/* Swatches */}
-                <div className="space-y-2 pt-4 border-t border-zinc-800">
-                  <span className="text-[10px] uppercase font-mono tracking-widest text-zinc-500">
-                    Recommended Neon Swatches
+                <div className="space-y-1">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-fuchsia-400 font-bold">
+                    Birthday Token of Love
                   </span>
-                  <div className="grid grid-cols-4 gap-2">
-                    {[
-                      { hex: content.paletteColor1, name: content.paletteName1 },
-                      { hex: content.paletteColor2, name: content.paletteName2 },
-                      { hex: content.paletteColor3, name: content.paletteName3 },
-                      { hex: content.paletteColor4, name: content.paletteName4 },
-                    ].map((swatch, i) => (
-                      <div key={i} className="space-y-1.5 text-center">
-                        <div
-                          style={{ backgroundColor: swatch.hex }}
-                          className="h-10 w-full rounded-lg border border-zinc-700 shadow-md"
-                        />
-                        <div className="text-[9px] font-mono text-zinc-400 truncate">{swatch.name}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-
-              {/* Kado Digital E-Wallet */}
-              <section
-                style={cardBgStyle}
-                className="rounded-2xl border border-zinc-800 p-6 sm:p-8 space-y-6 flex flex-col justify-between"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-                    <span className="text-xs uppercase tracking-[0.2em] text-fuchsia-400 font-mono font-bold">
-                      06 // Birthday Wish & Gift
-                    </span>
-                    <Sparkles className="w-4 h-4 text-cyan-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white">
-                      {content.giftWalletType || "Birthday Gift Fund"}
-                    </h4>
-                    <p className="text-xs text-zinc-400 mt-2 leading-relaxed">{content.giftNote}</p>
-                  </div>
+                  <h4 className="text-xl font-bold text-white">
+                    {content.giftWalletType} Digital Gift
+                  </h4>
+                  <p className="font-sans text-xs text-zinc-400">{content.giftNote}</p>
                 </div>
 
-                {content.giftAccountNo && (
-                  <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-4 space-y-3">
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-zinc-500 font-mono">
-                          Nomor E-Wallet / Rekening
-                        </div>
-                        <div className="text-base font-mono font-bold text-cyan-400 tracking-wider">
-                          {content.giftAccountNo}
-                        </div>
-                        <div className="text-xs text-zinc-400 font-mono mt-0.5">
-                          a.n. {content.giftAccountName}
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleCopyAccount}
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-mono font-bold transition-all",
-                          copied
-                            ? "bg-emerald-950 border border-emerald-500 text-emerald-300"
-                            : "bg-fuchsia-950/80 hover:bg-fuchsia-900 border border-fuchsia-500/50 text-fuchsia-200",
-                        )}
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>Tersalin</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>Salin</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </section>
-            </div>
+                <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-800 font-mono space-y-1">
+                  <p className="text-lg font-bold text-cyan-300 tracking-widest">{content.giftAccountNo}</p>
+                  <p className="text-xs text-zinc-400">a.n. {content.giftAccountName}</p>
+                </div>
 
-            {/* FOOTER */}
-            <footer className="text-center py-8 space-y-3 border-t border-zinc-900 font-mono text-xs text-zinc-600">
-              <p className="tracking-widest uppercase">
-                {content.partyTitle} &bull; {content.celebrantName}
-              </p>
-              <p className="text-[11px] text-zinc-700">
-                Lettera Cyberpunk Invitation Engine &copy; 2026. Keep the vibes alive.
-              </p>
-            </footer>
+                <button
+                  type="button"
+                  onClick={handleCopyAccount}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-mono text-xs uppercase tracking-wider transition-all"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Nomor Tersalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Salin Nomor E-Wallet</span>
+                    </>
+                  )}
+                </button>
+              </section>
+            )}
           </div>
         )}
       </div>
-
-      {/* ============================================================ */}
-      {/* FLOATING SYNTHWAVE AUDIO PLAYER (ISOLATED DARI /templates)   */}
-      {/* ============================================================ */}
-      {showFloatingAudio && (
-        <aside
-          aria-label="Pemutar Audio Pesta"
-          className="fixed bottom-5 right-5 z-40 animate-in fade-in slide-in-from-bottom-3 duration-500"
-        >
-          <audio ref={audioRef} src={content.musicUrl} loop preload="none" />
-          <button
-            type="button"
-            onClick={toggleAudio}
-            className="group flex items-center gap-3 bg-zinc-950/90 hover:bg-zinc-900 text-zinc-200 border border-fuchsia-500/50 px-4 py-2.5 rounded-full shadow-[0_0_20px_rgba(255,0,127,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 ring-1 ring-cyan-400/40"
-          >
-            <div className="relative flex items-center justify-center">
-              <span
-                className={cn(
-                  "w-3 h-3 rounded-full bg-cyan-400 transition-opacity",
-                  isPlaying ? "animate-ping opacity-75" : "opacity-0",
-                )}
-              />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-fuchsia-500" />
-            </div>
-            <span className="text-xs font-mono tracking-wider max-w-[140px] truncate">
-              {content.musicTitle || "Synthwave Beat"}
-            </span>
-            <div className="p-1 rounded-full bg-zinc-800 group-hover:bg-fuchsia-600 transition-colors">
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 ml-0.5" />}
-            </div>
-          </button>
-        </aside>
-      )}
     </div>
   );
 }
 
-export function NeonBashTemplate(props: NeonBashTemplateProps) {
+export function NeonBashTemplate({
+  data,
+  className,
+}: NeonBashTemplateProps) {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-[400px] flex items-center justify-center bg-zinc-950 text-cyan-400 font-mono text-xs">
-          Loading Cyber Odyssey...
-        </div>
-      }
-    >
-      <NeonBashTemplateInner {...props} />
+    <Suspense fallback={<div className="min-h-screen bg-[#090910]" />}>
+      <NeonBashTemplateInner data={data} className={className} />
     </Suspense>
   );
 }
