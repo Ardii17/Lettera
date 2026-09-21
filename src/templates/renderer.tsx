@@ -4,6 +4,16 @@ import { BirthdayTemplate } from "./birthday/BirthdayTemplate";
 import { FriendshipTemplate } from "./friendship/FriendshipTemplate";
 import { GraduationTemplate } from "./graduation/GraduationTemplate";
 import { RomanticTemplate } from "./romantic/RomanticTemplate";
+import { WeddingTemplate } from "./wedding/WeddingTemplate";
+import { ApologyTemplate } from "./apology/ApologyTemplate";
+import { VintageLoveTemplate } from "./vintage-love/VintageLoveTemplate";
+import { StarlightLoveTemplate } from "./starlight-love/StarlightLoveTemplate";
+import { LoveMixtapeTemplate } from "./love-mixtape/LoveMixtapeTemplate";
+import { LoveScrapbookTemplate } from "./love-scrapbook/LoveScrapbookTemplate";
+import { RoyalGardenWeddingTemplate } from "./royal-garden-wedding/RoyalGardenWeddingTemplate";
+import { ArtExhibitionTemplate } from "./art-exhibition/ArtExhibitionTemplate";
+import { NeonBashTemplate } from "./neon-bash/NeonBashTemplate";
+import { GalaAwardTemplate } from "./gala-award/GalaAwardTemplate";
 
 export interface TemplateComponentProps {
   data: LetterContent;
@@ -19,9 +29,19 @@ export interface TemplateComponentProps {
  */
 const TEMPLATE_COMPONENTS: Record<string, ComponentType<TemplateComponentProps>> = {
   romantic: RomanticTemplate,
+  "vintage-love": VintageLoveTemplate,
+  "starlight-love": StarlightLoveTemplate,
+  "love-mixtape": LoveMixtapeTemplate,
+  "love-scrapbook": LoveScrapbookTemplate,
   birthday: BirthdayTemplate,
   graduation: GraduationTemplate,
   friendship: FriendshipTemplate,
+  wedding: WeddingTemplate,
+  "royal-garden-wedding": RoyalGardenWeddingTemplate,
+  "art-exhibition": ArtExhibitionTemplate,
+  "neon-bash": NeonBashTemplate,
+  "gala-award": GalaAwardTemplate,
+  apology: ApologyTemplate,
 };
 
 export function hasTemplateComponent(slug: string): boolean {

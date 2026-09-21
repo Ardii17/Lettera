@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { verifyMidtransSignature } from "@/lib/payment/midtrans";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
     const payload = await request.json();

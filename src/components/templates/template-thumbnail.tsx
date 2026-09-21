@@ -23,7 +23,8 @@ export function TemplateThumbnail({
       <div className="thumb-canvas absolute top-0 left-0">
         <TemplateRenderer
           template={template.slug}
-          data={{ ...template.sample, bgMusicUrl: "", musicTitle: "" }}
+          data={{ ...template.sample, bgMusicUrl: "", musicTitle: "", _isThumbnail: "true" }}
+          className="is-thumbnail pointer-events-none"
         />
       </div>
     </div>

@@ -299,8 +299,10 @@ export function RomanticTemplate({
         </div>
       </div>
 
-      {/* Floating Romantic Music Player (if music provided) */}
-      {String(letter.bgMusicUrl || "").trim() ? (
+      {/* Floating Romantic Music Player (if music provided and not a thumbnail) */}
+      {String(letter.bgMusicUrl || "").trim() &&
+      !data._isThumbnail &&
+      !className?.includes("is-thumbnail") ? (
         <div className="fixed bottom-5 right-5 z-40 sm:bottom-8 sm:right-8">
           <button
             type="button"

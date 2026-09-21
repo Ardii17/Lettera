@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { buttonStyles } from "@/components/ui/button";
@@ -36,6 +37,16 @@ export function MobileNav({
           id="mobile-menu"
           className="absolute inset-x-0 top-full border-b border-line bg-paper px-5 py-5 shadow-lift"
         >
+          <div className="flex items-center gap-2.5 pb-4 mb-2 border-b border-line">
+            <Image
+              src="/images/logo.jpeg"
+              alt="Logo Lettera"
+              width={28}
+              height={28}
+              className="h-7 w-7 rounded-lg object-cover shadow-2xs"
+            />
+            <span className="font-display text-base font-semibold text-ink">Lettera</span>
+          </div>
           <nav className="flex flex-col gap-1">
             {links.map((link) => (
               <Link

@@ -53,6 +53,71 @@ export const FRIENDSHIP_COLOR_PRESETS: ColorPreset[] = [
   { label: "Slate Trust", value: "#475569", description: "Abu-abu slate kepercayaan kokoh" },
 ];
 
+export const WEDDING_COLOR_PRESETS: ColorPreset[] = [
+  { label: "Royal Gold", value: "#b48c36", description: "Emas kerajaan anggun dan mewah" },
+  { label: "Sage Botanical", value: "#4a6b57", description: "Hijau dedaunan botani alami" },
+  { label: "Dusty Rose", value: "#b85d6e", description: "Merah mawar lembut romantis" },
+  { label: "Terracotta Sunset", value: "#c05c3b", description: "Tembaga terracotta rustic hangat" },
+  { label: "Midnight Navy", value: "#1d2d44", description: "Biru navy malam agung" },
+  { label: "Emerald Luxury", value: "#1e4d3b", description: "Hijau zamrud pesta berkelas" },
+  { label: "Burgundy Wine", value: "#7a1c30", description: "Merah marun anggur intim" },
+  { label: "Champagne Pearl", value: "#c29b38", description: "Kuning champagne kilau mutiara" },
+];
+
+export const APOLOGY_COLOR_PRESETS: ColorPreset[] = [
+  { label: "Sage Serenity", value: "#3b6e5b", description: "Hijau sage tenang & reflektif" },
+  { label: "Calm Eucalyptus", value: "#2d5a49", description: "Hijau eukaliptus damai" },
+  { label: "Muted Slate", value: "#475569", description: "Abu-abu teduh penuh ketulusan" },
+  { label: "Warm Earth", value: "#785848", description: "Cokelat tanah hangat membumi" },
+  { label: "Soft Lavender", value: "#6d597a", description: "Ungu lavender lembut menenangkan" },
+  { label: "Deep Teal", value: "#1f5f61", description: "Biru toska tua bijaksana" },
+  { label: "Mellow Amber", value: "#926228", description: "Kuning tembaga hangat bersahabat" },
+  { label: "Charcoal Honest", value: "#334155", description: "Arang jujur dan tulus" },
+];
+
+export const VINTAGE_LOVE_COLOR_PRESETS: ColorPreset[] = [
+  { label: "Antique Burgundy", value: "#781d2f", description: "Merah marun anggur antik segel lilin" },
+  { label: "Vintage Mahogany", value: "#622929", description: "Cokelat mahoni tua surat klasik" },
+  { label: "Aged Parchment", value: "#9c6644", description: "Cokelat perkamen tua hangat" },
+  { label: "Emerald Epistle", value: "#1d4e3b", description: "Hijau botol klasik perpustakaan tua" },
+  { label: "Royal Navy Ink", value: "#1c2b42", description: "Biru navy tinta pulpen antik" },
+  { label: "Golden Wax", value: "#b38738", description: "Emas cap pos kerajaan" },
+  { label: "Dusty Terracotta", value: "#a04a37", description: "Tembaga kusam klasik" },
+  { label: "Midnight Velvet", value: "#3b192b", description: "Beludru malam anggun dan intim" },
+];
+
+export const STARLIGHT_COLOR_PRESETS: ColorPreset[] = [
+  { label: "Starlight Gold", value: "#f5c542", description: "Kuning emas bintang sampanye berkilau" },
+  { label: "Celestial Rose", value: "#e28698", description: "Merah muda nebula kosmik lembut" },
+  { label: "Aurora Sky Blue", value: "#38bdf8", description: "Biru langit aurora malam" },
+  { label: "Cosmic Amethyst", value: "#a78bfa", description: "Ungu galaksi mistis mempesona" },
+  { label: "Moonlit Silver", value: "#cbd5e1", description: "Perak sinar rembulan jernih" },
+  { label: "Amber Starlight", value: "#fbbf24", description: "Kuning temaram lentera cinta" },
+  { label: "Emerald Comet", value: "#34d399", description: "Hijau komet zamrud cemerlang" },
+  { label: "Solar Flare", value: "#f97316", description: "Jingga hangat kobaran cinta abadi" },
+];
+
+export const MIXTAPE_COLOR_PRESETS: ColorPreset[] = [
+  { label: "Retro Coral", value: "#e15b64", description: "Merah koral kaset 90-an ceria" },
+  { label: "Vintage Teal", value: "#2a9d8f", description: "Toska kaset analog klasik" },
+  { label: "Vaporwave Lilac", value: "#8b5cf6", description: "Ungu synthwave nostalgia manis" },
+  { label: "Sunset Tangerine", value: "#f97316", description: "Jingga senja retro hangat" },
+  { label: "Cobalt Blue Tape", value: "#2563eb", description: "Biru kobalt kaset Walkman" },
+  { label: "Mustard Gold 80s", value: "#d97706", description: "Kuning mustar kaset nostalgia" },
+  { label: "Emerald Studio", value: "#059669", description: "Hijau studio rekaman analog" },
+  { label: "Classic Charcoal Tape", value: "#1f2937", description: "Hitam arang kaset magnetik otentik" },
+];
+
+export const SCRAPBOOK_COLOR_PRESETS: ColorPreset[] = [
+  { label: "Pastel Blossom Pink", value: "#f472b6", description: "Merah muda pastel bunga manis" },
+  { label: "Matcha Journal", value: "#84cc16", description: "Hijau matcha buku jurnal hangat" },
+  { label: "Warm Honey Scrapbook", value: "#f59e0b", description: "Kuning madu washi tape ceria" },
+  { label: "Soft Lavender", value: "#a855f7", description: "Ungu lavender stiker pastel" },
+  { label: "Baby Sky Blue", value: "#38bdf8", description: "Biru langit cerah scrapbook" },
+  { label: "Classic Kraft Paper", value: "#b45309", description: "Cokelat kertas kraft buku kenangan" },
+  { label: "Cherry Jam", value: "#e11d48", description: "Merah ceri stiker hati gemas" },
+  { label: "Slate Pencil", value: "#475569", description: "Abu-abu pensil sketsa kenangan" },
+];
 
 export const BACKGROUND_COLOR_PRESETS: ColorPreset[] = [
   { label: "Blush Rose", value: "#fdf4f5", description: "Merah muda lembut klasik" },

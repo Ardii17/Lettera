@@ -42,10 +42,12 @@ export const getAvailableTemplates = cache(async (): Promise<TemplateMeta[]> => 
   const rows = await getActiveTemplateRows();
   if (rows.length === 0) return listTemplates();
 
+  const inactiveSlugs = new Set(rows.filter((r) => !r.is_active).map((r) => r.slug));
   const order = new Map(rows.map((row, index) => [row.slug, index]));
+
   return listTemplates()
-    .filter((template) => order.has(template.slug))
-    .sort((a, b) => (order.get(a.slug) ?? 0) - (order.get(b.slug) ?? 0));
+    .filter((template) => !inactiveSlugs.has(template.slug))
+    .sort((a, b) => (order.get(a.slug) ?? 999) - (order.get(b.slug) ?? 999));
 });
 
 export async function getAvailableTemplate(slug: string): Promise<TemplateMeta | null> {
@@ -55,10 +57,75 @@ export async function getAvailableTemplate(slug: string): Promise<TemplateMeta |
   const rows = await getActiveTemplateRows();
   if (rows.length === 0) return template;
 
-  return rows.some((row) => row.slug === slug) ? template : null;
+  const row = rows.find((r) => r.slug === slug);
+  if (row) return row.is_active ? template : null;
+
+  // Jika belum ada di tabel database (misal template baru dalam kode sebelum migrasi),
+  // tetap izinkan agar template baru langsung bisa digunakan
+  return template;
 }
+
+const DEFAULT_TEMPLATE_METAS: Record<string, { id: string; sort_order: number }> = {
+  romantic: { id: "00000000-0000-4000-8000-000000000001", sort_order: 1 },
+  birthday: { id: "00000000-0000-4000-8000-000000000002", sort_order: 2 },
+  graduation: { id: "00000000-0000-4000-8000-000000000003", sort_order: 3 },
+  friendship: { id: "00000000-0000-4000-8000-000000000004", sort_order: 4 },
+  wedding: { id: "00000000-0000-4000-8000-000000000005", sort_order: 5 },
+  apology: { id: "00000000-0000-4000-8000-000000000006", sort_order: 6 },
+  "vintage-love": { id: "00000000-0000-4000-8000-000000000007", sort_order: 7 },
+  "starlight-love": { id: "00000000-0000-4000-8000-000000000008", sort_order: 8 },
+  "love-mixtape": { id: "00000000-0000-4000-8000-000000000009", sort_order: 9 },
+  "love-scrapbook": { id: "00000000-0000-4000-8000-000000000010", sort_order: 10 },
+};
 
 export async function getTemplateRowBySlug(slug: string): Promise<TemplateRow | null> {
   const rows = await getActiveTemplateRows();
-  return rows.find((row) => row.slug === slug) ?? null;
+  const existing = rows.find((row) => row.slug === slug);
+  if (existing) return existing;
+
+  const template = getTemplate(slug);
+  if (!template) return null;
+
+  const fallbackMeta = DEFAULT_TEMPLATE_METAS[slug] ?? {
+    id: `00000000-0000-4000-8000-${String(Date.now()).slice(-12).padStart(12, "0")}`,
+    sort_order: 99,
+  };
+
+  // Coba masukkan row baru ke DB jika belum ada
+  try {
+    const supabase = await createClient();
+    const { data: inserted } = await supabase
+      .from("templates")
+      .upsert(
+        {
+          id: fallbackMeta.id,
+          slug: template.slug,
+          name: template.name,
+          description: template.description,
+          category: template.category,
+          is_active: true,
+          sort_order: fallbackMeta.sort_order,
+        },
+        { onConflict: "slug" },
+      )
+      .select()
+      .single();
+
+    if (inserted) return inserted;
+  } catch {
+    // Abaikan error upsert dan gunakan fallback
+  }
+
+  return {
+    id: fallbackMeta.id,
+    slug: template.slug,
+    name: template.name,
+    description: template.description,
+    category: template.category,
+    thumbnail_url: null,
+    is_active: true,
+    sort_order: fallbackMeta.sort_order,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
 }

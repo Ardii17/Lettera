@@ -298,7 +298,9 @@ export function GraduationTemplate({
       </div>
 
       {/* ================= FLOATING GRADUATION FANFARE MUSIC PLAYER ================= */}
-      {letter.bgMusicUrl ? (
+      {Boolean(String(letter.bgMusicUrl || "").trim()) &&
+      !data._isThumbnail &&
+      !className?.includes("is-thumbnail") ? (
         <>
           <audio
             ref={audioRef}

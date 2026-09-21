@@ -2,18 +2,19 @@
 
 /*
  * Design tokens — "stationery" direction.
- * Halaman terasa seperti amplop (lilac dingin), surat terasa seperti kertas (putih),
- * aksen memakai warna wax seal. Sengaja tidak memakai palet cream/terracotta.
+ * Halaman bernuansa kertas gading / ivory (#F4EEE2), surat terasa seperti kertas putih (#ffffff),
+ * aksen memakai warna wax seal.
  */
 @theme {
-  --color-page: #f3f1f7;
-  --color-page-deep: #e9e5f2;
+  --color-page: #F4EEE2;
+  --color-page-deep: #EBE2D3;
+  --color-primary: #F4EEE2;
   --color-paper: #ffffff;
   --color-ink: #241d33;
   --color-ink-soft: #5c5470;
   --color-ink-muted: #8b849c;
-  --color-line: #e4dfee;
-  --color-line-strong: #cfc7e2;
+  --color-line: #E8DFD1;
+  --color-line-strong: #D8CEBD;
 
   --color-seal-50: #fdf1f3;
   --color-seal-100: #fadfe4;

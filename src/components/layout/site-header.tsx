@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { buttonStyles } from "@/components/ui/button";
 import { siteConfig } from "@/lib/constants";
@@ -14,8 +15,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line/80 bg-page/85 backdrop-blur-md">
       <Container className="relative flex h-16 items-center justify-between gap-4">
-        <Link href="/" className="inline-flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-seal-500" aria-hidden />
+        <Link href="/" className="inline-flex items-center gap-2.5 group">
+          <Image
+            src="/images/logo.jpeg"
+            alt="Logo Lettera"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-lg object-cover shadow-2xs transition-transform duration-200 group-hover:scale-105"
+            priority
+          />
           <span className="font-display text-lg font-semibold tracking-tight text-ink">
             {siteConfig.name}
           </span>

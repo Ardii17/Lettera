@@ -29,10 +29,15 @@ export const metadata: Metadata = {
     description: siteConfig.description,
   },
   robots: { index: true, follow: true },
+  icons: {
+    icon: "/images/logo.jpeg",
+    shortcut: "/images/logo.jpeg",
+    apple: "/images/logo.jpeg",
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f3f1f7",
+  themeColor: "#F4EEE2",
   width: "device-width",
   initialScale: 1,
 };

@@ -905,19 +905,22 @@ export function FriendshipTemplate({
         </p>
       </footer>
 
-      {/* ================= 8. FLOATING AUDIO PLAYER ================= */}
-      <div className="fixed bottom-5 right-5 z-40 sm:bottom-8 sm:right-8">
-        <button
-          type="button"
-          onClick={toggleAudio}
-          title={isPlaying ? "Jeda musik latar" : "Putar musik persahabatan"}
-          aria-label={isPlaying ? "Jeda musik latar" : "Putar musik persahabatan"}
-          className={cn(
-            "group flex items-center gap-3 rounded-full border px-4 py-2.5 shadow-xl backdrop-blur-xl transition-all duration-300 hover:scale-105",
-            isPlaying
-              ? "ring-2 ring-emerald-500"
-              : "opacity-85 hover:opacity-100"
-          )}
+      {/* ================= 8. FLOATING AUDIO PLAYER (Hanya jika ada URL musik dan bukan thumbnail) ================= */}
+      {Boolean(String(letter.bgMusicUrl || "").trim()) &&
+        !data._isThumbnail &&
+        !className?.includes("is-thumbnail") && (
+          <div className="fixed bottom-5 right-5 z-40 sm:bottom-8 sm:right-8">
+            <button
+              type="button"
+              onClick={toggleAudio}
+              title={isPlaying ? "Jeda musik latar" : "Putar musik persahabatan"}
+              aria-label={isPlaying ? "Jeda musik latar" : "Putar musik persahabatan"}
+              className={cn(
+                "group flex items-center gap-3 rounded-full border px-4 py-2.5 shadow-xl backdrop-blur-xl transition-all duration-300 hover:scale-105",
+                isPlaying
+                  ? "ring-2 ring-emerald-500"
+                  : "opacity-85 hover:opacity-100"
+              )}
           style={{
             backgroundColor: cardColor,
             borderColor: isDarkCard ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.1)",
@@ -942,6 +945,7 @@ export function FriendshipTemplate({
           </div>
         </button>
       </div>
+    )}
 
       {/* ================= PHOTO LIGHTBOX MODAL ================= */}
       {lightboxPhoto && (

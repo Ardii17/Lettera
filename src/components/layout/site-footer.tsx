@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/lib/constants";
 import { listTemplates } from "@/templates/registry";
@@ -28,8 +29,14 @@ export function SiteFooter() {
     <footer className="mt-24 border-t border-line bg-paper">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-3">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-seal-500" aria-hidden />
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <Image
+              src="/images/logo.jpeg"
+              alt="Logo Lettera"
+              width={28}
+              height={28}
+              className="h-7 w-7 rounded-lg object-cover shadow-2xs transition-transform duration-200 group-hover:scale-105"
+            />
             <span className="font-display text-lg font-semibold text-ink">{siteConfig.name}</span>
           </Link>
           <p className="max-w-xs text-sm leading-relaxed text-ink-soft">{siteConfig.description}</p>

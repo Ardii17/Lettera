@@ -288,7 +288,9 @@ export function BirthdayTemplate({
       </div>
 
       {/* ================= FLOATING CELEBRATION MUSIC PLAYER ================= */}
-      {letter.bgMusicUrl ? (
+      {Boolean(String(letter.bgMusicUrl || "").trim()) &&
+      !data._isThumbnail &&
+      !className?.includes("is-thumbnail") ? (
         <>
           <audio
             ref={audioRef}

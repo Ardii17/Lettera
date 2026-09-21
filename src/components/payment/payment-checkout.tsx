@@ -17,7 +17,6 @@ import {
   ShieldCheck,
   Sparkles,
   Smartphone,
-  Wallet,
   AlertCircle,
   Zap,
 } from "lucide-react";

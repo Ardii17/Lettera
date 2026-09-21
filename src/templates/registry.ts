@@ -2,6 +2,16 @@ import { birthdayTemplate } from "./birthday/definition";
 import { friendshipTemplate } from "./friendship/definition";
 import { graduationTemplate } from "./graduation/definition";
 import { romanticTemplate } from "./romantic/definition";
+import { weddingTemplate } from "./wedding/definition";
+import { apologyTemplate } from "./apology/definition";
+import { vintageLoveTemplate } from "./vintage-love/definition";
+import { starlightLoveTemplate } from "./starlight-love/definition";
+import { loveMixtapeTemplate } from "./love-mixtape/definition";
+import { loveScrapbookTemplate } from "./love-scrapbook/definition";
+import { royalGardenWeddingTemplate } from "./royal-garden-wedding/definition";
+import { artExhibitionTemplate } from "./art-exhibition/definition";
+import { neonBashTemplate } from "./neon-bash/definition";
+import { galaAwardTemplate } from "./gala-award/definition";
 import type { TemplateMeta } from "./types";
 
 /**
@@ -14,9 +24,19 @@ import type { TemplateMeta } from "./types";
  */
 export const TEMPLATES: TemplateMeta[] = [
   romanticTemplate,
+  vintageLoveTemplate,
+  starlightLoveTemplate,
+  loveMixtapeTemplate,
+  loveScrapbookTemplate,
   birthdayTemplate,
   graduationTemplate,
   friendshipTemplate,
+  weddingTemplate,
+  royalGardenWeddingTemplate,
+  artExhibitionTemplate,
+  neonBashTemplate,
+  galaAwardTemplate,
+  apologyTemplate,
 ];
 
 const TEMPLATE_MAP: Record<string, TemplateMeta> = Object.fromEntries(

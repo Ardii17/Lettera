@@ -29,7 +29,11 @@ export function PreviewPanel({
         <p className="text-xs text-ink-muted">Persis seperti yang akan dilihat penerima</p>
       </div>
       <div className="max-h-[calc(100vh-12rem)] max-h-[calc(100dvh-12rem)] overflow-y-auto overflow-x-hidden overscroll-contain">
-        <TemplateRenderer template={template} data={data} />
+        <TemplateRenderer
+          template={template}
+          data={{ ...data, _isEditorPreview: "true" }}
+          className="is-editor-preview"
+        />
       </div>
     </div>
   );

@@ -115,7 +115,11 @@ export function FinalPreviewModal({
 
       {/* ================= FULL TEMPLATE RENDER CONTAINER ================= */}
       <main className="flex-1 w-full">
-        <TemplateRenderer template={templateSlug} data={data} />
+        <TemplateRenderer
+          template={templateSlug}
+          data={{ ...data, _isFullPreview: "true" }}
+          className="is-full-preview"
+        />
       </main>
 
       {/* ================= BOTTOM CONFIRMATION FLOATING BAR (MOBILE FRIENDLY) ================= */}
