@@ -30,7 +30,15 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
       iconColor: "text-rose-600",
       border: "border-rose-100",
     },
-    matchNames: ["Romansa", "romance", "romantic", "Cinta"],
+    matchNames: [
+      "Romansa",
+      "romance",
+      "romantic",
+      "Cinta",
+      "Surat Romantis",
+      "Romantis",
+      "Love",
+    ],
   },
   {
     id: "birthday",
@@ -46,7 +54,7 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
       iconColor: "text-amber-600",
       border: "border-amber-100",
     },
-    matchNames: ["Perayaan", "birthday", "Ulang Tahun"],
+    matchNames: ["Perayaan", "birthday", "Ulang Tahun", "Ulang Tahun & Perayaan"],
   },
   {
     id: "graduation",
@@ -62,7 +70,7 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
       iconColor: "text-indigo-600",
       border: "border-indigo-100",
     },
-    matchNames: ["Pencapaian", "graduation", "Kelulusan"],
+    matchNames: ["Pencapaian", "graduation", "Kelulusan", "Kelulusan & Prestasi", "Prestasi"],
   },
   {
     id: "friendship",
@@ -78,7 +86,7 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
       iconColor: "text-emerald-600",
       border: "border-emerald-100",
     },
-    matchNames: ["Pertemanan", "friendship", "Sahabat"],
+    matchNames: ["Pertemanan", "friendship", "Sahabat", "Pertemanan & Sahabat"],
   },
   {
     id: "wedding",
@@ -94,7 +102,7 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
       iconColor: "text-amber-700",
       border: "border-amber-100",
     },
-    matchNames: ["Undangan", "wedding", "Pernikahan"],
+    matchNames: ["Undangan", "wedding", "Pernikahan", "Undangan Pernikahan", "Undangan & Momen Spesial"],
   },
   {
     id: "apology",
@@ -110,7 +118,7 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
       iconColor: "text-teal-600",
       border: "border-teal-100",
     },
-    matchNames: ["Maaf", "apology", "Rekonsiliasi"],
+    matchNames: ["Permintaan Maaf", "Maaf", "apology", "Rekonsiliasi", "Permintaan Maaf & Rekonsiliasi"],
   },
 ];
 
@@ -118,10 +126,16 @@ export const TEMPLATE_CATEGORIES: CategoryMeta[] = [
  * Mencari metadata kategori berdasarkan nama atau slug kategori dari TemplateMeta.
  */
 export function getCategoryMeta(categoryName: string): CategoryMeta {
+  const norm = (categoryName || "").toLowerCase().trim();
   const found = TEMPLATE_CATEGORIES.find(
     (cat) =>
-      cat.id === categoryName.toLowerCase() ||
-      cat.matchNames.some((m) => m.toLowerCase() === categoryName.toLowerCase()),
+      cat.id === norm ||
+      cat.slug === norm ||
+      cat.name.toLowerCase() === norm ||
+      cat.matchNames.some((m) => {
+        const mNorm = m.toLowerCase().trim();
+        return mNorm === norm || norm.includes(mNorm) || mNorm.includes(norm);
+      }),
   );
 
   if (found) return found;
