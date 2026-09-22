@@ -341,13 +341,9 @@ export function ApologyBuilderForm({
             />
           </Field>
 
-          {/* Pengaturan Warna */}
-          <div className="border-t border-stone-200 pt-5 space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
-              Palet Warna Surat
-            </h4>
-
-            <div className="space-y-4">
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Aksen Utama" htmlFor={`${idPrefix}-primaryColor`}>
                 <ColorPickerField
                   value={(watch("primaryColor") as string) || "#3b6e5b"}
@@ -358,7 +354,9 @@ export function ApologyBuilderForm({
                   helperText="Warna tombol, batas ornamen, dan penanda komitmen."
                 />
               </Field>
+            </div>
 
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Latar Belakang Surat" htmlFor={`${idPrefix}-backgroundColor`}>
                 <ColorPickerField
                   value={(watch("backgroundColor") as string) || "#f7f8f6"}
@@ -369,7 +367,9 @@ export function ApologyBuilderForm({
                   helperText="Warna kanvas layar di luar kertas surat."
                 />
               </Field>
+            </div>
 
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Kertas Surat" htmlFor={`${idPrefix}-cardColor`}>
                 <ColorPickerField
                   value={(watch("cardColor") as string) || "#ffffff"}
@@ -380,35 +380,37 @@ export function ApologyBuilderForm({
                   helperText="Warna lembaran kertas perenungan."
                 />
               </Field>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Field label="Warna Teks Judul" htmlFor={`${idPrefix}-textColor`}>
-                  <ColorPickerField
-                    value={(watch("textColor") as string) || "#20382e"}
-                    onChange={(hex) =>
-                      setValue("textColor", hex, { shouldValidate: true, shouldDirty: true })
-                    }
-                    presets={TEXT_COLOR_PRESETS}
-                    helperText="Warna judul dan nama penerima."
-                  />
-                </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Teks Judul" htmlFor={`${idPrefix}-textColor`}>
+                <ColorPickerField
+                  value={(watch("textColor") as string) || "#20382e"}
+                  onChange={(hex) =>
+                    setValue("textColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={TEXT_COLOR_PRESETS}
+                  helperText="Warna judul dan nama penerima."
+                />
+              </Field>
+            </div>
 
-                <Field label="Warna Teks Paragraf" htmlFor={`${idPrefix}-bodyTextColor`}>
-                  <ColorPickerField
-                    value={(watch("bodyTextColor") as string) || "#3e5148"}
-                    onChange={(hex) =>
-                      setValue("bodyTextColor", hex, { shouldValidate: true, shouldDirty: true })
-                    }
-                    presets={TEXT_COLOR_PRESETS}
-                    helperText="Warna isi paragraf narasi."
-                  />
-                </Field>
-              </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Teks Paragraf" htmlFor={`${idPrefix}-bodyTextColor`}>
+                <ColorPickerField
+                  value={(watch("bodyTextColor") as string) || "#3e5148"}
+                  onChange={(hex) =>
+                    setValue("bodyTextColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={TEXT_COLOR_PRESETS}
+                  helperText="Warna isi paragraf narasi."
+                />
+              </Field>
             </div>
           </div>
 
-          {/* Pengaturan Audio */}
-          <div className="border-t border-stone-200 pt-5 space-y-4">
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
               Audio Musik Latar
             </h4>

@@ -32,7 +32,7 @@ export default async function PaymentPage({
   const { snapScriptUrl, clientKey, isProduction } = getMidtransConfig();
 
   return (
-    <Container className="py-6 sm:py-12">
+    <Container className="px-2.5 sm:px-8 py-4 sm:py-12 min-w-0 max-w-full overflow-hidden">
       <PaymentCheckout
         token={letter.publicToken}
         templateSlug={templateSlug}

@@ -716,11 +716,12 @@ export function MuseumOfUsBuilderForm({
             </Field>
           </div>
 
-          <div className="p-4 border border-stone-200 rounded-xl space-y-4 bg-white">
-            <p className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+          {/* Palet Warna Galeri - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <p className="text-xs font-bold text-stone-800 uppercase tracking-wider px-1">
               Palet Warna Galeri
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Aksen Plakat Gilded Gold"
                 value={(watch("accentColor") as string) || "#c5a059"}
@@ -728,6 +729,8 @@ export function MuseumOfUsBuilderForm({
                   setValue("accentColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Obsidian Galeri"
                 value={(watch("primaryColor") as string) || "#121316"}
@@ -735,6 +738,8 @@ export function MuseumOfUsBuilderForm({
                   setValue("primaryColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar Dinding Museum"
                 value={(watch("backgroundColor") as string) || "#f7f5f0"}
@@ -743,6 +748,8 @@ export function MuseumOfUsBuilderForm({
                 }
                 presets={BACKGROUND_COLOR_PRESETS}
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Plakat & Marmer"
                 value={(watch("cardColor") as string) || "#ffffff"}

@@ -571,41 +571,51 @@ export function SecretHerbariumBuilderForm({
             Sesuaikan nuansa palet rumah kaca botani dan iringan instrumen petikan harpa akustik.
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Dominan Konservatori"
-              value={primaryColor || "#1a382b"}
-              onChange={(color) => setValue("primaryColor", color)}
-              presets={BACKGROUND_COLOR_PRESETS}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Dominan Konservatori"
+                value={primaryColor || "#1a382b"}
+                onChange={(color) => setValue("primaryColor", color)}
+                presets={BACKGROUND_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Aksen Emas Botani"
-              value={secondaryColor || "#c59b58"}
-              onChange={(color) => setValue("secondaryColor", color)}
-              presets={BACKGROUND_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Aksen Emas Botani"
+                value={secondaryColor || "#c59b58"}
+                onChange={(color) => setValue("secondaryColor", color)}
+                presets={BACKGROUND_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Aksen Bunga Kering"
-              value={accentColor || "#9b435a"}
-              onChange={(color) => setValue("accentColor", color)}
-              presets={BACKGROUND_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Aksen Bunga Kering"
+                value={accentColor || "#9b435a"}
+                onChange={(color) => setValue("accentColor", color)}
+                presets={BACKGROUND_COLOR_PRESETS}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-audioUrl`}
-            label="URL Musik Latar (Harpa & Hujan)"
-            error={errors.audioUrl?.message}
-            helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
-          >
-            <Input
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-audioUrl`}
-              {...register("audioUrl")}
-              placeholder="https://example.com/botanical-harp.mp3"
-            />
-          </Field>
+              label="URL Musik Latar (Harpa & Hujan)"
+              error={errors.audioUrl?.message}
+              helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
+            >
+              <Input
+                id={`${idPrefix}-audioUrl`}
+                {...register("audioUrl")}
+                placeholder="https://example.com/botanical-harp.mp3"
+              />
+            </Field>
+          </div>
         </div>
       )}
 

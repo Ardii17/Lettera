@@ -502,42 +502,50 @@ export function KintsugiRepairBuilderForm({
             Sesuaikan nuansa palet wabi-sabi Kintsugi dan alunan musik meditatif seruling Shakuhachi.
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <ColorPickerField
-              label="Warna Emas Kintsugi"
-              value={primaryColor || "#d4af37"}
-              onChange={(color) => setValue("primaryColor", color)}
-              presets={[
-                { label: "Kintsugi Liquid Gold", value: "#d4af37" },
-                { label: "Warm Urushi Amber", value: "#caa64f" },
-                { label: "Subtle Brass Foil", value: "#c29b61" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Emas Kintsugi"
+                value={primaryColor || "#d4af37"}
+                onChange={(color) => setValue("primaryColor", color)}
+                presets={[
+                  { label: "Kintsugi Liquid Gold", value: "#d4af37" },
+                  { label: "Warm Urushi Amber", value: "#caa64f" },
+                  { label: "Subtle Brass Foil", value: "#c29b61" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Latar Wabi-Sabi"
-              value={backgroundColor || "#0f1318"}
-              onChange={(color) => setValue("backgroundColor", color)}
-              presets={[
-                { label: "Zen Slate Charcoal", value: "#0f1318" },
-                { label: "Kyoto Temple Night", value: "#14181f" },
-                { label: "Dark Earth Ware", value: "#1a1614" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Latar Wabi-Sabi"
+                value={backgroundColor || "#0f1318"}
+                onChange={(color) => setValue("backgroundColor", color)}
+                presets={[
+                  { label: "Zen Slate Charcoal", value: "#0f1318" },
+                  { label: "Kyoto Temple Night", value: "#14181f" },
+                  { label: "Dark Earth Ware", value: "#1a1614" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-audioUrl`}
-            label="URL Musik Seruling Zen (Shakuhachi & Koto)"
-            error={errors.audioUrl?.message}
-            helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
-          >
-            <Input
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-audioUrl`}
-              {...register("audioUrl")}
-              placeholder="https://example.com/zen-healing.mp3"
-            />
-          </Field>
+              label="URL Musik Seruling Zen (Shakuhachi & Koto)"
+              error={errors.audioUrl?.message}
+              helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
+            >
+              <Input
+                id={`${idPrefix}-audioUrl`}
+                {...register("audioUrl")}
+                placeholder="https://example.com/zen-healing.mp3"
+              />
+            </Field>
+          </div>
         </div>
       )}
 

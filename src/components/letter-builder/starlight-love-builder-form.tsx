@@ -548,51 +548,58 @@ export function StarlightLoveBuilderForm({
             </p>
           </div>
 
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
           <div className="space-y-4">
-            <Field label="Warna Aksen Bintang & Lentera" htmlFor={`${idPrefix}-primaryColor`}>
-              <ColorPickerField
-                value={(watch("primaryColor") as string) || "#f5c542"}
-                onChange={(hex) =>
-                  setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={STARLIGHT_COLOR_PRESETS}
-                helperText="Warna ornamen bintang berkilau, tombol lentera, dan ikon konstelasi."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Aksen Bintang & Lentera" htmlFor={`${idPrefix}-primaryColor`}>
+                <ColorPickerField
+                  value={(watch("primaryColor") as string) || "#f5c542"}
+                  onChange={(hex) =>
+                    setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={STARLIGHT_COLOR_PRESETS}
+                  helperText="Warna ornamen bintang berkilau, tombol lentera, dan ikon konstelasi."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Langit Malam (Latar)" htmlFor={`${idPrefix}-backgroundColor`}>
-              <ColorPickerField
-                value={(watch("backgroundColor") as string) || "#0b0f19"}
-                onChange={(hex) =>
-                  setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={[
-                  { label: "Deep Midnight Navy", value: "#0b0f19", description: "Biru dongker pekat malam kosmik" },
-                  { label: "Obsidian Black", value: "#09090b", description: "Hitam obsidian pekat luar angkasa" },
-                  { label: "Dark Indigo", value: "#0f172a", description: "Indigo malam berbintang" },
-                  { label: "Velvet Nebula", value: "#1e112a", description: "Ungu tua nebula misterius" },
-                  { label: "Abyssal Slate", value: "#0f141c", description: "Abu-abu laut malam gelap" },
-                ]}
-                helperText="Warna dasar kanvas malam."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Langit Malam (Latar)" htmlFor={`${idPrefix}-backgroundColor`}>
+                <ColorPickerField
+                  value={(watch("backgroundColor") as string) || "#0b0f19"}
+                  onChange={(hex) =>
+                    setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={[
+                    { label: "Deep Midnight Navy", value: "#0b0f19", description: "Biru dongker pekat malam kosmik" },
+                    { label: "Obsidian Black", value: "#09090b", description: "Hitam obsidian pekat luar angkasa" },
+                    { label: "Dark Indigo", value: "#0f172a", description: "Indigo malam berbintang" },
+                    { label: "Velvet Nebula", value: "#1e112a", description: "Ungu tua nebula misterius" },
+                    { label: "Abyssal Slate", value: "#0f141c", description: "Abu-abu laut malam gelap" },
+                  ]}
+                  helperText="Warna dasar kanvas malam."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Wadah Kaca Temaram" htmlFor={`${idPrefix}-cardColor`}>
-              <ColorPickerField
-                value={(watch("cardColor") as string) || "#131b2e"}
-                onChange={(hex) =>
-                  setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={[
-                  { label: "Midnight Glass", value: "#131b2e", description: "Kaca navy malam elegan" },
-                  { label: "Obsidian Card", value: "#18181b", description: "Kaca gelap arang pekat" },
-                  { label: "Nebula Glass", value: "#231535", description: "Kaca ungu velvet temaram" },
-                ]}
-                helperText="Warna kartu surat kaca (dark glassmorphism)."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Wadah Kaca Temaram" htmlFor={`${idPrefix}-cardColor`}>
+                <ColorPickerField
+                  value={(watch("cardColor") as string) || "#131b2e"}
+                  onChange={(hex) =>
+                    setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={[
+                    { label: "Midnight Glass", value: "#131b2e", description: "Kaca navy malam elegan" },
+                    { label: "Obsidian Card", value: "#18181b", description: "Kaca gelap arang pekat" },
+                    { label: "Nebula Glass", value: "#231535", description: "Kaca ungu velvet temaram" },
+                  ]}
+                  helperText="Warna kartu surat kaca (dark glassmorphism)."
+                />
+              </Field>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Judul Emas" htmlFor={`${idPrefix}-textColor`}>
                 <ColorPickerField
                   value={(watch("textColor") as string) || "#fef3c7"}
@@ -603,7 +610,9 @@ export function StarlightLoveBuilderForm({
                   helperText="Warna judul surat dan nama penerima."
                 />
               </Field>
+            </div>
 
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Isi Paragraf" htmlFor={`${idPrefix}-bodyTextColor`}>
                 <ColorPickerField
                   value={(watch("bodyTextColor") as string) || "#cbd5e1"}
@@ -617,8 +626,8 @@ export function StarlightLoveBuilderForm({
             </div>
           </div>
 
-          {/* Audio Pengiring */}
-          <div className="border-t border-stone-200 pt-5 space-y-4">
+          {/* Audio Pengiring dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
               Audio Melodi Malam Romantis
             </h4>

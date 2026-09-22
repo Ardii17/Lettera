@@ -786,11 +786,12 @@ export function BirthdayPassportBuilderForm({
             </Field>
           </div>
 
-          <div className="p-4 border border-stone-200 rounded-xl space-y-4 bg-white">
-            <p className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+          {/* Palet Warna Dokumen - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <p className="text-xs font-bold text-stone-800 uppercase tracking-wider px-1">
               Palet Warna Dokumen
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Sampul Kulit Paspor"
                 value={(watch("primaryColor") as string) || "#0f1e36"}
@@ -798,6 +799,8 @@ export function BirthdayPassportBuilderForm({
                   setValue("primaryColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Emboss Emas"
                 value={(watch("accentColor") as string) || "#d4af37"}
@@ -805,6 +808,8 @@ export function BirthdayPassportBuilderForm({
                   setValue("accentColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar Meja"
                 value={(watch("backgroundColor") as string) || "#f1ede4"}
@@ -813,6 +818,8 @@ export function BirthdayPassportBuilderForm({
                 }
                 presets={BACKGROUND_COLOR_PRESETS}
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Kertas Paspor"
                 value={(watch("paperColor") as string) || "#faf8f2"}

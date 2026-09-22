@@ -668,56 +668,66 @@ export function SolsticeThawBuilderForm({
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Kristal Es"
-              value={primaryColor || "#38bdf8"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Glacial Cyan", value: "#38bdf8" },
-                { label: "Deep Frost", value: "#0284c7" },
-                { label: "Ice Mist", value: "#67e8f9" },
-                { label: "Solstice Blue", value: "#93c5fd" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Kristal Es"
+                value={primaryColor || "#38bdf8"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Glacial Cyan", value: "#38bdf8" },
+                  { label: "Deep Frost", value: "#0284c7" },
+                  { label: "Ice Mist", value: "#67e8f9" },
+                  { label: "Solstice Blue", value: "#93c5fd" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Api Perapian"
-              value={secondaryColor || "#fbbf24"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Hearth Ember", value: "#fbbf24" },
-                { label: "Warm Fire", value: "#f59e0b" },
-                { label: "Campfire Orange", value: "#f97316" },
-                { label: "Bara Api", value: "#ef4444" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Api Perapian"
+                value={secondaryColor || "#fbbf24"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Hearth Ember", value: "#fbbf24" },
+                  { label: "Warm Fire", value: "#f59e0b" },
+                  { label: "Campfire Orange", value: "#f97316" },
+                  { label: "Bara Api", value: "#ef4444" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Tunas Musim Semi"
-              value={accentColor || "#86efac"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Spring Sprout", value: "#86efac" },
-                { label: "Meadow Green", value: "#4ade80" },
-                { label: "Fresh Leaf", value: "#22c55e" },
-                { label: "Pale Mint", value: "#a7f3d0" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Tunas Musim Semi"
+                value={accentColor || "#86efac"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Spring Sprout", value: "#86efac" },
+                  { label: "Meadow Green", value: "#4ade80" },
+                  { label: "Fresh Leaf", value: "#22c55e" },
+                  { label: "Pale Mint", value: "#a7f3d0" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-musicTrack`}
-            label="URL Audio Musik Perapian & Musim Semi (Opsional)"
-            error={errors.musicTrack?.message}
-            helperText="Tautan file audio MP3/WAV berdurasi tenang untuk menemani proses pembacaan surat"
-          >
-            <Input
+          {/* Pengaturan Audio Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-musicTrack`}
-              placeholder="https://.../piano-spring-thaw.mp3"
-              {...register("musicTrack")}
-            />
-          </Field>
+              label="URL Audio Musik Perapian & Musim Semi (Opsional)"
+              error={errors.musicTrack?.message}
+              helperText="Tautan file audio MP3/WAV berdurasi tenang untuk menemani proses pembacaan surat"
+            >
+              <Input
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://.../piano-spring-thaw.mp3"
+                {...register("musicTrack")}
+              />
+            </Field>
+          </div>
         </div>
       )}
 

@@ -782,50 +782,60 @@ export function FriendshipBuilderForm({
             </p>
           </div>
 
-          <div className="space-y-5">
-            <ColorPickerField
-              label="Warna Aksen Sahabat (Primary Color)"
-              helperText="Warna tombol fist bump, lencana, aksen tanggal, dan garis batas aktif."
-              value={primaryColor}
-              onChange={(c) => setValue("primaryColor", c, { shouldDirty: true })}
-              presets={FRIENDSHIP_COLOR_PRESETS}
-            />
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Aksen Sahabat (Primary Color)"
+                helperText="Warna tombol fist bump, lencana, aksen tanggal, dan garis batas aktif."
+                value={primaryColor}
+                onChange={(c) => setValue("primaryColor", c, { shouldDirty: true })}
+                presets={FRIENDSHIP_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Latar Belakang Website (Background)"
-              helperText="Warna kanvas utama website (dapat bernuansa terang alami atau gelap hangat)."
-              value={backgroundColor}
-              onChange={(c) => setValue("backgroundColor", c, { shouldDirty: true })}
-              presets={BACKGROUND_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Latar Belakang Website (Background)"
+                helperText="Warna kanvas utama website (dapat bernuansa terang alami atau gelap hangat)."
+                value={backgroundColor}
+                onChange={(c) => setValue("backgroundColor", c, { shouldDirty: true })}
+                presets={BACKGROUND_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Kartu Surat & Wadah (Card Color)"
-              helperText="Warna dasar kartu polaroid, kartu linimasa, dan kontainer surat."
-              value={cardColor}
-              onChange={(c) => setValue("cardColor", c, { shouldDirty: true })}
-              presets={CARD_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Kartu Surat & Wadah (Card Color)"
+                helperText="Warna dasar kartu polaroid, kartu linimasa, dan kontainer surat."
+                value={cardColor}
+                onChange={(c) => setValue("cardColor", c, { shouldDirty: true })}
+                presets={CARD_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Teks Judul & Nama"
-              helperText="Warna untuk judul besar, nama sahabat, dan tajuk kartu."
-              value={textColor}
-              onChange={(c) => setValue("textColor", c, { shouldDirty: true })}
-              presets={TEXT_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Teks Judul & Nama"
+                helperText="Warna untuk judul besar, nama sahabat, dan tajuk kartu."
+                value={textColor}
+                onChange={(c) => setValue("textColor", c, { shouldDirty: true })}
+                presets={TEXT_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Teks Cerita & Narasi"
-              helperText="Warna untuk isi surat, ulasan sifat, dan cerita petualangan."
-              value={bodyTextColor}
-              onChange={(c) => setValue("bodyTextColor", c, { shouldDirty: true })}
-              presets={TEXT_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Teks Cerita & Narasi"
+                helperText="Warna untuk isi surat, ulasan sifat, dan cerita petualangan."
+                value={bodyTextColor}
+                onChange={(c) => setValue("bodyTextColor", c, { shouldDirty: true })}
+                presets={TEXT_COLOR_PRESETS}
+              />
+            </div>
           </div>
 
           {/* Background Audio Settings */}
-          <div className="pt-4 border-t border-border/50 space-y-4">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h5 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Pengaturan Musik Latar
             </h5>

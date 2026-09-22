@@ -538,42 +538,50 @@ export function GrandLaureateBuilderForm({
             Sesuaikan nuansa palet konvokasi kehormatan dan musik simfoni kemenangan.
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <ColorPickerField
-              label="Warna Emas Kehormatan"
-              value={primaryColor || "#caa64f"}
-              onChange={(color) => setValue("primaryColor", color)}
-              presets={[
-                { label: "Royal Burnished Gold", value: "#caa64f" },
-                { label: "Champagne Laurel", value: "#dfc079" },
-                { label: "Imperial Bronze", value: "#b58742" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Emas Kehormatan"
+                value={primaryColor || "#caa64f"}
+                onChange={(color) => setValue("primaryColor", color)}
+                presets={[
+                  { label: "Royal Burnished Gold", value: "#caa64f" },
+                  { label: "Champagne Laurel", value: "#dfc079" },
+                  { label: "Imperial Bronze", value: "#b58742" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Latar Belakang (Royal Navy)"
-              value={backgroundColor || "#0b1526"}
-              onChange={(color) => setValue("backgroundColor", color)}
-              presets={[
-                { label: "Stockholm Royal Navy", value: "#0b1526" },
-                { label: "Oxford Deep Slate", value: "#101b2b" },
-                { label: "Vanguard Midnight", value: "#070e1a" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Latar Belakang (Royal Navy)"
+                value={backgroundColor || "#0b1526"}
+                onChange={(color) => setValue("backgroundColor", color)}
+                presets={[
+                  { label: "Stockholm Royal Navy", value: "#0b1526" },
+                  { label: "Oxford Deep Slate", value: "#101b2b" },
+                  { label: "Vanguard Midnight", value: "#070e1a" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-audioUrl`}
-            label="URL Musik Simfoni Kemenangan (Fanfare)"
-            error={errors.audioUrl?.message}
-            helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
-          >
-            <Input
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-audioUrl`}
-              {...register("audioUrl")}
-              placeholder="https://example.com/triumph-orchestra.mp3"
-            />
-          </Field>
+              label="URL Musik Simfoni Kemenangan (Fanfare)"
+              error={errors.audioUrl?.message}
+              helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
+            >
+              <Input
+                id={`${idPrefix}-audioUrl`}
+                {...register("audioUrl")}
+                placeholder="https://example.com/triumph-orchestra.mp3"
+              />
+            </Field>
+          </div>
         </div>
       )}
 

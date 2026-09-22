@@ -646,9 +646,9 @@ export function CartographyLoveBuilderForm({
           </Field>
 
           {/* Palette presets */}
-          <div className="space-y-2 pt-2 border-t border-border/50">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-3">
             <span className="text-xs font-semibold text-foreground">Preset Warna Tema Peta:</span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {colorPresets.map((preset, idx) => (
                 <button
                   key={idx}
@@ -671,47 +671,56 @@ export function CartographyLoveBuilderForm({
             </div>
           </div>
 
-          {/* Color pickers */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <ColorPickerField
-              label="Aksen Emas / Kuningan"
-              value={primaryColor || "#d4af37"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Renaissance Gold", value: "#d4af37" },
-                { label: "Antique Brass", value: "#e5c07b" },
-                { label: "Warm Sunburst", value: "#f59e0b" },
-              ]}
-            />
-            <ColorPickerField
-              label="Verdigris / Sea Foam"
-              value={secondaryColor || "#2dd4bf"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Sea Foam Teal", value: "#2dd4bf" },
-                { label: "Verdigris Jade", value: "#14b8a6" },
-                { label: "Ocean Breeze", value: "#38bdf8" },
-              ]}
-            />
-            <ColorPickerField
-              label="Deep Maritime Indigo"
-              value={accentColor || "#0b1e32"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Midnight Sea", value: "#0b1e32" },
-                { label: "Abyssal Navy", value: "#06121e" },
-                { label: "Deep Trench", value: "#041525" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Aksen Emas / Kuningan"
+                value={primaryColor || "#d4af37"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Renaissance Gold", value: "#d4af37" },
+                  { label: "Antique Brass", value: "#e5c07b" },
+                  { label: "Warm Sunburst", value: "#f59e0b" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Verdigris / Sea Foam"
+                value={secondaryColor || "#2dd4bf"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Sea Foam Teal", value: "#2dd4bf" },
+                  { label: "Verdigris Jade", value: "#14b8a6" },
+                  { label: "Ocean Breeze", value: "#38bdf8" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Deep Maritime Indigo"
+                value={accentColor || "#0b1e32"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Midnight Sea", value: "#0b1e32" },
+                  { label: "Abyssal Navy", value: "#06121e" },
+                  { label: "Deep Trench", value: "#041525" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field label="URL Musik Latar (Melodi Bahari)">
-            <Input
-              {...register("musicTrack")}
-              id={`${idPrefix}-musicTrack`}
-              placeholder="https://cdn.pixabay.com/..."
-            />
-          </Field>
+          {/* Pengaturan Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field label="URL Musik Latar (Melodi Bahari)">
+              <Input
+                {...register("musicTrack")}
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://cdn.pixabay.com/..."
+              />
+            </Field>
+          </div>
         </div>
       )}
 

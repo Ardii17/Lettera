@@ -618,56 +618,66 @@ export function ExLibrisBuilderForm({
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Emas Penjilid"
-              value={primaryColor || "#d4af37"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Bookbinder Gold", value: "#d4af37" },
-                { label: "Florentine Gilt", value: "#eab308" },
-                { label: "Antique Ochre", value: "#b45309" },
-                { label: "Champagne Warm", value: "#e6c587" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Emas Penjilid"
+                value={primaryColor || "#d4af37"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Bookbinder Gold", value: "#d4af37" },
+                  { label: "Florentine Gilt", value: "#eab308" },
+                  { label: "Antique Ochre", value: "#b45309" },
+                  { label: "Champagne Warm", value: "#e6c587" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Kulit Maroko Merah"
-              value={secondaryColor || "#8b1e2d"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Crimson Morocco", value: "#8b1e2d" },
-                { label: "Deep Burgundy", value: "#6b1420" },
-                { label: "Oxblood Leather", value: "#500724" },
-                { label: "Velvet Plum", value: "#4c0519" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Kulit Maroko Merah"
+                value={secondaryColor || "#8b1e2d"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Crimson Morocco", value: "#8b1e2d" },
+                  { label: "Deep Burgundy", value: "#6b1420" },
+                  { label: "Oxblood Leather", value: "#500724" },
+                  { label: "Velvet Plum", value: "#4c0519" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Pita Sutra"
-              value={accentColor || "#be123c"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Burgundy Silk", value: "#be123c" },
-                { label: "Ruby Ribbon", value: "#e11d48" },
-                { label: "Scarlet Weave", value: "#9f1239" },
-                { label: "Rose Petal", value: "#fb7185" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Pita Sutra"
+                value={accentColor || "#be123c"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Burgundy Silk", value: "#be123c" },
+                  { label: "Ruby Ribbon", value: "#e11d48" },
+                  { label: "Scarlet Weave", value: "#9f1239" },
+                  { label: "Rose Petal", value: "#fb7185" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-musicTrack`}
-            label="URL Audio Musik Selo Perpustakaan Kuno (Opsional)"
-            error={errors.musicTrack?.message}
-            helperText="Tautan file audio MP3/WAV klasik yang tenang dan hangat"
-          >
-            <Input
+          {/* Pengaturan Audio Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-musicTrack`}
-              placeholder="https://.../antiquarian-cello.mp3"
-              {...register("musicTrack")}
-            />
-          </Field>
+              label="URL Audio Musik Selo Perpustakaan Kuno (Opsional)"
+              error={errors.musicTrack?.message}
+              helperText="Tautan file audio MP3/WAV klasik yang tenang dan hangat"
+            >
+              <Input
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://.../antiquarian-cello.mp3"
+                {...register("musicTrack")}
+              />
+            </Field>
+          </div>
         </div>
       )}
 

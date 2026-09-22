@@ -17,6 +17,8 @@ import {
   ShieldCheck,
   Smartphone,
   AlertCircle,
+  AlertTriangle,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -76,8 +78,10 @@ export function PaymentCheckout({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   const [checkingStatus, setCheckingStatus] = useState(false);
+  const [simulating, setSimulating] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Dynamic QRIS Snap State dari Midtrans
@@ -125,10 +129,12 @@ export function PaymentCheckout({
           if (data.snapToken) setSnapToken(data.snapToken);
           if (data.redirectUrl) setRedirectUrl(data.redirectUrl);
           setIsMock(Boolean(data.isMock));
+          if (data.warning) setWarningMessage(data.warning);
         } else {
           if (!isProduction) {
             // Pada mode Sandbox/Lokal, otomatis alihkan ke mode simulasi lokal agar pengujian alur bisnis tidak berhenti
             setIsMock(true);
+            setWarningMessage(data.error || "Gagal menghubungi Midtrans Sandbox. Mode Simulasi Lokal diaktifkan.");
           } else {
             setError(data.error || "Gagal menginisialisasi pembayaran Midtrans.");
           }
@@ -137,6 +143,7 @@ export function PaymentCheckout({
         console.error("Gagal menginisialisasi pembayaran:", err);
         if (!isProduction) {
           setIsMock(true);
+          setWarningMessage("Gagal terhubung ke Midtrans Sandbox. Mode Simulasi Lokal diaktifkan.");
         } else {
           setError("Gagal terhubung ke server pembayaran.");
         }
@@ -243,14 +250,7 @@ export function PaymentCheckout({
       }
 
       try {
-        // Saat tombol ditekan manual untuk keperluan demo/rekaman video (non-production),
-        // otomatis teruskan parameter simulate=true agar status langsung lunas & terverifikasi
-        const url =
-          isManual && !isProduction
-            ? `/api/payment/status?token=${token}&simulate=true`
-            : `/api/payment/status?token=${token}`;
-
-        const res = await fetch(url, {
+        const res = await fetch(`/api/payment/status?token=${token}`, {
           cache: "no-store",
         });
         const data = await res.json();
@@ -277,7 +277,7 @@ export function PaymentCheckout({
         }
       }
     },
-    [paymentSuccess, token, router, templateSlug, isProduction],
+    [paymentSuccess, token, router, templateSlug],
   );
 
   // 4. Background Auto-polling setiap 3.5 detik
@@ -345,6 +345,29 @@ export function PaymentCheckout({
     }
   };
 
+  // 6. Fitur Simulasi Pembayaran Sukses (Sandbox / Demo only)
+  const handleSimulateSuccess = async () => {
+    if (isProduction) return;
+    setSimulating(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/payment/status?token=${token}&simulate=true`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+
+      if (data.isPaid) {
+        setPaymentSuccess(true);
+        router.push(`/created/${data.templateSlug || templateSlug}/${data.token || token}`);
+        router.refresh();
+      }
+    } catch {
+      setError("Gagal melakukan simulasi pembayaran.");
+    } finally {
+      setSimulating(false);
+    }
+  };
+
   return (
     <>
       {/* Load Midtrans Snap JS */}
@@ -359,23 +382,23 @@ export function PaymentCheckout({
         />
       )}
 
-      <div className="mx-auto max-w-4xl py-6 sm:py-10">
+      <div className="mx-auto w-full max-w-4xl py-4 sm:py-10 min-w-0">
         {/* Navigation & Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Link
             href={`/create/${templateSlug}`}
-            className="inline-flex items-center gap-2 text-sm font-medium text-ink-muted hover:text-ink transition-colors mb-4"
+            className="inline-flex items-center gap-2 text-sm font-medium text-ink-muted hover:text-ink transition-colors mb-3 sm:mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Kembali ke Pengeditan Form
           </Link>
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-              <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+              <h1 className="mt-1 sm:mt-2 font-display text-xl sm:text-3xl font-bold tracking-tight text-ink">
                 Selesaikan Pembayaran QRIS
               </h1>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <span className="text-xs text-ink-muted block">Total Tagihan (Terkunci)</span>
               <span className="font-display text-2xl font-bold text-seal-600 sm:text-3xl">
                 {formattedAmount}
@@ -396,22 +419,99 @@ export function PaymentCheckout({
           </div>
         )}
 
-        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          {/* Kolom Kiri: Midtrans Dynamic QRIS Container */}
-          <div className="rounded-3xl border border-line bg-paper p-5 sm:p-7 shadow-sm space-y-5">
-            <div className="flex items-center justify-between border-b border-line pb-4">
-              <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-seal-100 text-seal-700">
-                  <QrCode className="h-5 w-5" />
+        {/* Panel Kontrol Sandbox & Pengujian Bisnis Lokal (Hanya Muncul di Non-Production) */}
+        {!isProduction && (
+          <div className="mb-6 sm:mb-8 rounded-2xl sm:rounded-3xl border-2 border-dashed border-amber-300 bg-amber-50/80 p-4 sm:p-5 shadow-xs animate-in fade-in duration-200 min-w-0 max-w-full overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-amber-200/80 pb-3.5 mb-3.5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500 text-white shadow-xs shrink-0">
+                  <Zap className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-ink uppercase tracking-wide">
-                    QRIS Standar Indonesia
-                  </h2>
-                  <p className="text-xs text-ink-muted">Nominal pas {formattedAmount} (Otomatis)</p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-950">
+                      Mode Sandbox / Pengujian Lokal
+                    </span>
+                    <span className="rounded-full bg-amber-200/90 px-2 py-0.5 text-[10px] font-bold text-amber-900 border border-amber-300">
+                      Sandbox Active
+                    </span>
+                  </div>
+                  <p className="text-xs text-amber-800/90 mt-0.5">
+                    {isMock
+                      ? "Mode Simulasi Bisnis Aktif — Anda dapat menguji alur terbitnya surat secara instan tanpa tagihan nyata."
+                      : "Midtrans Snap Sandbox Aktif — terhubung ke server sandbox Midtrans."}
+                  </p>
                 </div>
               </div>
-              <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 border border-emerald-200">
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="sm"
+                  onClick={handleSimulateSuccess}
+                  disabled={simulating || paymentSuccess}
+                  className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs"
+                >
+                  {simulating ? <Spinner className="h-3.5 w-3.5 mr-1.5" /> : <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />}
+                  Simulasikan Pembayaran Sukses
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsMock((prev) => !prev)}
+                  className="text-xs border-amber-300 bg-white text-amber-900 hover:bg-amber-100/60"
+                  title="Beralih antara tampilan barcode simulasi dan komponen Midtrans Snap"
+                >
+                  {isMock ? "Coba Tampilan Snap" : "Coba Tampilan Mock QRIS"}
+                </Button>
+              </div>
+            </div>
+
+            {warningMessage && (
+              <div className="rounded-xl bg-white/90 p-3 text-xs text-amber-900 border border-amber-200 flex items-start gap-2.5 mb-3">
+                <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="flex-1 leading-relaxed">
+                  <span className="font-semibold block text-amber-950 mb-0.5">Catatan Sandbox:</span>
+                  <span>{warningMessage}</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap items-center justify-between text-[11px] text-amber-800/90 gap-2">
+              <span>
+                💡 <strong>Tips Bisnis:</strong> Klik <em>&ldquo;Simulasikan Pembayaran Sukses&rdquo;</em> untuk menguji otomatisasi update database dan penerbitan surat seketika.
+              </span>
+              <a
+                href="https://simulator.sandbox.midtrans.com/qris/index"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 font-semibold text-amber-900 underline hover:text-amber-950"
+              >
+                Buka QRIS Simulator Midtrans <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+          </div>
+        )}
+
+        <div className="grid w-full min-w-0 max-w-full gap-6 sm:gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+          {/* Kolom Kiri: Midtrans Dynamic QRIS Container */}
+          <div className="min-w-0 w-full max-w-full rounded-2xl sm:rounded-3xl border border-line bg-paper p-3 sm:p-7 shadow-sm space-y-4 sm:space-y-5 overflow-hidden">
+            <div className="flex items-center justify-between border-b border-line pb-3.5 sm:pb-4 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-seal-100 text-seal-700 shrink-0">
+                  <QrCode className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <h2 className="text-xs sm:text-sm font-bold text-ink uppercase tracking-wide truncate">
+                    QRIS Standar Indonesia
+                  </h2>
+                  <p className="text-[11px] sm:text-xs text-ink-muted truncate">Nominal pas {formattedAmount} (Otomatis)</p>
+                </div>
+              </div>
+              <span className="rounded-full bg-emerald-50 px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-xs font-semibold text-emerald-700 border border-emerald-200 shrink-0 whitespace-nowrap">
                 Nominal Terkunci
               </span>
             </div>
@@ -442,23 +542,41 @@ export function PaymentCheckout({
                     </span>
                   </div>
                 </div>
+
+                <div className="rounded-2xl border border-dashed border-seal-300 bg-seal-50/70 p-3 text-center">
+                  <p className="text-[11px] font-semibold text-seal-800 mb-1 flex items-center justify-center gap-1">
+                    <Zap className="h-3.5 w-3.5 text-amber-500" />
+                    Mode Pengujian / Sandbox Aktif
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSimulateSuccess}
+                    disabled={simulating || paymentSuccess}
+                    className="mt-1 w-full text-xs font-bold border-seal-300 text-seal-800 hover:bg-seal-100 bg-white"
+                  >
+                    {simulating ? <Spinner className="h-3.5 w-3.5 mr-1" /> : null}
+                    Simulasikan Pembayaran Sukses (Langsung Redirect)
+                  </Button>
+                </div>
               </div>
             ) : (
               /* Midtrans Snap Official Embed Container */
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4 w-full min-w-0 max-w-full overflow-hidden">
                 <div
                   id="snap-container"
-                  className="w-full min-h-[440px] rounded-2xl overflow-hidden border border-line bg-white shadow-2xs"
+                  className="w-full min-w-0 max-w-full min-h-[440px] rounded-xl sm:rounded-2xl overflow-hidden border border-line/60 bg-white shadow-2xs flex justify-center"
                 />
 
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1 text-xs text-ink-muted">
-                  <span>Jika QRIS di atas belum muncul:</span>
+                  <span className="text-center sm:text-left">Jika QRIS di atas belum muncul:</span>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     onClick={handleOpenSnapPopup}
-                    className="gap-1.5 text-xs text-seal-700 hover:bg-seal-50 border-seal-200"
+                    className="gap-1.5 text-xs text-seal-700 hover:bg-seal-50 border-seal-200 w-full sm:w-auto"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                     Buka Popup Pembayaran Midtrans
@@ -469,31 +587,31 @@ export function PaymentCheckout({
           </div>
 
           {/* Kolom Kanan: Rincian Pesanan & Tombol Periksa Status (Tanpa Form Identitas) */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6 min-w-0 w-full max-w-full">
             {/* Rincian Pesanan */}
-            <div className="rounded-3xl border border-line bg-paper p-6 shadow-sm">
+            <div className="rounded-2xl sm:rounded-3xl border border-line bg-paper p-4 sm:p-6 shadow-sm min-w-0 overflow-hidden">
               <h3 className="text-sm font-bold text-ink uppercase tracking-wider mb-4 border-b border-line pb-3">
                 Rincian Pesanan
               </h3>
               <div className="space-y-2.5 text-sm">
-                <div className="flex justify-between items-center">
-                  <span className="text-ink-muted">Key Pemesanan:</span>
-                  <span className="font-mono text-xs font-semibold text-seal-700 bg-seal-100/70 px-2 py-0.5 rounded-md">
+                <div className="flex justify-between items-center gap-2 min-w-0">
+                  <span className="text-ink-muted shrink-0">Key Pemesanan:</span>
+                  <span className="font-mono text-[11px] sm:text-xs font-semibold text-seal-700 bg-seal-100/70 px-2 py-0.5 rounded-md truncate max-w-[150px] sm:max-w-[200px]" title={token}>
                     {token}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-ink-muted">Template Surat:</span>
-                  <span className="font-medium text-ink">{templateName}</span>
+                <div className="flex justify-between gap-2 min-w-0">
+                  <span className="text-ink-muted shrink-0">Template Surat:</span>
+                  <span className="font-medium text-ink truncate text-right">{templateName}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-ink-muted">Judul / Peruntukan:</span>
-                  <span className="font-medium text-ink truncate max-w-[200px]">{title}</span>
+                <div className="flex justify-between gap-2 min-w-0">
+                  <span className="text-ink-muted shrink-0">Judul / Peruntukan:</span>
+                  <span className="font-medium text-ink truncate text-right max-w-[180px] sm:max-w-[220px]">{title}</span>
                 </div>
                 {recipient ? (
-                  <div className="flex justify-between">
-                    <span className="text-ink-muted">Penerima:</span>
-                    <span className="font-medium text-ink">{recipient}</span>
+                  <div className="flex justify-between gap-2 min-w-0">
+                    <span className="text-ink-muted shrink-0">Penerima:</span>
+                    <span className="font-medium text-ink truncate text-right">{recipient}</span>
                   </div>
                 ) : null}
                 <div className="border-t border-line pt-2.5 flex justify-between font-semibold">
@@ -504,7 +622,7 @@ export function PaymentCheckout({
             </div>
 
             {/* Key Pemesanan (ID Verifikasi Admin) Card dengan Tombol Salin */}
-            <div className="rounded-3xl border border-seal-200 bg-seal-50/50 p-5 shadow-xs space-y-2.5">
+            <div className="rounded-2xl sm:rounded-3xl border border-seal-200 bg-seal-50/50 p-4 sm:p-5 shadow-xs space-y-2.5 min-w-0 overflow-hidden">
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="order-key-display"
@@ -545,7 +663,7 @@ export function PaymentCheckout({
             </div>
 
             {/* Tombol Aksi Utama: Periksa Status Pembayaran */}
-            <div className="rounded-3xl border border-line bg-paper p-6 shadow-sm space-y-4">
+            <div className="rounded-2xl sm:rounded-3xl border border-line bg-paper p-4 sm:p-6 shadow-sm space-y-4 min-w-0 overflow-hidden">
               <div>
                 <h3 className="text-sm font-bold text-ink mb-1">
                   Konfirmasi Pembayaran
@@ -558,7 +676,24 @@ export function PaymentCheckout({
               {error && (
                 <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
-                  <span className="flex-1">{error}</span>
+                  <div className="flex-1 space-y-2">
+                    <span>{error}</span>
+                    {!isProduction && (
+                      <div className="pt-2 border-t border-rose-200/80">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={handleSimulateSuccess}
+                          disabled={simulating || paymentSuccess}
+                          className="bg-white text-rose-800 border-rose-300 hover:bg-rose-100 text-xs w-full font-semibold shadow-2xs"
+                        >
+                          {simulating ? <Spinner className="h-3.5 w-3.5 mr-1" /> : null}
+                          ⚡ Bypass Sandbox: Simulasikan Sukses Sekarang
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -590,19 +725,19 @@ export function PaymentCheckout({
                 )}
               </Button>
 
-              <div className="flex items-center justify-center gap-2 text-xs text-ink-muted">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="flex items-center justify-center gap-2 text-xs text-ink-muted text-center">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                 <span>Pengecekan otomatis aktif di latar belakang (setiap 3.5 detik)</span>
               </div>
 
-              <div className="flex items-center justify-center gap-1.5 text-[11px] text-ink-muted pt-2 border-t border-line">
+              <div className="flex items-center justify-center gap-1.5 text-[11px] text-ink-muted pt-2 border-t border-line text-center">
                 <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>Begitu lunas, halaman langsung otomatis membuka surat Anda.</span>
               </div>
             </div>
 
             {/* Panduan Pembayaran */}
-            <div className="rounded-3xl border border-line bg-paper p-6 shadow-sm">
+            <div className="rounded-2xl sm:rounded-3xl border border-line bg-paper p-4 sm:p-6 shadow-sm min-w-0 overflow-hidden">
               <h3 className="text-sm font-bold text-ink uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Smartphone className="h-4 w-4 text-seal-600" />
                 Langkah Pembayaran Singkat:

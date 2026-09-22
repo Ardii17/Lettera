@@ -590,14 +590,17 @@ export function HeritageWeddingBuilderForm({
             </Field>
           </div>
 
-          <div className="p-4 border border-stone-200 rounded-xl space-y-4 bg-white">
-            <p className="text-xs font-bold text-amber-800 uppercase tracking-wider">Palet Warna Template</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Palet Warna Template - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <p className="text-xs font-bold text-amber-800 uppercase tracking-wider px-1">Palet Warna Template</p>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Aksen Emas"
                 value={(watch("primaryColor") as string) || "#c59b27"}
                 onChange={(color) => setValue("primaryColor", color, { shouldDirty: true })}
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar (Deep Navy)"
                 value={(watch("backgroundColor") as string) || "#0b1320"}

@@ -541,38 +541,47 @@ export function RoyalGardenWeddingBuilderForm({
             </p>
           </div>
 
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
           {setValue && watch && (
-            <div className="space-y-5">
-              <ColorPickerField
-                label="Warna Aksen Utama"
-                value={(watch("primaryColor") as string) || "#064e3b"}
-                onChange={(val) => setValue("primaryColor", val, { shouldDirty: true })}
-                presets={[
-                  { label: "Royal Emerald", value: "#064e3b", description: "Hijau zamrud botani" },
-                  { label: "Imperial Gold", value: "#92400e", description: "Emas tembaga kemewahan" },
-                  { label: "Midnight Sage", value: "#14532d", description: "Hijau lumut hutan" },
-                  { label: "Burgundy Velvet", value: "#701a75", description: "Ungu tua velvet" },
-                  { label: "Sapphire Royal", value: "#1e3a8a", description: "Biru safir megah" },
-                ]}
-              />
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Aksen Utama"
+                  value={(watch("primaryColor") as string) || "#064e3b"}
+                  onChange={(val) => setValue("primaryColor", val, { shouldDirty: true })}
+                  presets={[
+                    { label: "Royal Emerald", value: "#064e3b", description: "Hijau zamrud botani" },
+                    { label: "Imperial Gold", value: "#92400e", description: "Emas tembaga kemewahan" },
+                    { label: "Midnight Sage", value: "#14532d", description: "Hijau lumut hutan" },
+                    { label: "Burgundy Velvet", value: "#701a75", description: "Ungu tua velvet" },
+                    { label: "Sapphire Royal", value: "#1e3a8a", description: "Biru safir megah" },
+                  ]}
+                />
+              </div>
 
-              <ColorPickerField
-                label="Warna Latar Belakang Halaman"
-                value={(watch("backgroundColor") as string) || "#f4f7f4"}
-                onChange={(val) => setValue("backgroundColor", val, { shouldDirty: true })}
-                presets={BACKGROUND_COLOR_PRESETS}
-              />
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Latar Belakang Halaman"
+                  value={(watch("backgroundColor") as string) || "#f4f7f4"}
+                  onChange={(val) => setValue("backgroundColor", val, { shouldDirty: true })}
+                  presets={BACKGROUND_COLOR_PRESETS}
+                />
+              </div>
 
-              <ColorPickerField
-                label="Warna Lembaran Kartu Undangan"
-                value={(watch("cardColor") as string) || "#ffffff"}
-                onChange={(val) => setValue("cardColor", val, { shouldDirty: true })}
-                presets={CARD_COLOR_PRESETS}
-              />
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Lembaran Kartu Undangan"
+                  value={(watch("cardColor") as string) || "#ffffff"}
+                  onChange={(val) => setValue("cardColor", val, { shouldDirty: true })}
+                  presets={CARD_COLOR_PRESETS}
+                />
+              </div>
             </div>
           )}
 
-          <div className="space-y-4 border-t border-stone-200 pt-4">
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">Audio Musik Pengiring</h4>
             <Field label="Judul Musik Pengiring" htmlFor={`${idPrefix}-musicTitle`}>
               <Input id={`${idPrefix}-musicTitle`} placeholder="A Thousand Years (Cello & Piano Orchestra)" {...register("musicTitle")} />
             </Field>

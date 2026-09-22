@@ -505,35 +505,43 @@ export function WeddingBuilderForm({
             </Field>
           </div>
 
-          <div className="rounded-2xl border border-line bg-paper p-4 sm:p-5 space-y-4">
+          <div className="space-y-4">
             <h4 className="text-sm font-bold text-ink">Palet Warna</h4>
-            <ColorPickerField
-              label="Warna Aksen Utama (Gold / Tombol / Monogram)"
-              value={(watch("primaryColor") as string) || "#b48c36"}
-              onChange={(hex) => setValue("primaryColor", hex, { shouldValidate: true })}
-              presets={WEDDING_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-line bg-paper p-4 sm:p-5">
+              <ColorPickerField
+                label="Warna Aksen Utama (Gold / Tombol / Monogram)"
+                value={(watch("primaryColor") as string) || "#b48c36"}
+                onChange={(hex) => setValue("primaryColor", hex, { shouldValidate: true })}
+                presets={WEDDING_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Latar Belakang Undangan"
-              value={(watch("backgroundColor") as string) || "#faf7f2"}
-              onChange={(hex) => setValue("backgroundColor", hex, { shouldValidate: true })}
-              presets={BACKGROUND_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-line bg-paper p-4 sm:p-5">
+              <ColorPickerField
+                label="Warna Latar Belakang Undangan"
+                value={(watch("backgroundColor") as string) || "#faf7f2"}
+                onChange={(hex) => setValue("backgroundColor", hex, { shouldValidate: true })}
+                presets={BACKGROUND_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Wadah Kartu & Acara"
-              value={(watch("cardColor") as string) || "#ffffff"}
-              onChange={(hex) => setValue("cardColor", hex, { shouldValidate: true })}
-              presets={CARD_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-line bg-paper p-4 sm:p-5">
+              <ColorPickerField
+                label="Warna Wadah Kartu & Acara"
+                value={(watch("cardColor") as string) || "#ffffff"}
+                onChange={(hex) => setValue("cardColor", hex, { shouldValidate: true })}
+                presets={CARD_COLOR_PRESETS}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Teks Judul & Nama Mempelai"
-              value={(watch("textColor") as string) || "#2a241e"}
-              onChange={(hex) => setValue("textColor", hex, { shouldValidate: true })}
-              presets={TEXT_COLOR_PRESETS}
-            />
+            <div className="rounded-2xl border border-line bg-paper p-4 sm:p-5">
+              <ColorPickerField
+                label="Warna Teks Judul & Nama Mempelai"
+                value={(watch("textColor") as string) || "#2a241e"}
+                onChange={(hex) => setValue("textColor", hex, { shouldValidate: true })}
+                presets={TEXT_COLOR_PRESETS}
+              />
+            </div>
           </div>
         </div>
       )}

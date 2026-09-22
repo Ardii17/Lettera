@@ -73,7 +73,7 @@ export function buildContentSchema(fields: TemplateField[]) {
   return z.object(shape);
 }
 
-/** Nilai awal form: default template, lalu ditimpa konten yang sudah ada. */
+/** Nilai awal form: kosong secara default agar user dapat langsung mengetik tanpa menghapus teks contoh. */
 export function buildDefaultValues(
   template: TemplateMeta,
   initial?: LetterContent | null,
@@ -81,27 +81,12 @@ export function buildDefaultValues(
   const values: LetterContent = {};
 
   for (const field of template.fields) {
-    if (field.defaultValue !== undefined && field.defaultValue !== "") {
-      values[field.name] = field.defaultValue;
-    } else if (template.sample?.[field.name] !== undefined) {
-      values[field.name] = template.sample[field.name];
-    } else if (field.type === "select") {
-      values[field.name] = field.options?.[0]?.value ?? "";
-    } else if (field.type === "number") {
-      values[field.name] = "" as unknown as number;
-    } else if (field.type === "color") {
+    if (field.type === "color") {
       values[field.name] = String(field.defaultValue ?? "#c03a52");
+    } else if (field.type === "select") {
+      values[field.name] = String(field.defaultValue ?? field.options?.[0]?.value ?? "");
     } else {
       values[field.name] = "";
-    }
-  }
-
-  // Masukkan juga field sample lain yang mungkin ada di template.sample
-  if (template.sample) {
-    for (const [key, val] of Object.entries(template.sample)) {
-      if (values[key] === undefined && (typeof val === "string" || typeof val === "number")) {
-        values[key] = val;
-      }
     }
   }
 

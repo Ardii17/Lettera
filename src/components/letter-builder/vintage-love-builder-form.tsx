@@ -551,42 +551,48 @@ export function VintageLoveBuilderForm({
             </p>
           </div>
 
-          {/* Pengaturan Warna */}
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
           <div className="space-y-4">
-            <Field label="Warna Segel Lilin & Cap Pos" htmlFor={`${idPrefix}-primaryColor`}>
-              <ColorPickerField
-                value={(watch("primaryColor") as string) || "#781d2f"}
-                onChange={(hex) =>
-                  setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={VINTAGE_LOVE_COLOR_PRESETS}
-                helperText="Warna stempel cap lilin 3D, garis ornamen, dan aksen cinta."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Segel Lilin & Cap Pos" htmlFor={`${idPrefix}-primaryColor`}>
+                <ColorPickerField
+                  value={(watch("primaryColor") as string) || "#781d2f"}
+                  onChange={(hex) =>
+                    setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={VINTAGE_LOVE_COLOR_PRESETS}
+                  helperText="Warna stempel cap lilin 3D, garis ornamen, dan aksen cinta."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Latar Belakang Halaman" htmlFor={`${idPrefix}-backgroundColor`}>
-              <ColorPickerField
-                value={(watch("backgroundColor") as string) || "#f6f1ea"}
-                onChange={(hex) =>
-                  setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={BACKGROUND_COLOR_PRESETS}
-                helperText="Warna kanvas di luar amplop."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Latar Belakang Halaman" htmlFor={`${idPrefix}-backgroundColor`}>
+                <ColorPickerField
+                  value={(watch("backgroundColor") as string) || "#f6f1ea"}
+                  onChange={(hex) =>
+                    setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={BACKGROUND_COLOR_PRESETS}
+                  helperText="Warna kanvas di luar amplop."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Kertas Perkamen" htmlFor={`${idPrefix}-cardColor`}>
-              <ColorPickerField
-                value={(watch("cardColor") as string) || "#fffdf9"}
-                onChange={(hex) =>
-                  setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={CARD_COLOR_PRESETS}
-                helperText="Warna lembaran surat perkamen."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Kertas Perkamen" htmlFor={`${idPrefix}-cardColor`}>
+                <ColorPickerField
+                  value={(watch("cardColor") as string) || "#fffdf9"}
+                  onChange={(hex) =>
+                    setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={CARD_COLOR_PRESETS}
+                  helperText="Warna lembaran surat perkamen."
+                />
+              </Field>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Judul & Cap" htmlFor={`${idPrefix}-textColor`}>
                 <ColorPickerField
                   value={(watch("textColor") as string) || "#3e1b24"}
@@ -597,7 +603,9 @@ export function VintageLoveBuilderForm({
                   helperText="Warna judul surat dan cap pos."
                 />
               </Field>
+            </div>
 
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Isi Surat" htmlFor={`${idPrefix}-bodyTextColor`}>
                 <ColorPickerField
                   value={(watch("bodyTextColor") as string) || "#4a3b32"}
@@ -611,8 +619,8 @@ export function VintageLoveBuilderForm({
             </div>
           </div>
 
-          {/* Pengaturan Audio */}
-          <div className="border-t border-stone-200 pt-5 space-y-4">
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
               Audio Musik Pengiring (Piringan Hitam)
             </h4>

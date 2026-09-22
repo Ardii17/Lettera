@@ -595,9 +595,9 @@ export function SymphonyLoveBuilderForm({
           </Field>
 
           {/* Palette presets */}
-          <div className="space-y-2 pt-2 border-t border-border/50">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-3">
             <span className="text-xs font-semibold text-foreground">Preset Warna Tema Partitur:</span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {colorPresets.map((preset, idx) => (
                 <button
                   key={idx}
@@ -620,47 +620,56 @@ export function SymphonyLoveBuilderForm({
             </div>
           </div>
 
-          {/* Color pickers */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <ColorPickerField
-              label="Candlelight Amber Gold"
-              value={primaryColor || "#d4af37"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Candlelight Amber", value: "#d4af37" },
-                { label: "Brass Clef Gold", value: "#f59e0b" },
-                { label: "Champagne Score", value: "#e5c07b" },
-              ]}
-            />
-            <ColorPickerField
-              label="Nocturne Warm Cello"
-              value={secondaryColor || "#b45309"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Warm Cello", value: "#b45309" },
-                { label: "Violin Mahogany", value: "#78350f" },
-                { label: "Autumn Sonata", value: "#92400e" },
-              ]}
-            />
-            <ColorPickerField
-              label="Concert Hall Ebony"
-              value={accentColor || "#1a100c"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Concert Ebony", value: "#1a100c" },
-                { label: "Midnight Velvet", value: "#110a08" },
-                { label: "Resonance Dark", value: "#0c0806" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Candlelight Amber Gold"
+                value={primaryColor || "#d4af37"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Candlelight Amber", value: "#d4af37" },
+                  { label: "Brass Clef Gold", value: "#f59e0b" },
+                  { label: "Champagne Score", value: "#e5c07b" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Nocturne Warm Cello"
+                value={secondaryColor || "#b45309"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Warm Cello", value: "#b45309" },
+                  { label: "Violin Mahogany", value: "#78350f" },
+                  { label: "Autumn Sonata", value: "#92400e" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Concert Hall Ebony"
+                value={accentColor || "#1a100c"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Concert Ebony", value: "#1a100c" },
+                  { label: "Midnight Velvet", value: "#110a08" },
+                  { label: "Resonance Dark", value: "#0c0806" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field label="URL Musik Latar (Simfoni Piano & Selo Klasik)">
-            <Input
-              {...register("musicTrack")}
-              id={`${idPrefix}-musicTrack`}
-              placeholder="https://cdn.pixabay.com/..."
-            />
-          </Field>
+          {/* Pengaturan Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field label="URL Musik Latar (Simfoni Piano & Selo Klasik)">
+              <Input
+                {...register("musicTrack")}
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://cdn.pixabay.com/..."
+              />
+            </Field>
+          </div>
         </div>
       )}
 

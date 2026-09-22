@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type Resolver } from "react-hook-form";
-import { Eye, PencilLine, Wand2 } from "lucide-react";
+import { Eye, PencilLine, RotateCcw, Wand2 } from "lucide-react";
 import { Button, buttonStyles } from "@/components/ui/button";
 import { ErrorNotice } from "@/components/ui/states";
 import { Spinner } from "@/components/ui/spinner";
@@ -97,13 +97,30 @@ export function LetterBuilder({
     if (mode !== "create") return;
     const saved = draft.load();
     if (saved) {
+      // Jika data tersimpan di localStorage hanyalah teks sample lama yang tersimpan otomatis,
+      // abaikan dan bersihkan draft agar user mendapatkan form kosong yang siap diisi.
+      if (template.sample) {
+        const isOnlyOldSample = Object.entries(saved).every(
+          ([k, v]) =>
+            v === "" ||
+            v === template.sample?.[k] ||
+            template.fields.find((f) => f.name === k)?.type === "color",
+        );
+        if (isOnlyOldSample) {
+          draft.clear();
+          return;
+        }
+      }
+
       const cleanSaved: LetterContent = {};
       for (const [k, v] of Object.entries(saved)) {
         if (v !== "" && v !== null && v !== undefined) {
           cleanSaved[k] = v;
         }
       }
-      form.reset({ ...defaultValues, ...cleanSaved });
+      if (Object.keys(cleanSaved).length > 0) {
+        form.reset({ ...defaultValues, ...cleanSaved });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -111,9 +128,19 @@ export function LetterBuilder({
   // Autosave ringan dengan jeda, supaya tidak menulis ke localStorage tiap ketikan.
   useEffect(() => {
     if (mode !== "create") return;
+    // Jangan autosave jika form masih dalam kondisi default kosong
+    const isFormEmpty = Object.entries(values).every(
+      ([k, v]) =>
+        v === "" ||
+        v === null ||
+        v === undefined ||
+        template.fields.find((f) => f.name === k)?.type === "color",
+    );
+    if (isFormEmpty) return;
+
     const timer = setTimeout(() => draft.save(values), 700);
     return () => clearTimeout(timer);
-  }, [values, mode, draft]);
+  }, [values, mode, draft, template.fields]);
 
   const handleOpenFinalPreview = async (enforceValidation = false) => {
     setFormError(null);
@@ -256,16 +283,33 @@ export function LetterBuilder({
                 <h2 className="font-display text-xl font-semibold text-ink truncate">{template.name}</h2>
                 <p className="mt-1 text-sm text-ink-soft">{template.tagline}</p>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => form.reset(template.sample)}
-                title="Isi form dengan contoh isi surat"
-                className="shrink-0"
-              >
-                <Wand2 className="h-4 w-4" aria-hidden />
-                Contoh
-              </Button>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    draft.clear();
+                    form.reset(buildDefaultValues(template));
+                  }}
+                  title="Kosongkan seluruh isian formulir"
+                  className="text-xs text-ink-muted hover:text-ink hover:bg-page border-line"
+                >
+                  <RotateCcw className="h-3.5 w-3.5 mr-1" aria-hidden />
+                  Kosongkan
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => form.reset({ ...defaultValues, ...(template.sample ?? {}) })}
+                  title="Isi form dengan contoh isi surat"
+                  className="text-xs"
+                >
+                  <Wand2 className="h-3.5 w-3.5 mr-1" aria-hidden />
+                  Contoh
+                </Button>
+              </div>
             </div>
 
             {template.slug === "romantic" ? (

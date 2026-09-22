@@ -588,9 +588,9 @@ export function AmalfiWeddingBuilderForm({
           </Field>
 
           {/* Palette presets */}
-          <div className="space-y-2 pt-2 border-t border-border/50">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-3">
             <span className="text-xs font-semibold text-foreground">Preset Warna Tema Villa:</span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {colorPresets.map((preset, idx) => (
                 <button
                   key={idx}
@@ -613,47 +613,56 @@ export function AmalfiWeddingBuilderForm({
             </div>
           </div>
 
-          {/* Color pickers */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <ColorPickerField
-              label="Limoncello Gold"
-              value={primaryColor || "#eab308"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Limoncello Gold", value: "#eab308" },
-                { label: "Citrus Amber", value: "#f59e0b" },
-                { label: "Champagne Leaf", value: "#d4af37" },
-              ]}
-            />
-            <ColorPickerField
-              label="Mediterranean Azure"
-              value={secondaryColor || "#0284c7"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Mediterranean Azure", value: "#0284c7" },
-                { label: "Tyrrhenian Sky", value: "#38bdf8" },
-                { label: "Amalfi Cobalt", value: "#1d4ed8" },
-              ]}
-            />
-            <ColorPickerField
-              label="Tyrrhenian Deep Blue"
-              value={accentColor || "#0f2b48"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Deep Tyrrhenian", value: "#0f2b48" },
-                { label: "Midnight Coast", value: "#07172b" },
-                { label: "Abyssal Villa", value: "#051120" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Limoncello Gold"
+                value={primaryColor || "#eab308"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Limoncello Gold", value: "#eab308" },
+                  { label: "Citrus Amber", value: "#f59e0b" },
+                  { label: "Champagne Leaf", value: "#d4af37" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Mediterranean Azure"
+                value={secondaryColor || "#0284c7"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Mediterranean Azure", value: "#0284c7" },
+                  { label: "Tyrrhenian Sky", value: "#38bdf8" },
+                  { label: "Amalfi Cobalt", value: "#1d4ed8" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Tyrrhenian Deep Blue"
+                value={accentColor || "#0f2b48"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Deep Tyrrhenian", value: "#0f2b48" },
+                  { label: "Midnight Coast", value: "#07172b" },
+                  { label: "Abyssal Villa", value: "#051120" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field label="URL Musik Latar (Melodi Mandolin Italia)">
-            <Input
-              {...register("musicTrack")}
-              id={`${idPrefix}-musicTrack`}
-              placeholder="https://cdn.pixabay.com/..."
-            />
-          </Field>
+          {/* Pengaturan Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field label="URL Musik Latar (Melodi Mandolin Italia)">
+              <Input
+                {...register("musicTrack")}
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://cdn.pixabay.com/..."
+              />
+            </Field>
+          </div>
         </div>
       )}
 

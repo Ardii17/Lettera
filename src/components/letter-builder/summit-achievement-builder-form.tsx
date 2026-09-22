@@ -541,53 +541,63 @@ export function SummitAchievementBuilderForm({
             Sesuaikan nuansa warna lanskap pegunungan glasial dan musik simfoni petualangan alpine.
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Es Glasial (Cyan)"
-              value={primaryColor || "#38bdf8"}
-              onChange={(color) => setValue("primaryColor", color)}
-              presets={[
-                { label: "Glacier Ice Cyan", value: "#38bdf8" },
-                { label: "Alpine Sky Blue", value: "#0ea5e9" },
-                { label: "Arctic Frost", value: "#67e8f9" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Es Glasial (Cyan)"
+                value={primaryColor || "#38bdf8"}
+                onChange={(color) => setValue("primaryColor", color)}
+                presets={[
+                  { label: "Glacier Ice Cyan", value: "#38bdf8" },
+                  { label: "Alpine Sky Blue", value: "#0ea5e9" },
+                  { label: "Arctic Frost", value: "#67e8f9" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Emas Puncak (Amber)"
-              value={secondaryColor || "#f59e0b"}
-              onChange={(color) => setValue("secondaryColor", color)}
-              presets={[
-                { label: "Alpine Dawn Gold", value: "#f59e0b" },
-                { label: "Campfire Flame", value: "#ea580c" },
-                { label: "High Altitude Brass", value: "#d97706" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Emas Puncak (Amber)"
+                value={secondaryColor || "#f59e0b"}
+                onChange={(color) => setValue("secondaryColor", color)}
+                presets={[
+                  { label: "Alpine Dawn Gold", value: "#f59e0b" },
+                  { label: "Campfire Flame", value: "#ea580c" },
+                  { label: "High Altitude Brass", value: "#d97706" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Latar (Twilight Navy)"
-              value={backgroundColor || "#08111e"}
-              onChange={(color) => setValue("backgroundColor", color)}
-              presets={[
-                { label: "Glacier Twilight Navy", value: "#08111e" },
-                { label: "High Ridge Slate", value: "#0f172a" },
-                { label: "Midnight Peak", value: "#050b14" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Latar (Twilight Navy)"
+                value={backgroundColor || "#08111e"}
+                onChange={(color) => setValue("backgroundColor", color)}
+                presets={[
+                  { label: "Glacier Twilight Navy", value: "#08111e" },
+                  { label: "High Ridge Slate", value: "#0f172a" },
+                  { label: "Midnight Peak", value: "#050b14" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-audioUrl`}
-            label="URL Musik Simfoni Pegunungan (Fanfare)"
-            error={errors.audioUrl?.message}
-            helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
-          >
-            <Input
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-audioUrl`}
-              {...register("audioUrl")}
-              placeholder="https://example.com/alpine-epic.mp3"
-            />
-          </Field>
+              label="URL Musik Simfoni Pegunungan (Fanfare)"
+              error={errors.audioUrl?.message}
+              helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
+            >
+              <Input
+                id={`${idPrefix}-audioUrl`}
+                {...register("audioUrl")}
+                placeholder="https://example.com/alpine-epic.mp3"
+              />
+            </Field>
+          </div>
         </div>
       )}
 

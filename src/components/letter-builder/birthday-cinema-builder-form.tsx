@@ -748,11 +748,12 @@ export function BirthdayCinemaBuilderForm({
             </Field>
           </div>
 
-          <div className="p-4 border border-stone-200 rounded-xl space-y-4 bg-white">
-            <p className="text-xs font-bold text-stone-800 uppercase tracking-wider">
+          {/* Palet Warna Sinema - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <p className="text-xs font-bold text-stone-800 uppercase tracking-wider px-1">
               Palet Warna Sinema
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Aksen Golden Laurel"
                 value={(watch("accentColor") as string) || "#e5b869"}
@@ -760,6 +761,8 @@ export function BirthdayCinemaBuilderForm({
                   setValue("accentColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Studio Premiere"
                 value={(watch("primaryColor") as string) || "#0d0d11"}
@@ -767,6 +770,8 @@ export function BirthdayCinemaBuilderForm({
                   setValue("primaryColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar Sinema"
                 value={(watch("backgroundColor") as string) || "#08080a"}
@@ -775,6 +780,8 @@ export function BirthdayCinemaBuilderForm({
                 }
                 presets={BACKGROUND_COLOR_PRESETS}
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Kartu Naskah & Klise"
                 value={(watch("cardColor") as string) || "#16171d"}

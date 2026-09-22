@@ -96,41 +96,49 @@ export function CampfireFriendshipBuilderForm({
       {/* ========================================================================= */}
       {activeTab === "hero" && (
         <div className="space-y-5 animate-fadeIn">
-          {/* Skema Warna */}
-          <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
+          {/* Skema Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 flex items-center gap-1.5 px-1">
               <Flame className="w-4 h-4" />
               Skema Warna Suasana Perkemahan
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <ColorPickerField
-                label="Warna Aksen Api Unggun"
-                value={primaryColor}
-                onChange={(val) => setValue("primaryColor", val)}
-                presets={FRIENDSHIP_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna tombol, lencana, dan sorotan utama."
-              />
-              <ColorPickerField
-                label="Warna Latar Belakang Malam"
-                value={backgroundColor}
-                onChange={(val) => setValue("backgroundColor", val)}
-                presets={BACKGROUND_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna langit malam perkemahan."
-              />
-              <ColorPickerField
-                label="Warna Tenda & Kartu"
-                value={cardColor}
-                onChange={(val) => setValue("cardColor", val)}
-                presets={CARD_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna wadah kartu dan panel kenangan."
-              />
-              <ColorPickerField
-                label="Warna Teks Judul & Nama"
-                value={textColor}
-                onChange={(val) => setValue("textColor", val)}
-                presets={TEXT_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna teks judul dan bintang."
-              />
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Aksen Api Unggun"
+                  value={primaryColor}
+                  onChange={(val) => setValue("primaryColor", val)}
+                  presets={FRIENDSHIP_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna tombol, lencana, dan sorotan utama."
+                />
+              </div>
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Latar Belakang Malam"
+                  value={backgroundColor}
+                  onChange={(val) => setValue("backgroundColor", val)}
+                  presets={BACKGROUND_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna langit malam perkemahan."
+                />
+              </div>
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Tenda & Kartu"
+                  value={cardColor}
+                  onChange={(val) => setValue("cardColor", val)}
+                  presets={CARD_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna wadah kartu dan panel kenangan."
+                />
+              </div>
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Teks Judul & Nama"
+                  value={textColor}
+                  onChange={(val) => setValue("textColor", val)}
+                  presets={TEXT_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna teks judul dan bintang."
+                />
+              </div>
             </div>
           </div>
 

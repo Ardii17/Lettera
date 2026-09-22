@@ -597,9 +597,9 @@ export function ChateauWeddingBuilderForm({
           </Field>
 
           {/* Palette presets */}
-          <div className="space-y-2 pt-2 border-t border-border/50">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-3">
             <span className="text-xs font-semibold text-foreground">Preset Warna Tema Istana:</span>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {colorPresets.map((preset, idx) => (
                 <button
                   key={idx}
@@ -622,47 +622,56 @@ export function ChateauWeddingBuilderForm({
             </div>
           </div>
 
-          {/* Color pickers */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            <ColorPickerField
-              label="Versailles Gold Leaf"
-              value={primaryColor || "#d4af37"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Versailles Gold", value: "#d4af37" },
-                { label: "Champagne Ormolu", value: "#e5c07b" },
-                { label: "Sunburst Gold", value: "#f59e0b" },
-              ]}
-            />
-            <ColorPickerField
-              label="Imperial Burgundy Velvet"
-              value={secondaryColor || "#991b1b"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Burgundy Velvet", value: "#991b1b" },
-                { label: "Royal Crimson", value: "#b91c1c" },
-                { label: "Deep Garnet", value: "#7f1d1d" },
-              ]}
-            />
-            <ColorPickerField
-              label="Velvet Deep Wine"
-              value={accentColor || "#24060f"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Velvet Deep Wine", value: "#24060f" },
-                { label: "Obsidian Burgundy", value: "#1a040b" },
-                { label: "Midnight Palace", value: "#0e0206" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Versailles Gold Leaf"
+                value={primaryColor || "#d4af37"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Versailles Gold", value: "#d4af37" },
+                  { label: "Champagne Ormolu", value: "#e5c07b" },
+                  { label: "Sunburst Gold", value: "#f59e0b" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Imperial Burgundy Velvet"
+                value={secondaryColor || "#991b1b"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Burgundy Velvet", value: "#991b1b" },
+                  { label: "Royal Crimson", value: "#b91c1c" },
+                  { label: "Deep Garnet", value: "#7f1d1d" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Velvet Deep Wine"
+                value={accentColor || "#24060f"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Velvet Deep Wine", value: "#24060f" },
+                  { label: "Obsidian Burgundy", value: "#1a040b" },
+                  { label: "Midnight Palace", value: "#0e0206" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field label="URL Musik Latar (Simfoni Waltz Istana Versailles)">
-            <Input
-              {...register("musicTrack")}
-              id={`${idPrefix}-musicTrack`}
-              placeholder="https://cdn.pixabay.com/..."
-            />
-          </Field>
+          {/* Pengaturan Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field label="URL Musik Latar (Simfoni Waltz Istana Versailles)">
+              <Input
+                {...register("musicTrack")}
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://cdn.pixabay.com/..."
+              />
+            </Field>
+          </div>
         </div>
       )}
 

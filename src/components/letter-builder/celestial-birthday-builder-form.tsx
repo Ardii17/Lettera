@@ -727,11 +727,12 @@ export function CelestialBirthdayBuilderForm({
             </Field>
           </div>
 
-          <div className="p-4 border border-slate-200 rounded-xl space-y-4 bg-white">
-            <p className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+          {/* Palet Warna Antariksa - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <p className="text-xs font-bold text-slate-800 uppercase tracking-wider px-1">
               Palet Warna Antariksa
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Aksen Starlight Gold"
                 value={(watch("primaryColor") as string) || "#f6c86d"}
@@ -739,6 +740,8 @@ export function CelestialBirthdayBuilderForm({
                   setValue("primaryColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Aksen Nebula Violet"
                 value={(watch("secondaryColor") as string) || "#818cf8"}
@@ -746,6 +749,8 @@ export function CelestialBirthdayBuilderForm({
                   setValue("secondaryColor", color, { shouldDirty: true })
                 }
               />
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar Kosmik"
                 value={(watch("backgroundColor") as string) || "#0b0e1b"}
@@ -754,6 +759,8 @@ export function CelestialBirthdayBuilderForm({
                 }
                 presets={BACKGROUND_COLOR_PRESETS}
               />
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Kontainer Kapsul"
                 value={(watch("cardColor") as string) || "#13172b"}

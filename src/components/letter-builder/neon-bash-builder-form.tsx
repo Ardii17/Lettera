@@ -513,11 +513,22 @@ export function NeonBashBuilderForm({
               <Input id={`${idPrefix}-dressCodeNotes`} placeholder="Kenakan busana gelap dengan sentuhan warna neon terang..." {...register("dressCodeNotes")} />
             </Field>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              <ColorPickerField label="Warna 1" value={(watch("paletteColor1") as string) || "#00f2fe"} onChange={(c) => setValue("paletteColor1", c, { shouldDirty: true })} />
-              <ColorPickerField label="Warna 2" value={(watch("paletteColor2") as string) || "#ff007f"} onChange={(c) => setValue("paletteColor2", c, { shouldDirty: true })} />
-              <ColorPickerField label="Warna 3" value={(watch("paletteColor3") as string) || "#39ff14"} onChange={(c) => setValue("paletteColor3", c, { shouldDirty: true })} />
-              <ColorPickerField label="Warna 4" value={(watch("paletteColor4") as string) || "#12121e"} onChange={(c) => setValue("paletteColor4", c, { shouldDirty: true })} />
+            <div className="space-y-3 pt-2">
+              <span className="text-xs font-semibold text-stone-700">Palet Rekomendasi Busana:</span>
+              <div className="space-y-3">
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 1" value={(watch("paletteColor1") as string) || "#00f2fe"} onChange={(c) => setValue("paletteColor1", c, { shouldDirty: true })} />
+                </div>
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 2" value={(watch("paletteColor2") as string) || "#ff007f"} onChange={(c) => setValue("paletteColor2", c, { shouldDirty: true })} />
+                </div>
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 3" value={(watch("paletteColor3") as string) || "#39ff14"} onChange={(c) => setValue("paletteColor3", c, { shouldDirty: true })} />
+                </div>
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 4" value={(watch("paletteColor4") as string) || "#12121e"} onChange={(c) => setValue("paletteColor4", c, { shouldDirty: true })} />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -545,15 +556,18 @@ export function NeonBashBuilderForm({
       {/* TAB 7: WARNA & BEATS */}
       {activeTab === "theme" && (
         <div className="space-y-6 animate-in fade-in-50 duration-200">
-          <div className="rounded-xl border border-stone-200 bg-white p-4 space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">Palet Warna Pesta</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Palet Warna Pesta - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800 px-1">Palet Warna Pesta</h4>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar Belakang (Dark Deck)"
                 value={(watch("backgroundColor") as string) || "#090910"}
                 onChange={(c) => setValue("backgroundColor", c, { shouldDirty: true })}
                 presets={BACKGROUND_COLOR_PRESETS}
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Kartu Pesta"
                 value={(watch("cardColor") as string) || "#12121e"}
@@ -563,7 +577,7 @@ export function NeonBashBuilderForm({
             </div>
           </div>
 
-          <div className="rounded-xl border border-stone-200 bg-white p-4 space-y-4">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">Audio Party Synthwave</h4>
             <Field
               label="Judul Musik Party"

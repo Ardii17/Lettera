@@ -628,56 +628,66 @@ export function ParfumDamourBuilderForm({
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Emas Sampanye"
-              value={primaryColor || "#e6c587"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Champagne Gold", value: "#e6c587" },
-                { label: "Versailles Gold", value: "#d4af37" },
-                { label: "Amber Glow", value: "#f59e0b" },
-                { label: "Pale Gold", value: "#fef08a" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Emas Sampanye"
+                value={primaryColor || "#e6c587"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Champagne Gold", value: "#e6c587" },
+                  { label: "Versailles Gold", value: "#d4af37" },
+                  { label: "Amber Glow", value: "#f59e0b" },
+                  { label: "Pale Gold", value: "#fef08a" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Mawar Anggun"
-              value={secondaryColor || "#d47a88"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Dusty Rose", value: "#d47a88" },
-                { label: "French Rose", value: "#f43f5e" },
-                { label: "Velvet Crimson", value: "#9f1239" },
-                { label: "Petal Pink", value: "#fda4af" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Mawar Anggun"
+                value={secondaryColor || "#d47a88"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Dusty Rose", value: "#d47a88" },
+                  { label: "French Rose", value: "#f43f5e" },
+                  { label: "Velvet Crimson", value: "#9f1239" },
+                  { label: "Petal Pink", value: "#fda4af" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Aksen Kristal"
-              value={accentColor || "#f59e0b"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Flacon Amber", value: "#f59e0b" },
-                { label: "Crystal Blue", value: "#93c5fd" },
-                { label: "Emerald Glass", value: "#34d399" },
-                { label: "Gilded Bronze", value: "#b45309" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Aksen Kristal"
+                value={accentColor || "#f59e0b"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Flacon Amber", value: "#f59e0b" },
+                  { label: "Crystal Blue", value: "#93c5fd" },
+                  { label: "Emerald Glass", value: "#34d399" },
+                  { label: "Gilded Bronze", value: "#b45309" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-musicTrack`}
-            label="URL Audio Musik Waltz Paris (Opsional)"
-            error={errors.musicTrack?.message}
-            helperText="Tautan file audio MP3/WAV berdurasi tenang untuk menemani proses pembacaan surat"
-          >
-            <Input
+          {/* Pengaturan Audio Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-musicTrack`}
-              placeholder="https://.../paris-romance-waltz.mp3"
-              {...register("musicTrack")}
-            />
-          </Field>
+              label="URL Audio Musik Waltz Paris (Opsional)"
+              error={errors.musicTrack?.message}
+              helperText="Tautan file audio MP3/WAV berdurasi tenang untuk menemani proses pembacaan surat"
+            >
+              <Input
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://.../paris-romance-waltz.mp3"
+                {...register("musicTrack")}
+              />
+            </Field>
+          </div>
         </div>
       )}
 

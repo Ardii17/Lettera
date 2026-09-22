@@ -618,56 +618,66 @@ export function TourbillonLoveBuilderForm({
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Emas Mawar (Rose Gold)"
-              value={primaryColor || "#e0a96d"}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Rose Gold", value: "#e0a96d" },
-                { label: "Champagne Gilt", value: "#fcd34d" },
-                { label: "Warm Bronze", value: "#b45309" },
-                { label: "Copper Gleam", value: "#ea580c" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Emas Mawar (Rose Gold)"
+                value={primaryColor || "#e0a96d"}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Rose Gold", value: "#e0a96d" },
+                  { label: "Champagne Gilt", value: "#fcd34d" },
+                  { label: "Warm Bronze", value: "#b45309" },
+                  { label: "Copper Gleam", value: "#ea580c" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Jarum Baja Biru"
-              value={secondaryColor || "#38bdf8"}
-              onChange={(val) => setValue("secondaryColor", val)}
-              presets={[
-                { label: "Blued Steel", value: "#38bdf8" },
-                { label: "Lapis Lazuli", value: "#2563eb" },
-                { label: "Midnight Blue", value: "#1e3a8a" },
-                { label: "Cyan Glaze", value: "#06b6d4" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Jarum Baja Biru"
+                value={secondaryColor || "#38bdf8"}
+                onChange={(val) => setValue("secondaryColor", val)}
+                presets={[
+                  { label: "Blued Steel", value: "#38bdf8" },
+                  { label: "Lapis Lazuli", value: "#2563eb" },
+                  { label: "Midnight Blue", value: "#1e3a8a" },
+                  { label: "Cyan Glaze", value: "#06b6d4" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Kuningan Horologi"
-              value={accentColor || "#d4af37"}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Horological Brass", value: "#d4af37" },
-                { label: "Golden Gear", value: "#eab308" },
-                { label: "Jeweled Ruby", value: "#e11d48" },
-                { label: "Polished Steel", value: "#94a3b8" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Kuningan Horologi"
+                value={accentColor || "#d4af37"}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Horological Brass", value: "#d4af37" },
+                  { label: "Golden Gear", value: "#eab308" },
+                  { label: "Jeweled Ruby", value: "#e11d48" },
+                  { label: "Polished Steel", value: "#94a3b8" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-musicTrack`}
-            label="URL Audio Musik Kotak Mekanik Jam / Harpsichord (Opsional)"
-            error={errors.musicTrack?.message}
-            helperText="Tautan file audio MP3/WAV kotak musik mekanik yang tenang dan romantis"
-          >
-            <Input
+          {/* Pengaturan Audio Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-musicTrack`}
-              placeholder="https://.../mechanical-music-box.mp3"
-              {...register("musicTrack")}
-            />
-          </Field>
+              label="URL Audio Musik Kotak Mekanik Jam / Harpsichord (Opsional)"
+              error={errors.musicTrack?.message}
+              helperText="Tautan file audio MP3/WAV kotak musik mekanik yang tenang dan romantis"
+            >
+              <Input
+                id={`${idPrefix}-musicTrack`}
+                placeholder="https://.../mechanical-music-box.mp3"
+                {...register("musicTrack")}
+              />
+            </Field>
+          </div>
         </div>
       )}
 

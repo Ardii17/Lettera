@@ -517,53 +517,63 @@ export function SafeHarborBuilderForm({
             Sesuaikan nuansa lentera mercusuar dan alunan musik deburan ombak malam hari yang menenangkan.
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <ColorPickerField
-              label="Warna Lentera (Amber)"
-              value={primaryColor || "#f59e0b"}
-              onChange={(color) => setValue("primaryColor", color)}
-              presets={[
-                { label: "Lantern Beacon Amber", value: "#f59e0b" },
-                { label: "Warm Harbor Gold", value: "#eab308" },
-                { label: "Flame Brass", value: "#d97706" },
-              ]}
-            />
+          {/* Color pickers - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Lentera (Amber)"
+                value={primaryColor || "#f59e0b"}
+                onChange={(color) => setValue("primaryColor", color)}
+                presets={[
+                  { label: "Lantern Beacon Amber", value: "#f59e0b" },
+                  { label: "Warm Harbor Gold", value: "#eab308" },
+                  { label: "Flame Brass", value: "#d97706" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Ombak (Cyan)"
-              value={secondaryColor || "#38bdf8"}
-              onChange={(color) => setValue("secondaryColor", color)}
-              presets={[
-                { label: "Glacial Seafoam", value: "#38bdf8" },
-                { label: "Oceanic Mist", value: "#0ea5e9" },
-                { label: "Coastal Teal", value: "#14b8a6" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Ombak (Cyan)"
+                value={secondaryColor || "#38bdf8"}
+                onChange={(color) => setValue("secondaryColor", color)}
+                presets={[
+                  { label: "Glacial Seafoam", value: "#38bdf8" },
+                  { label: "Oceanic Mist", value: "#0ea5e9" },
+                  { label: "Coastal Teal", value: "#14b8a6" },
+                ]}
+              />
+            </div>
 
-            <ColorPickerField
-              label="Warna Samudra (Navy)"
-              value={backgroundColor || "#07101d"}
-              onChange={(color) => setValue("backgroundColor", color)}
-              presets={[
-                { label: "Deep Storm Navy", value: "#07101d" },
-                { label: "Midnight Anchorage", value: "#0b1626" },
-                { label: "Abyssal Slate", value: "#050b14" },
-              ]}
-            />
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Samudra (Navy)"
+                value={backgroundColor || "#07101d"}
+                onChange={(color) => setValue("backgroundColor", color)}
+                presets={[
+                  { label: "Deep Storm Navy", value: "#07101d" },
+                  { label: "Midnight Anchorage", value: "#0b1626" },
+                  { label: "Abyssal Slate", value: "#050b14" },
+                ]}
+              />
+            </div>
           </div>
 
-          <Field
-            id={`${idPrefix}-audioUrl`}
-            label="URL Musik Deburan Ombak Damai (Cello & Waves)"
-            error={errors.audioUrl?.message}
-            helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
-          >
-            <Input
+          {/* Pengaturan Audio dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
+            <Field
               id={`${idPrefix}-audioUrl`}
-              {...register("audioUrl")}
-              placeholder="https://example.com/ocean-lullaby.mp3"
-            />
-          </Field>
+              label="URL Musik Deburan Ombak Damai (Cello & Waves)"
+              error={errors.audioUrl?.message}
+              helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
+            >
+              <Input
+                id={`${idPrefix}-audioUrl`}
+                {...register("audioUrl")}
+                placeholder="https://example.com/ocean-lullaby.mp3"
+              />
+            </Field>
+          </div>
         </div>
       )}
 

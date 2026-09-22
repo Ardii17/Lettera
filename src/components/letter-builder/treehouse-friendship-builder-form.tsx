@@ -96,41 +96,49 @@ export function TreehouseFriendshipBuilderForm({
       {/* ========================================================================= */}
       {activeTab === "hero" && (
         <div className="space-y-5 animate-fadeIn">
-          {/* Skema Warna */}
-          <div className="p-4 rounded-2xl bg-emerald-600/5 border border-emerald-600/20 space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+          {/* Skema Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5 px-1">
               <Trees className="w-4 h-4" />
               Skema Warna Suasana Rumah Pohon & Alam
             </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <ColorPickerField
-                label="Warna Daun Zamrud & Lampu Peri"
-                value={primaryColor}
-                onChange={(val) => setValue("primaryColor", val)}
-                presets={FRIENDSHIP_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna ornamen dedaunan, tombol, dan sorotan markas."
-              />
-              <ColorPickerField
-                label="Warna Hutan Malam (Background)"
-                value={backgroundColor}
-                onChange={(val) => setValue("backgroundColor", val)}
-                presets={BACKGROUND_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna kanopi hutan dan latar belakang."
-              />
-              <ColorPickerField
-                label="Warna Papan Kayu Cedar (Card)"
-                value={cardColor}
-                onChange={(val) => setValue("cardColor", val)}
-                presets={CARD_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna papan kayu wadah kartu kenangan."
-              />
-              <ColorPickerField
-                label="Warna Teks Judul (Krim Daun)"
-                value={textColor}
-                onChange={(val) => setValue("textColor", val)}
-                presets={TEXT_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
-                helperText="Warna teks judul dan nama sahabat."
-              />
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Daun Zamrud & Lampu Peri"
+                  value={primaryColor}
+                  onChange={(val) => setValue("primaryColor", val)}
+                  presets={FRIENDSHIP_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna ornamen dedaunan, tombol, dan sorotan markas."
+                />
+              </div>
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Hutan Malam (Background)"
+                  value={backgroundColor}
+                  onChange={(val) => setValue("backgroundColor", val)}
+                  presets={BACKGROUND_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna kanopi hutan dan latar belakang."
+                />
+              </div>
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Papan Kayu Cedar (Card)"
+                  value={cardColor}
+                  onChange={(val) => setValue("cardColor", val)}
+                  presets={CARD_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna papan kayu wadah kartu kenangan."
+                />
+              </div>
+              <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+                <ColorPickerField
+                  label="Warna Teks Judul (Krim Daun)"
+                  value={textColor}
+                  onChange={(val) => setValue("textColor", val)}
+                  presets={TEXT_COLOR_PRESETS.map((p) => ({ label: p.label, value: p.value }))}
+                  helperText="Warna teks judul dan nama sahabat."
+                />
+              </div>
             </div>
           </div>
 

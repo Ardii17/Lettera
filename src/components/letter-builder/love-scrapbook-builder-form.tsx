@@ -634,41 +634,48 @@ export function LoveScrapbookBuilderForm({
             </p>
           </div>
 
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
           <div className="space-y-4">
-            <Field label="Warna Aksen Washi Tape & Pita" htmlFor={`${idPrefix}-primaryColor`}>
-              <ColorPickerField
-                value={(watch("primaryColor") as string) || "#f472b6"}
-                onChange={(hex) =>
-                  setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={SCRAPBOOK_COLOR_PRESETS}
-                helperText="Warna selotip washi tape pastel, stiker cinta, dan tombol interaktif."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Aksen Washi Tape & Pita" htmlFor={`${idPrefix}-primaryColor`}>
+                <ColorPickerField
+                  value={(watch("primaryColor") as string) || "#f472b6"}
+                  onChange={(hex) =>
+                    setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={SCRAPBOOK_COLOR_PRESETS}
+                  helperText="Warna selotip washi tape pastel, stiker cinta, dan tombol interaktif."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Meja / Kanvas Luar" htmlFor={`${idPrefix}-backgroundColor`}>
-              <ColorPickerField
-                value={(watch("backgroundColor") as string) || "#faf7f2"}
-                onChange={(hex) =>
-                  setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={BACKGROUND_COLOR_PRESETS}
-                helperText="Warna kanvas di luar buku jurnal."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Meja / Kanvas Luar" htmlFor={`${idPrefix}-backgroundColor`}>
+                <ColorPickerField
+                  value={(watch("backgroundColor") as string) || "#faf7f2"}
+                  onChange={(hex) =>
+                    setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={BACKGROUND_COLOR_PRESETS}
+                  helperText="Warna kanvas di luar buku jurnal."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Kertas Jurnal (Grid Sheet)" htmlFor={`${idPrefix}-cardColor`}>
-              <ColorPickerField
-                value={(watch("cardColor") as string) || "#ffffff"}
-                onChange={(hex) =>
-                  setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={CARD_COLOR_PRESETS}
-                helperText="Warna lembaran kertas jurnal."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Kertas Jurnal (Grid Sheet)" htmlFor={`${idPrefix}-cardColor`}>
+                <ColorPickerField
+                  value={(watch("cardColor") as string) || "#ffffff"}
+                  onChange={(hex) =>
+                    setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={CARD_COLOR_PRESETS}
+                  helperText="Warna lembaran kertas jurnal."
+                />
+              </Field>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Judul" htmlFor={`${idPrefix}-textColor`}>
                 <ColorPickerField
                   value={(watch("textColor") as string) || "#27272a"}
@@ -679,7 +686,9 @@ export function LoveScrapbookBuilderForm({
                   helperText="Warna teks judul jurnal dan surat."
                 />
               </Field>
+            </div>
 
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Isi Paragraf" htmlFor={`${idPrefix}-bodyTextColor`}>
                 <ColorPickerField
                   value={(watch("bodyTextColor") as string) || "#4b5563"}
@@ -693,8 +702,8 @@ export function LoveScrapbookBuilderForm({
             </div>
           </div>
 
-          {/* Audio Musik */}
-          <div className="border-t border-stone-200 pt-5 space-y-4">
+          {/* Audio Musik dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
               Audio Melodi Akustik Scrapbook
             </h4>

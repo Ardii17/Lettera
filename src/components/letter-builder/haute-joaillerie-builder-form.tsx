@@ -237,29 +237,34 @@ export function HauteJoaillerieBuilderForm({
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <ColorPickerField
-              label="Warna Beludru Kotak Perhiasan"
-              value={primaryColor}
-              onChange={(val) => setValue("primaryColor", val)}
-              presets={[
-                { label: "Midnight Sapphire", value: "#0a1128" },
-                { label: "Royal Emerald", value: "#061a14" },
-                { label: "Imperial Ruby Velvet", value: "#1a080c" },
-                { label: "Noir Vendôme", value: "#0a0a0a" },
-              ]}
-            />
-            <ColorPickerField
-              label="Warna Aksen Emas & Tatahan"
-              value={accentColor}
-              onChange={(val) => setValue("accentColor", val)}
-              presets={[
-                { label: "Or de Paris (24K Gold)", value: "#d4af37" },
-                { label: "Champagne Gold", value: "#e5c158" },
-                { label: "Rose Gold Vendôme", value: "#e0a899" },
-                { label: "Platinum Glow", value: "#e2e8f0" },
-              ]}
-            />
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4 pt-2">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Beludru Kotak Perhiasan"
+                value={primaryColor}
+                onChange={(val) => setValue("primaryColor", val)}
+                presets={[
+                  { label: "Midnight Sapphire", value: "#0a1128" },
+                  { label: "Royal Emerald", value: "#061a14" },
+                  { label: "Imperial Ruby Velvet", value: "#1a080c" },
+                  { label: "Noir Vendôme", value: "#0a0a0a" },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <ColorPickerField
+                label="Warna Aksen Emas & Tatahan"
+                value={accentColor}
+                onChange={(val) => setValue("accentColor", val)}
+                presets={[
+                  { label: "Or de Paris (24K Gold)", value: "#d4af37" },
+                  { label: "Champagne Gold", value: "#e5c158" },
+                  { label: "Rose Gold Vendôme", value: "#e0a899" },
+                  { label: "Platinum Glow", value: "#e2e8f0" },
+                ]}
+              />
+            </div>
           </div>
         </div>
       )}

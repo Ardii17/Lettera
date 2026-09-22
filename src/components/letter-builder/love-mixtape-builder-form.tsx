@@ -566,41 +566,48 @@ export function LoveMixtapeBuilderForm({
             </p>
           </div>
 
+          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
           <div className="space-y-4">
-            <Field label="Warna Bodi Kaset Pita" htmlFor={`${idPrefix}-primaryColor`}>
-              <ColorPickerField
-                value={(watch("primaryColor") as string) || "#e15b64"}
-                onChange={(hex) =>
-                  setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={MIXTAPE_COLOR_PRESETS}
-                helperText="Warna bodi plastik kaset retro."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Bodi Kaset Pita" htmlFor={`${idPrefix}-primaryColor`}>
+                <ColorPickerField
+                  value={(watch("primaryColor") as string) || "#e15b64"}
+                  onChange={(hex) =>
+                    setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={MIXTAPE_COLOR_PRESETS}
+                  helperText="Warna bodi plastik kaset retro."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Latar Belakang Halaman" htmlFor={`${idPrefix}-backgroundColor`}>
-              <ColorPickerField
-                value={(watch("backgroundColor") as string) || "#fbf8f3"}
-                onChange={(hex) =>
-                  setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={BACKGROUND_COLOR_PRESETS}
-                helperText="Warna kanvas di luar kaset."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Latar Belakang Halaman" htmlFor={`${idPrefix}-backgroundColor`}>
+                <ColorPickerField
+                  value={(watch("backgroundColor") as string) || "#fbf8f3"}
+                  onChange={(hex) =>
+                    setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={BACKGROUND_COLOR_PRESETS}
+                  helperText="Warna kanvas di luar kaset."
+                />
+              </Field>
+            </div>
 
-            <Field label="Warna Lembar Sleeve Kaset" htmlFor={`${idPrefix}-cardColor`}>
-              <ColorPickerField
-                value={(watch("cardColor") as string) || "#ffffff"}
-                onChange={(hex) =>
-                  setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
-                }
-                presets={CARD_COLOR_PRESETS}
-                helperText="Warna kertas lipatan sleeve kaset."
-              />
-            </Field>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
+              <Field label="Warna Lembar Sleeve Kaset" htmlFor={`${idPrefix}-cardColor`}>
+                <ColorPickerField
+                  value={(watch("cardColor") as string) || "#ffffff"}
+                  onChange={(hex) =>
+                    setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
+                  }
+                  presets={CARD_COLOR_PRESETS}
+                  helperText="Warna kertas lipatan sleeve kaset."
+                />
+              </Field>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Judul" htmlFor={`${idPrefix}-textColor`}>
                 <ColorPickerField
                   value={(watch("textColor") as string) || "#27272a"}
@@ -611,7 +618,9 @@ export function LoveMixtapeBuilderForm({
                   helperText="Warna judul surat dan nama di label kaset."
                 />
               </Field>
+            </div>
 
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Teks Isi Paragraf" htmlFor={`${idPrefix}-bodyTextColor`}>
                 <ColorPickerField
                   value={(watch("bodyTextColor") as string) || "#4b5563"}
@@ -625,8 +634,8 @@ export function LoveMixtapeBuilderForm({
             </div>
           </div>
 
-          {/* Audio Kaset */}
-          <div className="border-t border-stone-200 pt-5 space-y-4">
+          {/* Audio Kaset dalam Box Tersendiri */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
               Audio Musik yang Diputar Kaset
             </h4>

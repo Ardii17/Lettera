@@ -526,11 +526,22 @@ export function ArtExhibitionBuilderForm({
               <Input id={`${idPrefix}-dressCodeNotes`} placeholder="Tamu disarankan mengenakan busana monokrom gelap..." {...register("dressCodeNotes")} />
             </Field>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              <ColorPickerField label="Warna 1" value={(watch("paletteColor1") as string) || "#111111"} onChange={(c) => setValue("paletteColor1", c, { shouldDirty: true })} />
-              <ColorPickerField label="Warna 2" value={(watch("paletteColor2") as string) || "#27272a"} onChange={(c) => setValue("paletteColor2", c, { shouldDirty: true })} />
-              <ColorPickerField label="Warna 3" value={(watch("paletteColor3") as string) || "#f4f4f5"} onChange={(c) => setValue("paletteColor3", c, { shouldDirty: true })} />
-              <ColorPickerField label="Warna 4" value={(watch("paletteColor4") as string) || "#dc2626"} onChange={(c) => setValue("paletteColor4", c, { shouldDirty: true })} />
+            <div className="space-y-3 pt-2">
+              <span className="text-xs font-semibold text-stone-700">Palet Rekomendasi Busana:</span>
+              <div className="space-y-3">
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 1" value={(watch("paletteColor1") as string) || "#111111"} onChange={(c) => setValue("paletteColor1", c, { shouldDirty: true })} />
+                </div>
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 2" value={(watch("paletteColor2") as string) || "#27272a"} onChange={(c) => setValue("paletteColor2", c, { shouldDirty: true })} />
+                </div>
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 3" value={(watch("paletteColor3") as string) || "#f4f4f5"} onChange={(c) => setValue("paletteColor3", c, { shouldDirty: true })} />
+                </div>
+                <div className="rounded-xl border border-stone-200 bg-white p-3 sm:p-4 shadow-2xs">
+                  <ColorPickerField label="Warna Busana 4" value={(watch("paletteColor4") as string) || "#dc2626"} onChange={(c) => setValue("paletteColor4", c, { shouldDirty: true })} />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -558,15 +569,18 @@ export function ArtExhibitionBuilderForm({
       {/* TAB 7: TEMA WARNA & AUDIO */}
       {activeTab === "theme" && (
         <div className="space-y-6 animate-in fade-in-50 duration-200">
-          <div className="rounded-xl border border-stone-200 bg-white p-4 space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">Palet Warna Galeri</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Palet Warna Galeri - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800 px-1">Palet Warna Galeri</h4>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Latar Belakang (Canvas)"
                 value={(watch("backgroundColor") as string) || "#09090b"}
                 onChange={(c) => setValue("backgroundColor", c, { shouldDirty: true })}
                 presets={BACKGROUND_COLOR_PRESETS}
               />
+            </div>
+            <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <ColorPickerField
                 label="Warna Kartu & Frame"
                 value={(watch("cardColor") as string) || "#18181b"}
@@ -576,7 +590,7 @@ export function ArtExhibitionBuilderForm({
             </div>
           </div>
 
-          <div className="rounded-xl border border-stone-200 bg-white p-4 space-y-4">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-stone-800">Audio Ambient Galeri</h4>
             <Field
               label="Judul Musik Ambient"

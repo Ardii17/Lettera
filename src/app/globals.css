@@ -165,4 +165,26 @@
       ),
       radial-gradient(circle at 85% 0%, var(--color-page-deep), transparent 50%);
   }
+
+  /* =========================================================================
+     Midtrans Snap Embed Container Responsiveness
+     Ensure iframe fits cleanly within container and never overflows mobile viewport
+     ========================================================================= */
+  #snap-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #snap-container iframe,
+  iframe[id="snap-midtrans"],
+  iframe[name*="popup_"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+  }
 }
+
