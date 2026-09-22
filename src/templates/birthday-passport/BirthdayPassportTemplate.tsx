@@ -256,7 +256,7 @@ function BirthdayPassportTemplateInner({
       }}
     >
       {/* Background Travel Desk Atmosphere */}
-      <div className="fixed inset-0 pointer-events-none opacity-40">
+      <div className="absolute inset-0 pointer-events-none opacity-40">
         <div
           className="absolute inset-0"
           style={{

@@ -102,6 +102,10 @@ const DEFAULT_TEMPLATE_METAS: Record<string, { id: string; sort_order: number }>
   "kintsugi-repair": { id: "00000000-0000-4000-8000-000000000033", sort_order: 33 },
   "safe-harbor": { id: "00000000-0000-4000-8000-000000000034", sort_order: 34 },
   "solstice-thaw": { id: "00000000-0000-4000-8000-000000000035", sort_order: 35 },
+  "campfire-friendship": { id: "00000000-0000-4000-8000-000000000036", sort_order: 36 },
+  "bistro-friendship": { id: "00000000-0000-4000-8000-000000000037", sort_order: 37 },
+  "roadtrip-friendship": { id: "00000000-0000-4000-8000-000000000038", sort_order: 38 },
+  "treehouse-friendship": { id: "00000000-0000-4000-8000-000000000039", sort_order: 39 },
 };
 
 export async function getTemplateRowBySlug(slug: string): Promise<TemplateRow | null> {

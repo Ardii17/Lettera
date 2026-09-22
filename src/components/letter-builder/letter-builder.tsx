@@ -22,6 +22,10 @@ import { GraduationBuilderForm } from "./graduation-builder-form";
 import { GrandLaureateBuilderForm } from "./grand-laureate-builder-form";
 import { SummitAchievementBuilderForm } from "./summit-achievement-builder-form";
 import { FriendshipBuilderForm } from "./friendship-builder-form";
+import { CampfireFriendshipBuilderForm } from "./campfire-friendship-builder-form";
+import { BistroFriendshipBuilderForm } from "./bistro-friendship-builder-form";
+import { RoadtripFriendshipBuilderForm } from "./roadtrip-friendship-builder-form";
+import { TreehouseFriendshipBuilderForm } from "./treehouse-friendship-builder-form";
 import { WeddingBuilderForm } from "./wedding-builder-form";
 import { ApologyBuilderForm } from "./apology-builder-form";
 import { KintsugiRepairBuilderForm } from "./kintsugi-repair-builder-form";
@@ -92,7 +96,15 @@ export function LetterBuilder({
   useEffect(() => {
     if (mode !== "create") return;
     const saved = draft.load();
-    if (saved) form.reset({ ...defaultValues, ...saved });
+    if (saved) {
+      const cleanSaved: LetterContent = {};
+      for (const [k, v] of Object.entries(saved)) {
+        if (v !== "" && v !== null && v !== undefined) {
+          cleanSaved[k] = v;
+        }
+      }
+      form.reset({ ...defaultValues, ...cleanSaved });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -103,45 +115,96 @@ export function LetterBuilder({
     return () => clearTimeout(timer);
   }, [values, mode, draft]);
 
-  const handleOpenFinalPreview = async () => {
+  const handleOpenFinalPreview = async (enforceValidation = false) => {
     setFormError(null);
+
+    // Mode pratinjau bebas (misalnya tombol 'Pratinjau Layar Penuh')
+    if (!enforceValidation) {
+      setShowFinalPreview(true);
+      return;
+    }
+
+    // Mode validasi sebelum lanjut bayar ('Pratinjau & Konfirmasi')
     const isValid = await form.trigger();
     if (isValid) {
       setShowFinalPreview(true);
+    } else {
+      const errorEntries = Object.entries(form.formState.errors);
+      if (errorEntries.length > 0) {
+        const [firstField, err] = errorEntries[0];
+        const msg = (err?.message as string) || "Ada kolom wajib yang belum diisi.";
+        setFormError(`Perhatian: ${msg}`);
+
+        // Pastikan tab editor aktif agar error terlihat di mobile
+        setTab("editor");
+
+        setTimeout(() => {
+          const el =
+            document.getElementById(`${template.slug}-${firstField}`) ||
+            document.getElementsByName(firstField)[0];
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            el.focus?.();
+          }
+        }, 100);
+      } else {
+        setFormError("Mohon periksa kembali kolom formulir yang belum valid.");
+      }
     }
   };
 
   const handleConfirmPreview = () => {
-    form.handleSubmit((content) => {
-      setFormError(null);
+    form.handleSubmit(
+      (content) => {
+        setFormError(null);
 
-      startTransition(async () => {
-        const result =
-          mode === "create"
-            ? await createLetterAction({ templateSlug: template.slug, content })
-            : await updateLetterAction({ id: letterId, templateSlug: template.slug, content });
+        startTransition(async () => {
+          const result =
+            mode === "create"
+              ? await createLetterAction({ templateSlug: template.slug, content })
+              : await updateLetterAction({ id: letterId, templateSlug: template.slug, content });
 
-        if (!result.ok) {
-          setShowFinalPreview(false);
-          setFormError(result.error);
-          if (result.fieldErrors) {
-            for (const [name, messages] of Object.entries(result.fieldErrors)) {
-              if (messages?.[0]) form.setError(name, { message: messages[0] });
+          if (!result.ok) {
+            setShowFinalPreview(false);
+            setFormError(result.error);
+            if (result.fieldErrors) {
+              for (const [name, messages] of Object.entries(result.fieldErrors)) {
+                if (messages?.[0]) form.setError(name, { message: messages[0] });
+              }
+            }
+            return;
+          }
+
+          if (mode === "create" && "token" in result.data) {
+            draft.clear();
+            setShowFinalPreview(false);
+            router.push(`/pay/${result.data.templateSlug}/${result.data.token}`);
+          } else {
+            router.push("/templates");
+          }
+          router.refresh();
+        });
+      },
+      (errors) => {
+        setShowFinalPreview(false);
+        const [firstField, err] = Object.entries(errors)[0] || [];
+        const msg = (err?.message as string) || "Mohon lengkapi seluruh kolom wajib bertanda bintang (*).";
+        setFormError(`Perhatian: ${msg}`);
+        setTab("editor");
+
+        setTimeout(() => {
+          if (firstField) {
+            const el =
+              document.getElementById(`${template.slug}-${firstField}`) ||
+              document.getElementsByName(firstField)[0];
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth", block: "center" });
+              el.focus?.();
             }
           }
-          return;
-        }
-
-        if (mode === "create" && "token" in result.data) {
-          draft.clear();
-          setShowFinalPreview(false);
-          router.push(`/pay/${result.data.templateSlug}/${result.data.token}`);
-        } else {
-          router.push("/templates");
-        }
-        router.refresh();
-      });
-    })();
+        }, 100);
+      },
+    )();
   };
 
   return (
@@ -149,7 +212,7 @@ export function LetterBuilder({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleOpenFinalPreview();
+          handleOpenFinalPreview(true);
         }}
         noValidate
       >
@@ -287,6 +350,38 @@ export function LetterBuilder({
               />
             ) : template.slug === "friendship" ? (
               <FriendshipBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "campfire-friendship" ? (
+              <CampfireFriendshipBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "bistro-friendship" ? (
+              <BistroFriendshipBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "roadtrip-friendship" ? (
+              <RoadtripFriendshipBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "treehouse-friendship" ? (
+              <TreehouseFriendshipBuilderForm
                 register={form.register}
                 setValue={form.setValue}
                 watch={form.watch}
@@ -506,7 +601,7 @@ export function LetterBuilder({
               <Button
                 type="button"
                 size="lg"
-                onClick={handleOpenFinalPreview}
+                onClick={() => handleOpenFinalPreview(true)}
                 disabled={pending}
                 className="w-full sm:w-auto bg-seal-600 hover:bg-seal-700 text-white shadow-sm"
               >
@@ -543,7 +638,7 @@ export function LetterBuilder({
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={handleOpenFinalPreview}
+                onClick={() => handleOpenFinalPreview(false)}
                 title="Buka pratinjau dalam layar penuh"
                 className="bg-white/95 backdrop-blur-xs hover:bg-page shadow-2xs text-xs font-medium"
               >

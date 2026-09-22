@@ -204,7 +204,7 @@ function SummitAchievementInner({ data, className = "" }: TemplateComponentProps
     >
       {/* Background Glacial Twilight Mountain Mesh */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-25"
         style={{
           backgroundImage: `
             radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.15) 0%, transparent 60%),
@@ -216,7 +216,7 @@ function SummitAchievementInner({ data, className = "" }: TemplateComponentProps
       />
 
       {/* Subtle Alpine Blizzard Snow Embers */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute top-1/5 left-1/4 w-80 h-80 rounded-full bg-cyan-600/10 blur-3xl animate-pulse" />
         <div
           className="absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full bg-amber-500/10 blur-3xl animate-pulse"

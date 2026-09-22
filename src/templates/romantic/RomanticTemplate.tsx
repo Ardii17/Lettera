@@ -274,7 +274,7 @@ export function RomanticTemplate({
       {/* Subtle Floating Ambient Hearts & Sparkles */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-40"
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden opacity-40"
       >
         <div className="absolute top-[10%] left-[8%] animate-pulse">
           <Heart

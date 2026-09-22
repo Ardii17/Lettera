@@ -1,5 +1,9 @@
 import { birthdayTemplate } from "./birthday/definition";
 import { friendshipTemplate } from "./friendship/definition";
+import { campfireFriendshipTemplate } from "./campfire-friendship/definition";
+import { bistroFriendshipTemplate } from "./bistro-friendship/definition";
+import { roadtripFriendshipTemplate } from "./roadtrip-friendship/definition";
+import { treehouseFriendshipTemplate } from "./treehouse-friendship/definition";
 import { graduationTemplate } from "./graduation/definition";
 import { grandLaureateTemplate } from "./grand-laureate/definition";
 import { summitAchievementTemplate } from "./summit-achievement/definition";
@@ -67,6 +71,10 @@ export const TEMPLATES: TemplateMeta[] = [
   grandLaureateTemplate,
   summitAchievementTemplate,
   friendshipTemplate,
+  campfireFriendshipTemplate,
+  bistroFriendshipTemplate,
+  roadtripFriendshipTemplate,
+  treehouseFriendshipTemplate,
   weddingTemplate,
   royalGardenWeddingTemplate,
   heritageWeddingTemplate,

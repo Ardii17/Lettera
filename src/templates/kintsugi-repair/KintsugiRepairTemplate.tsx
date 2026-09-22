@@ -211,7 +211,7 @@ function KintsugiRepairInner({ data, className = "" }: TemplateComponentProps) {
     >
       {/* Background Wabi-Sabi Ceramic Texture with Gold Vein Highlights */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-25"
         style={{
           backgroundImage: `
             radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.12) 0%, transparent 65%),
@@ -222,7 +222,7 @@ function KintsugiRepairInner({ data, className = "" }: TemplateComponentProps) {
         }}
       />
 
-      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute top-1/4 left-1/5 w-80 h-80 rounded-full bg-amber-700/10 blur-3xl animate-pulse" />
         <div
           className="absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full bg-stone-700/10 blur-3xl animate-pulse"

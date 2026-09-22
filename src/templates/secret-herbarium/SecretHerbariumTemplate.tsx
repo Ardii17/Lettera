@@ -205,7 +205,7 @@ function SecretHerbariumInner({ data, className = "" }: TemplateComponentProps) 
     >
       {/* Background Victorian Glasshouse Grid & Foliage Silhouettes */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-20"
+        className="absolute inset-0 pointer-events-none opacity-20"
         style={{
           backgroundImage: `
             radial-gradient(circle at 50% 20%, rgba(197, 155, 88, 0.15) 0%, transparent 60%),
@@ -217,7 +217,7 @@ function SecretHerbariumInner({ data, className = "" }: TemplateComponentProps) 
       />
 
       {/* Subtle Floating Embers / Pollen Dust */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute top-1/4 left-1/5 w-72 h-72 rounded-full bg-emerald-700/10 blur-3xl animate-pulse" />
         <div
           className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full bg-amber-600/10 blur-3xl animate-pulse"

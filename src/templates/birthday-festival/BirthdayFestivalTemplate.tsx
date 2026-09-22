@@ -244,7 +244,7 @@ function BirthdayFestivalTemplateInner({
       }}
     >
       {/* Background Concert Spotlight & Neon Gradients */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
         <div
           className="absolute inset-0"
           style={{

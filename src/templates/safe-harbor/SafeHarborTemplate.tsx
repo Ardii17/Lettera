@@ -213,7 +213,7 @@ function SafeHarborInner({ data, className = "" }: TemplateComponentProps) {
     >
       {/* Background Stormy Oceanic Mesh & Ambient Light */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-25"
         style={{
           backgroundImage: `
             radial-gradient(circle at 50% 12%, rgba(245, 158, 11, 0.15) 0%, transparent 65%),
@@ -226,7 +226,7 @@ function SafeHarborInner({ data, className = "" }: TemplateComponentProps) {
 
       {/* Rotating / Pulsing Beacon Beam Visual when Lit */}
       {isBeaconLit && (
-        <div className="fixed inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-400/25 via-cyan-900/10 to-transparent transition-all duration-1000 animate-pulse" />
+        <div className="absolute inset-0 pointer-events-none opacity-30 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-400/25 via-cyan-900/10 to-transparent transition-all duration-1000 animate-pulse" />
       )}
 
       {/* Floating Audio Player (Isolated for Full Page Only) */}

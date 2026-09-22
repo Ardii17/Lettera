@@ -46,6 +46,7 @@ export async function POST(request: Request) {
       snapScriptUrl: snapResult.snapScriptUrl,
       isMock: snapResult.isMock,
       error: snapResult.error,
+      warning: snapResult.warning,
     });
   } catch (err: unknown) {
     console.error("[api/payment/create] Error:", err);

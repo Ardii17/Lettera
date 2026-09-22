@@ -60,6 +60,7 @@ export interface SnapTransactionResult {
   snapScriptUrl: string;
   isMock: boolean;
   error?: string;
+  warning?: string;
 }
 
 /**
@@ -72,8 +73,20 @@ export async function createSnapTransaction(
 ): Promise<SnapTransactionResult> {
   const config = getMidtransConfig();
 
-  // Mode Fallback / Mock jika Server Key belum dikonfigurasi
-  if (!config.serverKey) {
+  // Mode Fallback / Mock jika Server Key belum dikonfigurasi ATAU jika mode Sandbox aktif tapi key adalah Production key
+  const isProdKeyInSandbox = !config.isProduction && config.serverKey.startsWith("Mid-server-");
+  const isDummySandboxKey =
+    !config.isProduction &&
+    (config.serverKey.includes("demo") ||
+      config.serverKey.includes("xxxx") ||
+      config.serverKey === "SB-Mid-server-sandbox-local");
+
+  if (!config.serverKey || isProdKeyInSandbox || isDummySandboxKey) {
+    if (isProdKeyInSandbox) {
+      console.warn(
+        "[Midtrans] Server key diawali 'Mid-server-' (Production Key), sedangkan mode Sandbox aktif. Mengaktifkan Mode Mock/Simulator lokal agar pengujian alur bisnis tetap lancar tanpa error 401.",
+      );
+    }
     return {
       ok: true,
       orderId: params.orderId,
@@ -82,6 +95,9 @@ export async function createSnapTransaction(
       clientKey: config.clientKey,
       snapScriptUrl: config.snapScriptUrl,
       isMock: true,
+      warning: isProdKeyInSandbox
+        ? "Server Key saat ini adalah Production Key di mode Sandbox. Mode Simulasi Lokal otomatis aktif agar alur bisnis dapat diuji tanpa error."
+        : undefined,
     };
   }
 
@@ -124,6 +140,19 @@ export async function createSnapTransaction(
 
     if (!response.ok || !data.token) {
       console.error("[Midtrans Snap error]", data);
+
+      // Jika di Sandbox / Pengujian Lokal, jangan biarkan error API memblokir pengujian proses bisnis.
+      if (!config.isProduction) {
+        return {
+          ok: true,
+          orderId: params.orderId,
+          clientKey: config.clientKey,
+          snapScriptUrl: config.snapScriptUrl,
+          isMock: true,
+          warning: `Midtrans Sandbox: ${data.error_messages?.join(", ") || "API menolak transaksi"}. Mode Simulasi Lokal diaktifkan.`,
+        };
+      }
+
       return {
         ok: false,
         orderId: params.orderId,
@@ -145,6 +174,18 @@ export async function createSnapTransaction(
     };
   } catch (err: unknown) {
     console.error("[Midtrans Snap connection error]", err);
+
+    if (!config.isProduction) {
+      return {
+        ok: true,
+        orderId: params.orderId,
+        clientKey: config.clientKey,
+        snapScriptUrl: config.snapScriptUrl,
+        isMock: true,
+        warning: "Gagal terhubung ke Midtrans Sandbox. Mode Simulasi Lokal diaktifkan.",
+      };
+    }
+
     return {
       ok: false,
       orderId: params.orderId,

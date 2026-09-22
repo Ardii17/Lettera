@@ -128,12 +128,22 @@
      lalu menskalakannya mengikuti lebar container (tanpa JavaScript). */
   .thumb-frame {
     container-type: inline-size;
+    overflow: hidden;
+    contain: layout paint;
+    isolation: isolate;
   }
 
   .thumb-canvas {
     width: 760px;
     transform-origin: top left;
     transform: scale(calc(100cqw / 760));
+    contain: layout paint;
+  }
+
+  /* Cegah elemen template apapun bocor ke viewport halaman utama */
+  .thumb-canvas [class*="fixed"],
+  .thumb-canvas .fixed {
+    position: absolute !important;
   }
 
   .skeleton {

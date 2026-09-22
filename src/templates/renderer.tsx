@@ -2,6 +2,10 @@ import type { ComponentType } from "react";
 import type { LetterContent } from "@/types/letter";
 import { BirthdayTemplate } from "./birthday/BirthdayTemplate";
 import { FriendshipTemplate } from "./friendship/FriendshipTemplate";
+import { CampfireFriendshipTemplate } from "./campfire-friendship/CampfireFriendshipTemplate";
+import { BistroFriendshipTemplate } from "./bistro-friendship/BistroFriendshipTemplate";
+import { RoadtripFriendshipTemplate } from "./roadtrip-friendship/RoadtripFriendshipTemplate";
+import { TreehouseFriendshipTemplate } from "./treehouse-friendship/TreehouseFriendshipTemplate";
 import { GraduationTemplate } from "./graduation/GraduationTemplate";
 import { GrandLaureateTemplate } from "./grand-laureate/GrandLaureateTemplate";
 import { SummitAchievementTemplate } from "./summit-achievement/SummitAchievementTemplate";
@@ -72,6 +76,10 @@ const TEMPLATE_COMPONENTS: Record<string, ComponentType<TemplateComponentProps>>
   "grand-laureate": GrandLaureateTemplate,
   "summit-achievement": SummitAchievementTemplate,
   friendship: FriendshipTemplate,
+  "campfire-friendship": CampfireFriendshipTemplate,
+  "bistro-friendship": BistroFriendshipTemplate,
+  "roadtrip-friendship": RoadtripFriendshipTemplate,
+  "treehouse-friendship": TreehouseFriendshipTemplate,
   wedding: WeddingTemplate,
   "royal-garden-wedding": RoyalGardenWeddingTemplate,
   "heritage-wedding": HeritageWeddingTemplate,

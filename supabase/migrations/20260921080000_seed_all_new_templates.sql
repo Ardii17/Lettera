@@ -202,6 +202,44 @@ values
     'Permintaan Maaf',
     true,
     35
+  ),
+
+  -- ===================== PERTEMANAN & SAHABAT =====================
+  (
+    '00000000-0000-4000-8000-000000000036',
+    'campfire-friendship',
+    'Campfire Chronicles: Friendship Haven',
+    'Jurnal perkemahan hangat di bawah bintang dengan api unggun, jemuran polaroid, kamus lelucon rahasia, dan piagam persahabatan abadi.',
+    'Pertemanan',
+    true,
+    36
+  ),
+  (
+    '00000000-0000-4000-8000-000000000037',
+    'bistro-friendship',
+    'Bistro des Amis: Late-Night Café',
+    'Kedai bistro hangat tengah malam dengan meja sudut kenangan, menu racikan tawa, piringan vinyl, serbet bersurat, dan bon kasir tak ternilai.',
+    'Pertemanan',
+    true,
+    37
+  ),
+  (
+    '00000000-0000-4000-8000-000000000038',
+    'roadtrip-friendship',
+    'The Great Roadtrip: Highway of Soulmates',
+    'Petualangan perjalanan darat melintasi jalan tol tak berujung dengan dashboard mobil retro, rambu kilometer, laci glovebox, dan tiket tol emas.',
+    'Pertemanan',
+    true,
+    38
+  ),
+  (
+    '00000000-0000-4000-8000-000000000039',
+    'treehouse-friendship',
+    'The Secret Treehouse: Eternal Youth',
+    'Markas rahasia rumah pohon di atas dahan rimbun dengan lentera malam, toples kunang-kunang, ukiran dahan kayu, dan kapsul waktu persahabatan.',
+    'Pertemanan',
+    true,
+    39
   )
 on conflict (slug) do update
 set

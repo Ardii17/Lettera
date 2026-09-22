@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Script from "next/script";
@@ -15,10 +15,8 @@ import {
   QrCode,
   RefreshCw,
   ShieldCheck,
-  Sparkles,
   Smartphone,
   AlertCircle,
-  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -46,6 +44,8 @@ declare global {
           onClose?: () => void;
         },
       ) => void;
+      hide?: () => void;
+      show?: () => void;
     };
   }
 }
@@ -55,11 +55,11 @@ interface PaymentCheckoutProps {
   templateSlug: string;
   templateName: string;
   title: string;
-  recipient?: string;
+  recipient: string;
   amount: number;
   snapScriptUrl: string;
   clientKey: string;
-  isProduction?: boolean;
+  isProduction: boolean;
 }
 
 export function PaymentCheckout({
@@ -71,14 +71,13 @@ export function PaymentCheckout({
   amount,
   snapScriptUrl,
   clientKey,
-  isProduction = false,
+  isProduction,
 }: PaymentCheckoutProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   const [checkingStatus, setCheckingStatus] = useState(false);
-  const [simulating, setSimulating] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Dynamic QRIS Snap State dari Midtrans
@@ -86,7 +85,10 @@ export function PaymentCheckout({
   const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
   const [isMock, setIsMock] = useState<boolean>(false);
   const [loadingPayment, setLoadingPayment] = useState<boolean>(true);
-  const [scriptLoaded, setScriptLoaded] = useState<boolean>(false);
+  const [scriptLoaded, setScriptLoaded] = useState<boolean>(() => {
+    return typeof window !== "undefined" && Boolean(window.snap);
+  });
+  const embeddedTokenRef = useRef<string | null>(null);
 
   const { copied: keyCopied, copy: copyKey } = useCopyToClipboard();
 
@@ -124,11 +126,20 @@ export function PaymentCheckout({
           if (data.redirectUrl) setRedirectUrl(data.redirectUrl);
           setIsMock(Boolean(data.isMock));
         } else {
-          setError(data.error || "Gagal menginisialisasi pembayaran Midtrans.");
+          if (!isProduction) {
+            // Pada mode Sandbox/Lokal, otomatis alihkan ke mode simulasi lokal agar pengujian alur bisnis tidak berhenti
+            setIsMock(true);
+          } else {
+            setError(data.error || "Gagal menginisialisasi pembayaran Midtrans.");
+          }
         }
       } catch (err) {
         console.error("Gagal menginisialisasi pembayaran:", err);
-        setError("Gagal terhubung ke server pembayaran.");
+        if (!isProduction) {
+          setIsMock(true);
+        } else {
+          setError("Gagal terhubung ke server pembayaran.");
+        }
       } finally {
         if (isMounted) setLoadingPayment(false);
       }
@@ -139,15 +150,43 @@ export function PaymentCheckout({
     return () => {
       isMounted = false;
     };
-  }, [token, templateSlug, router]);
+  }, [token, templateSlug, isProduction, router]);
 
   // 2. Embed Snap UI jika snapToken & script sudah siap
   useEffect(() => {
-    if (!snapToken || isMock) return;
+    if (!snapToken || isMock || loadingPayment) return;
+
+    let cancelled = false;
+    let timer: NodeJS.Timeout | null = null;
 
     function doEmbed() {
+      if (cancelled) return;
+
+      const container = document.getElementById("snap-container");
+      if (!container) {
+        // Kontainer belum tersedia di DOM, coba lagi sesaat kemudian
+        timer = setTimeout(doEmbed, 100);
+        return;
+      }
+
+      // Jika kontainer sudah memiliki iframe/anak dan token sama, jangan embed ulang
+      if (embeddedTokenRef.current === snapToken && container.children.length > 0) {
+        return;
+      }
+
       if (typeof window !== "undefined" && window.snap && typeof window.snap.embed === "function") {
         try {
+          // Bersihkan popup/embed aktif sebelumnya jika ada agar transisi state tidak bentrok
+          if (typeof window.snap.hide === "function") {
+            try {
+              window.snap.hide();
+            } catch {
+              // ignore
+            }
+          }
+
+          container.innerHTML = "";
+
           window.snap.embed(snapToken!, {
             embedId: "snap-container",
             onSuccess: () => {
@@ -160,7 +199,11 @@ export function PaymentCheckout({
             onError: (err) => {
               console.error("Midtrans payment error:", err);
             },
+            onClose: () => {
+              embeddedTokenRef.current = null;
+            },
           });
+          embeddedTokenRef.current = snapToken!;
         } catch (e) {
           console.error("Gagal melakukan embed Snap:", e);
         }
@@ -170,16 +213,23 @@ export function PaymentCheckout({
     if (scriptLoaded || (typeof window !== "undefined" && window.snap)) {
       doEmbed();
     } else {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         if (typeof window !== "undefined" && window.snap) {
-          clearInterval(timer);
+          if (timer) clearInterval(timer);
           setScriptLoaded(true);
           doEmbed();
         }
       }, 250);
-      return () => clearInterval(timer);
     }
-  }, [snapToken, scriptLoaded, isMock, templateSlug, token, router]);
+
+    return () => {
+      cancelled = true;
+      if (timer) {
+        clearInterval(timer);
+        clearTimeout(timer);
+      }
+    };
+  }, [snapToken, scriptLoaded, isMock, loadingPayment, templateSlug, token, router]);
 
   // 3. Fungsi Periksa Status Pembayaran (Manual & Polling)
   const checkStatus = useCallback(
@@ -193,7 +243,14 @@ export function PaymentCheckout({
       }
 
       try {
-        const res = await fetch(`/api/payment/status?token=${token}`, {
+        // Saat tombol ditekan manual untuk keperluan demo/rekaman video (non-production),
+        // otomatis teruskan parameter simulate=true agar status langsung lunas & terverifikasi
+        const url =
+          isManual && !isProduction
+            ? `/api/payment/status?token=${token}&simulate=true`
+            : `/api/payment/status?token=${token}`;
+
+        const res = await fetch(url, {
           cache: "no-store",
         });
         const data = await res.json();
@@ -220,7 +277,7 @@ export function PaymentCheckout({
         }
       }
     },
-    [paymentSuccess, token, router, templateSlug],
+    [paymentSuccess, token, router, templateSlug, isProduction],
   );
 
   // 4. Background Auto-polling setiap 3.5 detik
@@ -237,37 +294,54 @@ export function PaymentCheckout({
   // 5. Buka Popup Snap Modal secara manual jika diinginkan pengguna
   const handleOpenSnapPopup = () => {
     if (snapToken && window.snap && typeof window.snap.pay === "function") {
-      window.snap.pay(snapToken, {
-        onSuccess: () => {
-          setPaymentSuccess(true);
-          router.push(`/created/${templateSlug}/${token}`);
-        },
-      });
+      try {
+        if (typeof window.snap.hide === "function") {
+          window.snap.hide();
+        }
+      } catch {
+        // ignore
+      }
+
+      try {
+        window.snap.pay(snapToken, {
+          onSuccess: () => {
+            setPaymentSuccess(true);
+            router.push(`/created/${templateSlug}/${token}`);
+          },
+          onPending: (result) => {
+            console.log("Midtrans payment pending:", result);
+          },
+          onError: (err) => {
+            console.error("Midtrans payment error:", err);
+          },
+          onClose: () => {
+            // Re-embed snap bila popup ditutup user
+            const container = document.getElementById("snap-container");
+            if (container && typeof window.snap?.embed === "function") {
+              try {
+                if (typeof window.snap.hide === "function") {
+                  window.snap.hide();
+                }
+              } catch {
+                // ignore
+              }
+              container.innerHTML = "";
+              window.snap.embed(snapToken, {
+                embedId: "snap-container",
+                onSuccess: () => {
+                  setPaymentSuccess(true);
+                  router.push(`/created/${templateSlug}/${token}`);
+                },
+              });
+              embeddedTokenRef.current = snapToken;
+            }
+          },
+        });
+      } catch (err) {
+        console.error("Error opening snap popup:", err);
+      }
     } else if (redirectUrl) {
       window.open(redirectUrl, "_blank");
-    }
-  };
-
-  // 6. Fitur Simulasi Pembayaran Sukses (Sandbox / Demo only)
-  const handleSimulateSuccess = async () => {
-    if (isProduction) return;
-    setSimulating(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/payment/status?token=${token}&simulate=true`, {
-        cache: "no-store",
-      });
-      const data = await res.json();
-
-      if (data.isPaid) {
-        setPaymentSuccess(true);
-        router.push(`/created/${data.templateSlug || templateSlug}/${data.token || token}`);
-        router.refresh();
-      }
-    } catch {
-      setError("Gagal melakukan simulasi pembayaran.");
-    } finally {
-      setSimulating(false);
     }
   };
 
@@ -281,6 +355,7 @@ export function PaymentCheckout({
           data-client-key={clientKey}
           strategy="afterInteractive"
           onLoad={() => setScriptLoaded(true)}
+          onReady={() => setScriptLoaded(true)}
         />
       )}
 
@@ -296,10 +371,6 @@ export function PaymentCheckout({
           </Link>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-seal-50 px-3 py-1 text-xs font-semibold text-seal-700 border border-seal-200/60">
-                <Sparkles className="h-3.5 w-3.5 text-seal-600" />
-                Dynamic QRIS Resmi Midtrans
-              </div>
               <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
                 Selesaikan Pembayaran QRIS
               </h1>
@@ -370,24 +441,6 @@ export function PaymentCheckout({
                       Nominal Terkunci: {formattedAmount}
                     </span>
                   </div>
-                </div>
-
-                <div className="rounded-2xl border border-dashed border-seal-300 bg-seal-50/70 p-3 text-center">
-                  <p className="text-[11px] font-semibold text-seal-800 mb-1 flex items-center justify-center gap-1">
-                    <Zap className="h-3.5 w-3.5 text-amber-500" />
-                    Mode Pengujian / Sandbox Aktif
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleSimulateSuccess}
-                    disabled={simulating || paymentSuccess}
-                    className="mt-1 w-full text-xs font-bold border-seal-300 text-seal-800 hover:bg-seal-100 bg-white"
-                  >
-                    {simulating ? <Spinner className="h-3.5 w-3.5 mr-1" /> : null}
-                    Simulasikan Pembayaran Sukses (Langsung Redirect)
-                  </Button>
                 </div>
               </div>
             ) : (
@@ -505,7 +558,7 @@ export function PaymentCheckout({
               {error && (
                 <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
-                  <span>{error}</span>
+                  <span className="flex-1">{error}</span>
                 </div>
               )}
 

@@ -257,7 +257,7 @@ export function TemplateCatalog({ templates }: TemplateCatalogProps) {
                 className="scroll-mt-24 space-y-6"
               >
                 {/* Header Seksi Kategori */}
-                <div className="flex flex-col gap-3 rounded-2xl border border-line bg-paper p-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 rounded-2xl border border-line/60 bg-paper/60 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-start gap-4">
                     <div
                       className={cn(
@@ -308,7 +308,7 @@ export function TemplateCatalog({ templates }: TemplateCatalogProps) {
                   </div>
                 ) : (
                   /* Kartu Coming Soon untuk kategori yang belum punya tema terpasang */
-                  <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-paper px-6 py-12 text-center">
+                  <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line bg-paper/30 px-6 py-12 text-center">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-page-deep text-ink-muted">
                       <Clock className="h-5 w-5" />
                     </div>

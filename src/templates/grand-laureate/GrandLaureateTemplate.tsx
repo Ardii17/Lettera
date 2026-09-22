@@ -201,7 +201,7 @@ function GrandLaureateInner({ data, className = "" }: TemplateComponentProps) {
     >
       {/* Background Royal Swedish Navy Mesh & Stately Gold Embers */}
       <div
-        className="fixed inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-25"
         style={{
           backgroundImage: `
             radial-gradient(circle at 50% 15%, rgba(202, 166, 79, 0.2) 0%, transparent 65%),
@@ -212,7 +212,7 @@ function GrandLaureateInner({ data, className = "" }: TemplateComponentProps) {
         }}
       />
 
-      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-30">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
         <div className="absolute top-1/6 left-1/4 w-96 h-96 rounded-full bg-amber-600/10 blur-3xl animate-pulse" />
         <div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl animate-pulse"

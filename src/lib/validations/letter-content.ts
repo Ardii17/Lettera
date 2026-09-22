@@ -1,3 +1,4 @@
+import { LETTER_LIMITS } from "@/lib/constants";
 import { z } from "zod";
 import type { TemplateField, TemplateMeta } from "@/templates/types";
 import type { LetterContent } from "@/types/letter";
@@ -56,7 +57,8 @@ function fieldSchema(field: TemplateField): z.ZodTypeAny {
       : z.union([z.literal(""), base]).optional().default(fallback);
   }
 
-  const max = field.maxLength ?? 500;
+  const defaultMax = field.type === "textarea" ? LETTER_LIMITS.message : 1000;
+  const max = field.maxLength ?? defaultMax;
   const base = z.string().trim().max(max, `${label} maksimal ${max} karakter.`);
   return field.required
     ? base.min(1, `${label} wajib diisi.`)
@@ -79,11 +81,28 @@ export function buildDefaultValues(
   const values: LetterContent = {};
 
   for (const field of template.fields) {
-    if (field.defaultValue !== undefined) values[field.name] = field.defaultValue;
-    else if (field.type === "select") values[field.name] = field.options?.[0]?.value ?? "";
-    else if (field.type === "number") values[field.name] = "" as unknown as number;
-    else if (field.type === "color") values[field.name] = String(field.defaultValue ?? "#c03a52");
-    else values[field.name] = "";
+    if (field.defaultValue !== undefined && field.defaultValue !== "") {
+      values[field.name] = field.defaultValue;
+    } else if (template.sample?.[field.name] !== undefined) {
+      values[field.name] = template.sample[field.name];
+    } else if (field.type === "select") {
+      values[field.name] = field.options?.[0]?.value ?? "";
+    } else if (field.type === "number") {
+      values[field.name] = "" as unknown as number;
+    } else if (field.type === "color") {
+      values[field.name] = String(field.defaultValue ?? "#c03a52");
+    } else {
+      values[field.name] = "";
+    }
+  }
+
+  // Masukkan juga field sample lain yang mungkin ada di template.sample
+  if (template.sample) {
+    for (const [key, val] of Object.entries(template.sample)) {
+      if (values[key] === undefined && (typeof val === "string" || typeof val === "number")) {
+        values[key] = val;
+      }
+    }
   }
 
   if (initial) {
