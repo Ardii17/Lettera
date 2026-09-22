@@ -278,12 +278,12 @@ export function LetterBuilder({
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-start">
         <div className={cn(tab === "editor" ? "block" : "hidden lg:block", "min-w-0 w-full")}>
           <div className="rounded-2xl border border-line bg-paper p-4 sm:p-7 min-w-0 w-full overflow-hidden">
-            <div className="mb-6 flex items-start justify-between gap-3 sm:gap-4">
-              <div className="min-w-0 flex-1">
-                <h2 className="font-display text-xl font-semibold text-ink truncate">{template.name}</h2>
-                <p className="mt-1 text-sm text-ink-soft">{template.tagline}</p>
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+              <div className="min-w-0 w-full flex-1">
+                <h2 className="font-display text-xl font-semibold text-ink">{template.name}</h2>
+                <p className="mt-1 text-xs sm:text-sm text-ink-soft leading-relaxed">{template.tagline}</p>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
+              <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
                 <Button
                   type="button"
                   variant="outline"
