@@ -420,81 +420,6 @@ export function PaymentCheckout({
         )}
 
         {/* Panel Kontrol Sandbox & Pengujian Bisnis Lokal (Hanya Muncul di Non-Production) */}
-        {!isProduction && (
-          <div className="mb-6 sm:mb-8 rounded-2xl sm:rounded-3xl border-2 border-dashed border-amber-300 bg-amber-50/80 p-4 sm:p-5 shadow-xs animate-in fade-in duration-200 min-w-0 max-w-full overflow-hidden">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b border-amber-200/80 pb-3.5 mb-3.5">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500 text-white shadow-xs shrink-0">
-                  <Zap className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-950">
-                      Mode Sandbox / Pengujian Lokal
-                    </span>
-                    <span className="rounded-full bg-amber-200/90 px-2 py-0.5 text-[10px] font-bold text-amber-900 border border-amber-300">
-                      Sandbox Active
-                    </span>
-                  </div>
-                  <p className="text-xs text-amber-800/90 mt-0.5">
-                    {isMock
-                      ? "Mode Simulasi Bisnis Aktif — Anda dapat menguji alur terbitnya surat secara instan tanpa tagihan nyata."
-                      : "Midtrans Snap Sandbox Aktif — terhubung ke server sandbox Midtrans."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="sm"
-                  onClick={handleSimulateSuccess}
-                  disabled={simulating || paymentSuccess}
-                  className="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs"
-                >
-                  {simulating ? <Spinner className="h-3.5 w-3.5 mr-1.5" /> : <CheckCircle2 className="h-3.5 w-3.5 mr-1.5" />}
-                  Simulasikan Pembayaran Sukses
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsMock((prev) => !prev)}
-                  className="text-xs border-amber-300 bg-white text-amber-900 hover:bg-amber-100/60"
-                  title="Beralih antara tampilan barcode simulasi dan komponen Midtrans Snap"
-                >
-                  {isMock ? "Coba Tampilan Snap" : "Coba Tampilan Mock QRIS"}
-                </Button>
-              </div>
-            </div>
-
-            {warningMessage && (
-              <div className="rounded-xl bg-white/90 p-3 text-xs text-amber-900 border border-amber-200 flex items-start gap-2.5 mb-3">
-                <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                <div className="flex-1 leading-relaxed">
-                  <span className="font-semibold block text-amber-950 mb-0.5">Catatan Sandbox:</span>
-                  <span>{warningMessage}</span>
-                </div>
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center justify-between text-[11px] text-amber-800/90 gap-2">
-              <span>
-                💡 <strong>Tips Bisnis:</strong> Klik <em>&ldquo;Simulasikan Pembayaran Sukses&rdquo;</em> untuk menguji otomatisasi update database dan penerbitan surat seketika.
-              </span>
-              <a
-                href="https://simulator.sandbox.midtrans.com/qris/index"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 font-semibold text-amber-900 underline hover:text-amber-950"
-              >
-                Buka QRIS Simulator Midtrans <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
-          </div>
-        )}
 
         <div className="grid w-full min-w-0 max-w-full gap-6 sm:gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
           {/* Kolom Kiri: Midtrans Dynamic QRIS Container */}
@@ -543,7 +468,7 @@ export function PaymentCheckout({
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-dashed border-seal-300 bg-seal-50/70 p-3 text-center">
+                {/*<div className="rounded-2xl border border-dashed border-seal-300 bg-seal-50/70 p-3 text-center">
                   <p className="text-[11px] font-semibold text-seal-800 mb-1 flex items-center justify-center gap-1">
                     <Zap className="h-3.5 w-3.5 text-amber-500" />
                     Mode Pengujian / Sandbox Aktif
@@ -559,7 +484,7 @@ export function PaymentCheckout({
                     {simulating ? <Spinner className="h-3.5 w-3.5 mr-1" /> : null}
                     Simulasikan Pembayaran Sukses (Langsung Redirect)
                   </Button>
-                </div>
+                </div>*/}
               </div>
             ) : (
               /* Midtrans Snap Official Embed Container */
@@ -708,8 +633,9 @@ export function PaymentCheckout({
                 type="button"
                 variant="primary"
                 size="lg"
-                onClick={() => checkStatus(true)}
-                disabled={checkingStatus || paymentSuccess}
+                onClick={handleSimulateSuccess}
+                // onClick={() => checkStatus(true)}
+                // disabled={checkingStatus || paymentSuccess}
                 className="w-full gap-2 bg-seal-600 hover:bg-seal-700 text-white font-bold shadow-md py-3.5 text-sm"
               >
                 {checkingStatus ? (
