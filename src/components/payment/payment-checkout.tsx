@@ -10,6 +10,7 @@ import {
   Check,
   CheckCircle2,
   Copy,
+  Download,
   ExternalLink,
   Key,
   QrCode,
@@ -17,12 +18,18 @@ import {
   ShieldCheck,
   Smartphone,
   AlertCircle,
-  AlertTriangle,
+  MessageCircle,
+  HelpCircle,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import {
+  ADMIN_WHATSAPP_NUMBER,
+  generateWhatsAppConfirmationUrl,
+  splitAmountForDisplay,
+} from "@/lib/payment/qris-static";
 
 declare global {
   interface Window {
@@ -76,19 +83,19 @@ export function PaymentCheckout({
   isProduction,
 }: PaymentCheckoutProps) {
   const router = useRouter();
+
+  // Mode pembayaran: default ke "static" (QRIS Statis + Kode Unik)
+  const [paymentMode, setPaymentMode] = useState<"static" | "midtrans">("static");
+
   const [error, setError] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
-  const [warningMessage, setWarningMessage] = useState<string | null>(null);
-
   const [checkingStatus, setCheckingStatus] = useState(false);
-  const [simulating, setSimulating] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [copiedNominal, setCopiedNominal] = useState(false);
 
-  // Dynamic QRIS Snap State dari Midtrans
+  // Dynamic QRIS Snap State dari Midtrans (untuk mode fallback)
   const [snapToken, setSnapToken] = useState<string | null>(null);
-  const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
-  const [isMock, setIsMock] = useState<boolean>(false);
-  const [loadingPayment, setLoadingPayment] = useState<boolean>(true);
+  const [loadingMidtrans, setLoadingMidtrans] = useState<boolean>(false);
   const [scriptLoaded, setScriptLoaded] = useState<boolean>(() => {
     return typeof window !== "undefined" && Boolean(window.snap);
   });
@@ -96,149 +103,30 @@ export function PaymentCheckout({
 
   const { copied: keyCopied, copy: copyKey } = useCopyToClipboard();
 
-  const formattedAmount = new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(amount);
+  // Format nominal dengan 3 digit unik
+  const amountDisplay = splitAmountForDisplay(amount);
 
-  // 1. Inisialisasi Transaksi Midtrans Snap saat halaman dibuka
-  useEffect(() => {
-    let isMounted = true;
+  // URL WhatsApp terisi otomatis
+  const whatsappUrl = generateWhatsAppConfirmationUrl({
+    token,
+    amount,
+    templateName,
+    title,
+    recipient,
+  });
 
-    async function initPayment() {
-      try {
-        setLoadingPayment(true);
-        const res = await fetch("/api/payment/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token }),
-        });
-
-        const data = await res.json();
-
-        if (!isMounted) return;
-
-        if (data.isPaid) {
-          setPaymentSuccess(true);
-          router.push(`/created/${data.templateSlug || templateSlug}/${data.token || token}`);
-          return;
-        }
-
-        if (data.ok) {
-          if (data.snapToken) setSnapToken(data.snapToken);
-          if (data.redirectUrl) setRedirectUrl(data.redirectUrl);
-          setIsMock(Boolean(data.isMock));
-          if (data.warning) setWarningMessage(data.warning);
-        } else {
-          if (!isProduction) {
-            // Pada mode Sandbox/Lokal, otomatis alihkan ke mode simulasi lokal agar pengujian alur bisnis tidak berhenti
-            setIsMock(true);
-            setWarningMessage(data.error || "Gagal menghubungi Midtrans Sandbox. Mode Simulasi Lokal diaktifkan.");
-          } else {
-            setError(data.error || "Gagal menginisialisasi pembayaran Midtrans.");
-          }
-        }
-      } catch (err) {
-        console.error("Gagal menginisialisasi pembayaran:", err);
-        if (!isProduction) {
-          setIsMock(true);
-          setWarningMessage("Gagal terhubung ke Midtrans Sandbox. Mode Simulasi Lokal diaktifkan.");
-        } else {
-          setError("Gagal terhubung ke server pembayaran.");
-        }
-      } finally {
-        if (isMounted) setLoadingPayment(false);
-      }
+  // Salin nominal presisi angka murni (misal: 15132) agar user tidak salah ketik di m-banking
+  const handleCopyExactNominal = async () => {
+    try {
+      await navigator.clipboard.writeText(amount.toString());
+      setCopiedNominal(true);
+      setTimeout(() => setCopiedNominal(false), 2500);
+    } catch {
+      // fallback
     }
+  };
 
-    initPayment();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [token, templateSlug, isProduction, router]);
-
-  // 2. Embed Snap UI jika snapToken & script sudah siap
-  useEffect(() => {
-    if (!snapToken || isMock || loadingPayment) return;
-
-    let cancelled = false;
-    let timer: NodeJS.Timeout | null = null;
-
-    function doEmbed() {
-      if (cancelled) return;
-
-      const container = document.getElementById("snap-container");
-      if (!container) {
-        // Kontainer belum tersedia di DOM, coba lagi sesaat kemudian
-        timer = setTimeout(doEmbed, 100);
-        return;
-      }
-
-      // Jika kontainer sudah memiliki iframe/anak dan token sama, jangan embed ulang
-      if (embeddedTokenRef.current === snapToken && container.children.length > 0) {
-        return;
-      }
-
-      if (typeof window !== "undefined" && window.snap && typeof window.snap.embed === "function") {
-        try {
-          // Bersihkan popup/embed aktif sebelumnya jika ada agar transisi state tidak bentrok
-          if (typeof window.snap.hide === "function") {
-            try {
-              window.snap.hide();
-            } catch {
-              // ignore
-            }
-          }
-
-          container.innerHTML = "";
-
-          window.snap.embed(snapToken!, {
-            embedId: "snap-container",
-            onSuccess: () => {
-              setPaymentSuccess(true);
-              router.push(`/created/${templateSlug}/${token}`);
-            },
-            onPending: (result) => {
-              console.log("Midtrans payment pending:", result);
-            },
-            onError: (err) => {
-              console.error("Midtrans payment error:", err);
-            },
-            onClose: () => {
-              embeddedTokenRef.current = null;
-            },
-          });
-          embeddedTokenRef.current = snapToken!;
-        } catch (e) {
-          console.error("Gagal melakukan embed Snap:", e);
-        }
-      }
-    }
-
-    if (scriptLoaded || (typeof window !== "undefined" && window.snap)) {
-      doEmbed();
-    } else {
-      timer = setInterval(() => {
-        if (typeof window !== "undefined" && window.snap) {
-          if (timer) clearInterval(timer);
-          setScriptLoaded(true);
-          doEmbed();
-        }
-      }, 250);
-    }
-
-    return () => {
-      cancelled = true;
-      if (timer) {
-        clearInterval(timer);
-        clearTimeout(timer);
-      }
-    };
-  }, [snapToken, scriptLoaded, isMock, loadingPayment, templateSlug, token, router]);
-
-  // 3. Fungsi Periksa Status Pembayaran (Manual & Polling)
+  // 1. Fungsi Periksa Status Pembayaran (Manual & Polling)
   const checkStatus = useCallback(
     async (isManual = false) => {
       if (paymentSuccess) return;
@@ -264,7 +152,7 @@ export function PaymentCheckout({
 
         if (isManual) {
           setInfoMessage(
-            "Pembayaran belum terdeteksi masuk. Jika Anda baru saja menyelesaikan pembayaran di m-Banking / e-Wallet, mohon tunggu beberapa detik lalu klik periksa kembali.",
+            "Pembayaran belum terdeteksi masuk. Setelah Anda melakukan transfer, klik tombol 'Konfirmasi via WhatsApp' di bawah agar admin langsung memverifikasi.",
           );
         }
       } catch {
@@ -280,98 +168,86 @@ export function PaymentCheckout({
     [paymentSuccess, token, router, templateSlug],
   );
 
-  // 4. Background Auto-polling setiap 3.5 detik
+  // 2. Background Auto-polling setiap 3 detik
+  // Saat admin mengklik "Konfirmasi & Aktifkan" di panel admin, pembeli akan langsung dialihkan otomatis!
   useEffect(() => {
     if (paymentSuccess) return;
 
     const interval = setInterval(() => {
       checkStatus(false);
-    }, 3500);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [paymentSuccess, checkStatus]);
 
-  // 5. Buka Popup Snap Modal secara manual jika diinginkan pengguna
-  const handleOpenSnapPopup = () => {
-    if (snapToken && window.snap && typeof window.snap.pay === "function") {
-      try {
-        if (typeof window.snap.hide === "function") {
-          window.snap.hide();
-        }
-      } catch {
-        // ignore
-      }
+  // 3. Lazy Inisialisasi Midtrans hanya jika user beralih ke tab Midtrans
+  useEffect(() => {
+    if (paymentMode !== "midtrans") return;
 
+    let isMounted = true;
+    async function initMidtrans() {
       try {
-        window.snap.pay(snapToken, {
+        setLoadingMidtrans(true);
+        const res = await fetch("/api/payment/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        });
+        const data = await res.json();
+
+        if (!isMounted) return;
+
+        if (data.isPaid) {
+          setPaymentSuccess(true);
+          router.push(`/created/${data.templateSlug || templateSlug}/${data.token || token}`);
+          return;
+        }
+
+        if (data.ok && data.snapToken) {
+          setSnapToken(data.snapToken);
+        }
+      } catch (err) {
+        console.error("Gagal inisialisasi Midtrans:", err);
+      } finally {
+        if (isMounted) setLoadingMidtrans(false);
+      }
+    }
+
+    initMidtrans();
+    return () => {
+      isMounted = false;
+    };
+  }, [paymentMode, token, templateSlug, router]);
+
+  // 4. Embed Midtrans Snap UI jika mode midtrans aktif
+  useEffect(() => {
+    if (paymentMode !== "midtrans" || !snapToken || loadingMidtrans) return;
+
+    const container = document.getElementById("snap-container");
+    if (!container) return;
+
+    if (embeddedTokenRef.current === snapToken && container.children.length > 0) return;
+
+    if (typeof window !== "undefined" && window.snap && typeof window.snap.embed === "function") {
+      try {
+        container.innerHTML = "";
+        window.snap.embed(snapToken, {
+          embedId: "snap-container",
           onSuccess: () => {
             setPaymentSuccess(true);
             router.push(`/created/${templateSlug}/${token}`);
           },
-          onPending: (result) => {
-            console.log("Midtrans payment pending:", result);
-          },
-          onError: (err) => {
-            console.error("Midtrans payment error:", err);
-          },
-          onClose: () => {
-            // Re-embed snap bila popup ditutup user
-            const container = document.getElementById("snap-container");
-            if (container && typeof window.snap?.embed === "function") {
-              try {
-                if (typeof window.snap.hide === "function") {
-                  window.snap.hide();
-                }
-              } catch {
-                // ignore
-              }
-              container.innerHTML = "";
-              window.snap.embed(snapToken, {
-                embedId: "snap-container",
-                onSuccess: () => {
-                  setPaymentSuccess(true);
-                  router.push(`/created/${templateSlug}/${token}`);
-                },
-              });
-              embeddedTokenRef.current = snapToken;
-            }
-          },
         });
-      } catch (err) {
-        console.error("Error opening snap popup:", err);
+        embeddedTokenRef.current = snapToken;
+      } catch (e) {
+        console.error("Gagal embed Snap:", e);
       }
-    } else if (redirectUrl) {
-      window.open(redirectUrl, "_blank");
     }
-  };
-
-  // 6. Fitur Simulasi Pembayaran Sukses (Sandbox / Demo only)
-  const handleSimulateSuccess = async () => {
-    if (isProduction) return;
-    setSimulating(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/payment/status?token=${token}&simulate=true`, {
-        cache: "no-store",
-      });
-      const data = await res.json();
-
-      if (data.isPaid) {
-        setPaymentSuccess(true);
-        router.push(`/created/${data.templateSlug || templateSlug}/${data.token || token}`);
-        router.refresh();
-      }
-    } catch {
-      setError("Gagal melakukan simulasi pembayaran.");
-    } finally {
-      setSimulating(false);
-    }
-  };
+  }, [paymentMode, snapToken, loadingMidtrans, templateSlug, token, router]);
 
   return (
     <>
-      {/* Load Midtrans Snap JS */}
-      {snapScriptUrl && (
+      {snapScriptUrl && paymentMode === "midtrans" && (
         <Script
           id="midtrans-snap-script"
           src={snapScriptUrl}
@@ -382,7 +258,7 @@ export function PaymentCheckout({
         />
       )}
 
-      <div className="mx-auto w-full max-w-4xl py-4 sm:py-10 min-w-0">
+      <div className="mx-auto w-full max-w-4xl py-4 sm:py-8 min-w-0">
         {/* Navigation & Header */}
         <div className="mb-6 sm:mb-8">
           <Link
@@ -394,231 +270,289 @@ export function PaymentCheckout({
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-              <h1 className="mt-1 sm:mt-2 font-display text-xl sm:text-3xl font-bold tracking-tight text-ink">
-                Selesaikan Pembayaran QRIS
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-seal-100 px-3 py-1 text-xs font-semibold text-seal-800 mb-1.5">
+                <QrCode className="h-3.5 w-3.5 text-seal-600" />
+                QRIS Pembayaran Resmi
+              </span>
+              <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-ink">
+                Selesaikan Pembayaran Surat
               </h1>
             </div>
             <div className="text-left sm:text-right">
-              <span className="text-xs text-ink-muted block">Total Tagihan (Terkunci)</span>
-              <span className="font-display text-2xl font-bold text-seal-600 sm:text-3xl">
-                {formattedAmount}
+              <span className="text-xs text-ink-muted block">Total Tagihan (Tepat Termasuk Kode Unik):</span>
+              <div className="flex items-baseline gap-1 sm:justify-end">
+                <span className="font-display text-2xl sm:text-3xl font-bold text-ink">
+                  Rp 15.
+                </span>
+                <span className="font-display text-2xl sm:text-3xl font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded-lg border border-amber-300">
+                  {amountDisplay.uniqueCode}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Notifikasi Pembayaran Berhasil */}
+        {paymentSuccess && (
+          <div className="mb-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-5 text-center text-emerald-900 shadow-sm animate-in fade-in">
+            <div className="flex items-center justify-center gap-2 font-bold text-base sm:text-lg">
+              <CheckCircle2 className="h-6 w-6 text-emerald-600 animate-bounce" />
+              <span>Pembayaran Berhasil Dikonfirmasi!</span>
+            </div>
+            <p className="mt-1 text-xs sm:text-sm text-emerald-700">
+              Surat digital Anda telah aktif. Mengalihkan ke halaman tautan surat siap bagikan...
+            </p>
+          </div>
+        )}
+
+        {/* Kotak Pengumuman Kode Unik Penting */}
+        <div className="mb-6 rounded-2xl border-2 border-amber-300/80 bg-amber-50/90 p-4 sm:p-5 shadow-xs">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500 text-white shrink-0 mt-0.5">
+              <Key className="h-4 w-4" />
+            </div>
+            <div className="flex-1 text-xs sm:text-sm leading-relaxed text-amber-950">
+              <strong className="font-bold text-amber-900 block mb-0.5">
+                PENTING: Masukkan Nominal Tepat Hingga 3 Digit Terakhir
+              </strong>
+              <span>
+                Mohon transfer sebesar{" "}
+                <strong className="bg-white px-2 py-0.5 rounded font-mono text-amber-800 border border-amber-200 font-bold">
+                  Rp 15.{amountDisplay.uniqueCode}
+                </strong>
+                . Tiga digit terakhir (<strong>{amountDisplay.uniqueCode}</strong>) merupakan kode verifikasi unik pesanan Anda agar dapat diaktivasi dengan cepat.
               </span>
             </div>
           </div>
         </div>
 
-        {paymentSuccess && (
-          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center text-emerald-800 shadow-sm animate-in fade-in">
-            <div className="flex items-center justify-center gap-2 font-bold text-base">
-              <CheckCircle2 className="h-5 w-5 text-emerald-600 animate-bounce" />
-              <span>Pembayaran Berhasil Terverifikasi!</span>
-            </div>
-            <p className="mt-1 text-xs text-emerald-700">
-              Sedang mengalihkan Anda ke halaman tautan surat digital...
-            </p>
-          </div>
-        )}
-
-        {/* Panel Kontrol Sandbox & Pengujian Bisnis Lokal (Hanya Muncul di Non-Production) */}
-
-        <div className="grid w-full min-w-0 max-w-full gap-6 sm:gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          {/* Kolom Kiri: Midtrans Dynamic QRIS Container */}
-          <div className="min-w-0 w-full max-w-full rounded-2xl sm:rounded-3xl border border-line bg-paper p-3 sm:p-7 shadow-sm space-y-4 sm:space-y-5 overflow-hidden">
-            <div className="flex items-center justify-between border-b border-line pb-3.5 sm:pb-4 gap-2">
-              <div className="flex items-center gap-2 min-w-0">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-seal-100 text-seal-700 shrink-0">
-                  <QrCode className="h-5 w-5" />
+        <div className="grid w-full min-w-0 max-w-full gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          {/* Kolom Kiri: Barcode QRIS & Panduan Scan */}
+          <div className="min-w-0 w-full max-w-full rounded-3xl border border-line bg-paper p-5 sm:p-7 shadow-sm space-y-5 overflow-hidden">
+            {paymentMode === "static" ? (
+              <>
+                {/* Header Barcode */}
+                <div className="flex items-center justify-between border-b border-line pb-4 gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-seal-100 text-seal-700 shrink-0">
+                      <QrCode className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <h2 className="text-sm font-bold text-ink uppercase tracking-wide">
+                        QRIS Standar Nasional
+                      </h2>
+                      <p className="text-xs text-ink-muted">Bisa di-scan dari semua m-Banking & e-Wallet</p>
+                    </div>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-200 shrink-0">
+                    Aktif & Siap Scan
+                  </span>
                 </div>
-                <div className="min-w-0">
-                  <h2 className="text-xs sm:text-sm font-bold text-ink uppercase tracking-wide truncate">
-                    QRIS Standar Indonesia
-                  </h2>
-                  <p className="text-[11px] sm:text-xs text-ink-muted truncate">Nominal pas {formattedAmount} (Otomatis)</p>
-                </div>
-              </div>
-              <span className="rounded-full bg-emerald-50 px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-xs font-semibold text-emerald-700 border border-emerald-200 shrink-0 whitespace-nowrap">
-                Nominal Terkunci
-              </span>
-            </div>
 
-            {loadingPayment ? (
-              <div className="flex flex-col items-center justify-center min-h-[380px] rounded-2xl border border-dashed border-seal-200 bg-slate-50/60 p-6 gap-3">
-                <Spinner className="h-8 w-8 text-seal-600" />
-                <p className="text-sm font-semibold text-ink">Menyiapkan QRIS Dinamis Midtrans...</p>
-                <p className="text-xs text-ink-muted">Mengunci nominal {formattedAmount}</p>
-              </div>
-            ) : isMock && !isProduction ? (
-              /* Fallback / Mock View jika Midtrans key belum diisi (hanya pada mode development/sandbox) */
-              <div className="space-y-4">
-                <div className="relative mx-auto flex max-w-[320px] flex-col items-center overflow-hidden rounded-2xl border-2 border-dashed border-seal-200 bg-white p-4 shadow-sm">
+                {/* Tampilan Gambar QRIS Statis */}
+                <div className="relative mx-auto flex max-w-[340px] flex-col items-center overflow-hidden rounded-2xl border-2 border-line/80 bg-white p-4 shadow-xs">
                   <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-slate-50">
                     <Image
                       src="/images/qris-code.jpeg"
                       alt="Barcode QRIS Pembayaran Lettera"
                       fill
                       className="object-contain"
-                      sizes="(max-width: 640px) 280px, 320px"
+                      sizes="(max-width: 640px) 300px, 340px"
                       priority
                     />
                   </div>
-                  <div className="mt-3 w-full rounded-xl bg-seal-50 py-1.5 px-3 text-center border border-seal-100">
-                    <span className="text-[11px] text-seal-700 font-semibold">
-                      Nominal Terkunci: {formattedAmount}
-                    </span>
+
+                  {/* Tombol Unduh QRIS (Berguna bagi user HP yang scan dari galeri) */}
+                  <div className="mt-3.5 flex w-full gap-2">
+                    <a
+                      href="/images/qris-code.jpeg"
+                      download="QRIS-Lettera.jpeg"
+                      className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-line bg-page-deep/60 py-2 px-3 text-xs font-semibold text-ink hover:bg-page transition-colors text-center"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      <span>Unduh Barcode</span>
+                    </a>
+                    <a
+                      href="/images/qris-code.jpeg"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center rounded-xl border border-line bg-page-deep/60 px-3 py-2 text-xs font-semibold text-ink hover:bg-page transition-colors"
+                      title="Perbesar Barcode"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
                   </div>
                 </div>
 
-                {/*<div className="rounded-2xl border border-dashed border-seal-300 bg-seal-50/70 p-3 text-center">
-                  <p className="text-[11px] font-semibold text-seal-800 mb-1 flex items-center justify-center gap-1">
-                    <Zap className="h-3.5 w-3.5 text-amber-500" />
-                    Mode Pengujian / Sandbox Aktif
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleSimulateSuccess}
-                    disabled={simulating || paymentSuccess}
-                    className="mt-1 w-full text-xs font-bold border-seal-300 text-seal-800 hover:bg-seal-100 bg-white"
-                  >
-                    {simulating ? <Spinner className="h-3.5 w-3.5 mr-1" /> : null}
-                    Simulasikan Pembayaran Sukses (Langsung Redirect)
-                  </Button>
-                </div>*/}
-              </div>
-            ) : (
-              /* Midtrans Snap Official Embed Container */
-              <div className="space-y-3 sm:space-y-4 w-full min-w-0 max-w-full overflow-hidden">
-                <div
-                  id="snap-container"
-                  className="w-full min-w-0 max-w-full min-h-[440px] rounded-xl sm:rounded-2xl overflow-hidden border border-line/60 bg-white shadow-2xs flex justify-center"
-                />
+                {/* Panel Nominal Presisi dengan Tombol Salin */}
+                <div className="rounded-2xl border border-seal-200 bg-seal-50/70 p-4 text-center space-y-2">
+                  <span className="text-xs text-ink-muted block">Jumlah yang Harus Ditransfer:</span>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="font-display text-3xl font-bold text-ink">Rp 15.</span>
+                    <span className="font-display text-3xl font-black text-amber-700 bg-amber-100/90 px-2 py-0.5 rounded-lg border border-amber-300">
+                      {amountDisplay.uniqueCode}
+                    </span>
+                  </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1 text-xs text-ink-muted">
-                  <span className="text-center sm:text-left">Jika QRIS di atas belum muncul:</span>
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleOpenSnapPopup}
-                    className="gap-1.5 text-xs text-seal-700 hover:bg-seal-50 border-seal-200 w-full sm:w-auto"
+                    onClick={handleCopyExactNominal}
+                    className={`mt-1 inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all shadow-2xs cursor-pointer ${
+                      copiedNominal
+                        ? "bg-emerald-600 text-white"
+                        : "bg-white text-seal-800 border border-seal-300 hover:bg-seal-100"
+                    }`}
                   >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    Buka Popup Pembayaran Midtrans
-                  </Button>
+                    {copiedNominal ? (
+                      <>
+                        <Check className="h-3.5 w-3.5" />
+                        <span>Nominal Rp {amount} Berhasil Disalin!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Salin Nominal Presisi ({amount})</span>
+                      </>
+                    )}
+                  </button>
+                  <p className="text-[11px] text-ink-muted">
+                    Salin angka ini lalu tempelkan di kolom nominal m-Banking Anda.
+                  </p>
                 </div>
+
+                {/* Panduan 4 Langkah Singkat */}
+                <div className="space-y-2 pt-2 border-t border-line text-xs text-ink-soft">
+                  <h4 className="font-bold text-ink flex items-center gap-1.5">
+                    <Smartphone className="h-4 w-4 text-seal-600" />
+                    Cara Pembayaran Mudah:
+                  </h4>
+                  <ol className="list-decimal list-inside space-y-1.5 leading-relaxed pl-1 text-ink-soft">
+                    <li>Buka aplikasi m-Banking (BCA, Mandiri, BRI, dll) atau e-Wallet (GoPay, OVO, Dana, ShopeePay).</li>
+                    <li>Pilih menu <strong>Scan QRIS</strong> (atau unggah gambar barcode jika membuka dari HP).</li>
+                    <li>Ketikkan nominal tepat <strong>Rp {amount.toLocaleString("id-ID")}</strong> (jangan dibulatkan).</li>
+                    <li>Selesaikan pembayaran dan konfirmasi via tombol WhatsApp di samping.</li>
+                  </ol>
+                </div>
+              </>
+            ) : (
+              /* Midtrans Container (Optional Switch) */
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-line pb-3">
+                  <h3 className="font-bold text-ink text-sm">Pembayaran via Midtrans Gateway</h3>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMode("static")}
+                    className="text-xs text-seal-600 underline font-semibold"
+                  >
+                    ← Kembali ke QRIS Statis
+                  </button>
+                </div>
+                {loadingMidtrans ? (
+                  <div className="flex flex-col items-center justify-center min-h-[350px] gap-2">
+                    <Spinner className="h-8 w-8 text-seal-600" />
+                    <p className="text-sm font-semibold text-ink">Menghubungkan ke Midtrans...</p>
+                  </div>
+                ) : (
+                  <div id="snap-container" className="min-h-[400px] border rounded-2xl overflow-hidden" />
+                )}
               </div>
             )}
           </div>
 
-          {/* Kolom Kanan: Rincian Pesanan & Tombol Periksa Status (Tanpa Form Identitas) */}
-          <div className="space-y-4 sm:space-y-6 min-w-0 w-full max-w-full">
+          {/* Kolom Kanan: Rincian Pesanan, Konfirmasi WhatsApp, & Status */}
+          <div className="space-y-5 min-w-0 w-full max-w-full">
             {/* Rincian Pesanan */}
-            <div className="rounded-2xl sm:rounded-3xl border border-line bg-paper p-4 sm:p-6 shadow-sm min-w-0 overflow-hidden">
-              <h3 className="text-sm font-bold text-ink uppercase tracking-wider mb-4 border-b border-line pb-3">
-                Rincian Pesanan
+            <div className="rounded-3xl border border-line bg-paper p-5 sm:p-6 shadow-sm min-w-0 overflow-hidden">
+              <h3 className="text-xs font-bold text-ink uppercase tracking-wider mb-4 border-b border-line pb-3">
+                Rincian Pesanan Surat
               </h3>
-              <div className="space-y-2.5 text-sm">
-                <div className="flex justify-between items-center gap-2 min-w-0">
-                  <span className="text-ink-muted shrink-0">Key Pemesanan:</span>
-                  <span className="font-mono text-[11px] sm:text-xs font-semibold text-seal-700 bg-seal-100/70 px-2 py-0.5 rounded-md truncate max-w-[150px] sm:max-w-[200px]" title={token}>
-                    {token}
-                  </span>
+              <div className="space-y-2.5 text-xs sm:text-sm">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-ink-muted">Kode Pesanan:</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-xs font-semibold text-seal-700 bg-seal-100/70 px-2 py-0.5 rounded-md">
+                      {token}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => copyKey(token)}
+                      className="text-ink-muted hover:text-ink cursor-pointer"
+                      title="Salin Kode"
+                    >
+                      {keyCopied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
+                    </button>
+                  </div>
                 </div>
-                <div className="flex justify-between gap-2 min-w-0">
-                  <span className="text-ink-muted shrink-0">Template Surat:</span>
+
+                <div className="flex justify-between gap-2">
+                  <span className="text-ink-muted">Template:</span>
                   <span className="font-medium text-ink truncate text-right">{templateName}</span>
                 </div>
-                <div className="flex justify-between gap-2 min-w-0">
-                  <span className="text-ink-muted shrink-0">Judul / Peruntukan:</span>
-                  <span className="font-medium text-ink truncate text-right max-w-[180px] sm:max-w-[220px]">{title}</span>
+
+                <div className="flex justify-between gap-2">
+                  <span className="text-ink-muted">Judul Surat:</span>
+                  <span className="font-medium text-ink truncate text-right max-w-[200px]">{title}</span>
                 </div>
+
                 {recipient ? (
-                  <div className="flex justify-between gap-2 min-w-0">
-                    <span className="text-ink-muted shrink-0">Penerima:</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-ink-muted">Penerima:</span>
                     <span className="font-medium text-ink truncate text-right">{recipient}</span>
                   </div>
                 ) : null}
+
                 <div className="border-t border-line pt-2.5 flex justify-between font-semibold">
-                  <span className="text-ink">Biaya Penerbitan:</span>
-                  <span className="text-seal-600 font-bold">{formattedAmount}</span>
+                  <span className="text-ink">Total Tagihan:</span>
+                  <div className="text-right">
+                    <span className="text-seal-700 font-bold text-base">Rp {amount.toLocaleString("id-ID")}</span>
+                    <span className="text-[10px] text-ink-muted block font-normal">Termasuk kode unik verifikasi</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Key Pemesanan (ID Verifikasi Admin) Card dengan Tombol Salin */}
-            <div className="rounded-2xl sm:rounded-3xl border border-seal-200 bg-seal-50/50 p-4 sm:p-5 shadow-xs space-y-2.5 min-w-0 overflow-hidden">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="order-key-display"
-                  className="flex items-center gap-1.5 text-xs font-semibold text-ink"
-                >
-                  <Key className="h-3.5 w-3.5 text-seal-600" />
-                  Key Pemesanan (ID Verifikasi Admin)
-                </label>
-                <button
-                  type="button"
-                  onClick={() => copyKey(token)}
-                  className="inline-flex items-center gap-1 text-[11px] font-medium text-seal-700 hover:text-seal-900 transition-colors cursor-pointer"
-                >
-                  {keyCopied ? (
-                    <>
-                      <Check className="h-3 w-3 text-emerald-600" />
-                      <span className="text-emerald-600 font-semibold">Key Tersalin</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3 w-3" />
-                      <span>Salin Key</span>
-                    </>
-                  )}
-                </button>
+            {/* Tombol Utama: Konfirmasi Pembayaran via WhatsApp (085210358521) */}
+            <div className="rounded-3xl border-2 border-emerald-500/40 bg-emerald-50/50 p-5 sm:p-6 shadow-sm space-y-3">
+              <div className="flex items-center gap-2 text-emerald-800">
+                <MessageCircle className="h-5 w-5 text-emerald-600 shrink-0" />
+                <h3 className="text-sm font-bold">Konfirmasi Pembayaran Cepat</h3>
               </div>
-              <input
-                id="order-key-display"
-                type="text"
-                value={token}
-                disabled
-                readOnly
-                className="w-full rounded-xl border border-line bg-white/90 px-3.5 py-2 font-mono text-xs font-semibold text-ink-soft select-all cursor-not-allowed shadow-2xs"
-              />
-              <p className="text-[11px] text-ink-muted leading-relaxed">
-                Sertakan key unik ini jika Anda membutuhkan bantuan admin terkait kendala transaksi.
+
+              <p className="text-xs text-ink-soft leading-relaxed">
+                Sudah selesai scan dan transfer? Klik tombol di bawah untuk mengirim bukti transfer ke WhatsApp Admin agar surat Anda langsung diaktivasi seketika:
+              </p>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3.5 text-xs sm:text-sm font-bold text-white shadow-xs hover:bg-emerald-700 hover:shadow-md transition-all active:scale-[0.98] text-center"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>Konfirmasi via WhatsApp ({ADMIN_WHATSAPP_NUMBER})</span>
+              </a>
+
+              <p className="text-[11px] text-ink-muted text-center">
+                Pesan WhatsApp sudah terisi otomatis dengan Kode Pesanan &amp; Nominal Anda.
               </p>
             </div>
 
-            {/* Tombol Aksi Utama: Periksa Status Pembayaran */}
-            <div className="rounded-2xl sm:rounded-3xl border border-line bg-paper p-4 sm:p-6 shadow-sm space-y-4 min-w-0 overflow-hidden">
-              <div>
-                <h3 className="text-sm font-bold text-ink mb-1">
-                  Konfirmasi Pembayaran
+            {/* Pengecekan Status & Auto-Polling */}
+            <div className="rounded-3xl border border-line bg-paper p-5 sm:p-6 shadow-sm space-y-3.5">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold text-ink uppercase tracking-wide">
+                  Status Pembayaran
                 </h3>
-                <p className="text-xs text-ink-muted leading-relaxed">
-                  Setelah Anda menyelesaikan pembayaran di aplikasi ponsel, tekan tombol di bawah ini atau tunggu beberapa detik hingga sistem mendeteksi secara otomatis.
-                </p>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-bold text-amber-800 border border-amber-200">
+                  <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                  Menunggu Verifikasi
+                </span>
               </div>
 
               {error && (
                 <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 flex items-start gap-2">
                   <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
-                  <div className="flex-1 space-y-2">
-                    <span>{error}</span>
-                    {!isProduction && (
-                      <div className="pt-2 border-t border-rose-200/80">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={handleSimulateSuccess}
-                          disabled={simulating || paymentSuccess}
-                          className="bg-white text-rose-800 border-rose-300 hover:bg-rose-100 text-xs w-full font-semibold shadow-2xs"
-                        >
-                          {simulating ? <Spinner className="h-3.5 w-3.5 mr-1" /> : null}
-                          ⚡ Bypass Sandbox: Simulasikan Sukses Sekarang
-                        </Button>
-                      </div>
-                    )}
-                  </div>
+                  <span>{error}</span>
                 </div>
               )}
 
@@ -631,51 +565,50 @@ export function PaymentCheckout({
 
               <Button
                 type="button"
-                variant="primary"
-                size="lg"
-                onClick={handleSimulateSuccess}
-                // onClick={() => checkStatus(true)}
-                // disabled={checkingStatus || paymentSuccess}
-                className="w-full gap-2 bg-seal-600 hover:bg-seal-700 text-white font-bold shadow-md py-3.5 text-sm"
+                variant="outline"
+                size="md"
+                onClick={() => checkStatus(true)}
+                disabled={checkingStatus || paymentSuccess}
+                className="w-full gap-2 text-xs font-bold text-ink border-line hover:bg-page py-3"
               >
                 {checkingStatus ? (
                   <>
                     <Spinner className="h-4 w-4" />
-                    Memeriksa Status Pembayaran...
+                    Memeriksa Status...
                   </>
                 ) : (
                   <>
-                    <RefreshCw className="h-4 w-4" />
-                    Periksa Status Pembayaran
+                    <RefreshCw className="h-4 w-4 text-seal-600" />
+                    Periksa Status Manual
                   </>
                 )}
               </Button>
 
-              <div className="flex items-center justify-center gap-2 text-xs text-ink-muted text-center">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span>Pengecekan otomatis aktif di latar belakang (setiap 3.5 detik)</span>
-              </div>
-
-              <div className="flex items-center justify-center gap-1.5 text-[11px] text-ink-muted pt-2 border-t border-line text-center">
+              <div className="flex items-center justify-center gap-1.5 text-[11px] text-ink-muted text-center pt-1 border-t border-line">
                 <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Begitu lunas, halaman langsung otomatis membuka surat Anda.</span>
+                <span>Layar otomatis berpindah ke surat begitu pembayaran terverifikasi.</span>
               </div>
             </div>
 
-            {/* Panduan Pembayaran */}
-            <div className="rounded-2xl sm:rounded-3xl border border-line bg-paper p-4 sm:p-6 shadow-sm min-w-0 overflow-hidden">
-              <h3 className="text-sm font-bold text-ink uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Smartphone className="h-4 w-4 text-seal-600" />
-                Langkah Pembayaran Singkat:
-              </h3>
-              <ol className="list-decimal list-inside space-y-1.5 text-xs text-ink-soft leading-relaxed">
-                <li>Buka aplikasi m-Banking atau e-Wallet di HP Anda.</li>
-                <li>Pilih menu <strong>Scan QRIS</strong>.</li>
-                <li>Arahkan kamera ke barcode QRIS di samping.</li>
-                <li>Nominal tagihan <strong>{formattedAmount} otomatis muncul</strong>.</li>
-                <li>Konfirmasi pembayaran di HP Anda.</li>
-                <li>Klik tombol <strong>&ldquo;Periksa Status Pembayaran&rdquo;</strong> di atas untuk langsung membuka link surat.</li>
-              </ol>
+            {/* Opsi Switcher jika ingin mencoba Midtrans */}
+            <div className="text-center pt-1">
+              {paymentMode === "static" ? (
+                <button
+                  type="button"
+                  onClick={() => setPaymentMode("midtrans")}
+                  className="text-[11px] text-ink-muted hover:text-ink underline transition-colors"
+                >
+                  Coba alur pembayaran Midtrans Snap otomatis →
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setPaymentMode("static")}
+                  className="text-[11px] text-ink-muted hover:text-ink underline transition-colors"
+                >
+                  ← Kembali ke QRIS Statis + Kode Unik
+                </button>
+              )}
             </div>
           </div>
         </div>

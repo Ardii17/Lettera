@@ -9,6 +9,7 @@ import { getTemplate } from "@/templates/registry";
 import type { ActionResult } from "@/types";
 import type { LetterContent } from "@/types/letter";
 import { getTemplateRowBySlug, getTemplateRowsById } from "./templates.service";
+import { getUniqueAmount } from "@/lib/payment/qris-static";
 
 const GENERIC_ERROR = "Surat gagal disimpan. Coba lagi sebentar lagi.";
 
@@ -70,7 +71,7 @@ export async function createLetterAction(
         payer_name: parsedInput.data.payerName || null,
         payer_email: parsedInput.data.payerEmail || null,
         payment_status: "pending",
-        amount: 15000,
+        amount: getUniqueAmount(15000, publicToken),
         template_id: templateRow.id,
         public_token: publicToken,
         title,

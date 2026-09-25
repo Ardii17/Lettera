@@ -10,6 +10,7 @@ import { getTemplate } from "@/templates/registry";
 import type { LetterContent, LetterStats, LetterSummary, PublicLetter } from "@/types/letter";
 import type { LetterRow } from "@/types/database";
 import { getTemplateRowsById } from "./templates.service";
+import { getUniqueAmount } from "@/lib/payment/qris-static";
 
 function asContent(value: unknown): LetterContent {
   if (!value || typeof value !== "object" || Array.isArray(value)) return {};
@@ -160,7 +161,7 @@ export async function getLetterForPayment(token: string) {
     templateSlug: slug,
     templateName: meta?.name ?? templateRow?.name ?? "Digital Letter",
     title: data.title ?? meta?.name ?? "Digital Letter",
-    amount: data.amount ?? 15000,
+    amount: getUniqueAmount(data.amount ?? 15000, data.public_token),
     paymentStatus: data.payment_status ?? "pending",
     payerName: data.payer_name ?? "",
     payerEmail: data.payer_email ?? "",
