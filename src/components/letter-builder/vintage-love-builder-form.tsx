@@ -16,6 +16,12 @@ import {
   ChevronRight,
   ChevronLeft,
   Check,
+  Clock,
+  Disc,
+  Ticket,
+  Newspaper,
+  Milestone,
+  Send,
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
@@ -36,7 +42,13 @@ interface VintageLoveBuilderFormProps {
   idPrefix?: string;
 }
 
-type TabType = "envelope" | "letter" | "memories" | "promises" | "theme";
+type TabType =
+  | "envelope"
+  | "letter"
+  | "vintage_features"
+  | "journal"
+  | "memories"
+  | "theme";
 
 const PRESET_VINTAGE_PHOTOS = [
   {
@@ -71,10 +83,11 @@ export function VintageLoveBuilderForm({
   const [activeTab, setActiveTab] = useState<TabType>("envelope");
 
   const tabs: Array<{ id: TabType; label: string; icon: typeof Compass }> = [
-    { id: "envelope", label: "Amplop & Cap Pos", icon: Compass },
-    { id: "letter", label: "Warkat Cinta", icon: Scroll },
-    { id: "memories", label: "Foto Kenangan", icon: ImageIcon },
-    { id: "promises", label: "Rahasia & Janji", icon: Lock },
+    { id: "envelope", label: "Amplop", icon: Compass },
+    { id: "letter", label: "Warkat Utama", icon: Scroll },
+    { id: "vintage_features", label: "Jam & Piringan", icon: Clock },
+    { id: "journal", label: "Koran & Babak", icon: Newspaper },
+    { id: "memories", label: "Foto & Janji", icon: ImageIcon },
     { id: "theme", label: "Warna & Musik", icon: Palette },
   ];
 
@@ -310,20 +323,385 @@ export function VintageLoveBuilderForm({
         </div>
       )}
 
-      {/* TAB 3: FOTO KENANGAN */}
-      {activeTab === "memories" && (
+      {/* TAB 3: JAM SAKU, PIRINGAN HITAM & TIKET VINTAGE */}
+      {activeTab === "vintage_features" && (
         <div className="space-y-6 animate-in fade-in-50 duration-200">
-          <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 text-xs sm:text-sm text-amber-950">
-            <p className="font-medium mb-1">Galeri Bingkai Foto Film Retro</p>
-            <p className="text-amber-900/80 leading-relaxed">
-              Sertakan hingga dua foto kenangan manis berdua yang akan dipajang dengan bingkai foto film analog vintage berpasangan di dalam warkat cinta.
-            </p>
+          {/* Jam Saku Waktu Abadi */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Clock className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">
+                1. Jam Saku Antik (Pocket Watch Real-time Counter)
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Tanggal Mulai Hubungan / Jadian"
+                htmlFor={`${idPrefix}-anniversaryDate`}
+                error={errors.anniversaryDate?.message as string}
+                hint="Format YYYY-MM-DD (misal: 2022-02-14) untuk menghitung detik cinta secara live."
+              >
+                <Input
+                  id={`${idPrefix}-anniversaryDate`}
+                  placeholder="2022-02-14"
+                  {...register("anniversaryDate")}
+                />
+              </Field>
+
+              <Field
+                label="Kutipan Romantis Jam Saku"
+                htmlFor={`${idPrefix}-counterSubtitle`}
+                error={errors.counterSubtitle?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-counterSubtitle`}
+                  placeholder="Detik demi detik bersamamu adalah anugerah terindah"
+                  {...register("counterSubtitle")}
+                />
+              </Field>
+            </div>
           </div>
 
+          {/* Piringan Hitam Vinyl Gramofon */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Disc className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">
+                2. Piringan Hitam Vinyl Gramofon (Interactive Turntable)
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Judul Lagu Favorit Berdua"
+                htmlFor={`${idPrefix}-vinylSongTitle`}
+                error={errors.vinylSongTitle?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-vinylSongTitle`}
+                  placeholder="Can't Help Falling in Love"
+                  {...register("vinylSongTitle")}
+                />
+              </Field>
+
+              <Field
+                label="Penyanyi / Komponis"
+                htmlFor={`${idPrefix}-vinylArtist`}
+                error={errors.vinylArtist?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-vinylArtist`}
+                  placeholder="Elvis Presley • Side A Track 01"
+                  {...register("vinylArtist")}
+                />
+              </Field>
+            </div>
+
+            <Field
+              label="Catatan Tepi Lagu (Side Note)"
+              htmlFor={`${idPrefix}-vinylSideNote`}
+              error={errors.vinylSideNote?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-vinylSideNote`}
+                placeholder="Lagu yang selalu berputar di sanubari setiap kali mengingat senyummu."
+                {...register("vinylSideNote")}
+              />
+            </Field>
+          </div>
+
+          {/* Tiket Kereta / Bioskop Klasik */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Ticket className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">
+                3. Tiket Perjalanan Cinta Klasik (Vintage Boarding Pass)
+              </h4>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Titik Berangkat (Origin)"
+                htmlFor={`${idPrefix}-ticketOrigin`}
+                error={errors.ticketOrigin?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-ticketOrigin`}
+                  placeholder="Pertemuan Pertama di Braga"
+                  {...register("ticketOrigin")}
+                />
+              </Field>
+
+              <Field
+                label="Tujuan Akhir (Destination)"
+                htmlFor={`${idPrefix}-ticketDestination`}
+                error={errors.ticketDestination?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-ticketDestination`}
+                  placeholder="Menua Bersama Selamanya"
+                  {...register("ticketDestination")}
+                />
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Nomor Kursi / Gerbong"
+                htmlFor={`${idPrefix}-ticketSeat`}
+                error={errors.ticketSeat?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-ticketSeat`}
+                  placeholder="Gerbong Kasih No. 01 (VIP)"
+                  {...register("ticketSeat")}
+                />
+              </Field>
+
+              <Field
+                label="Masa Berlaku Tiket"
+                htmlFor={`${idPrefix}-ticketDate`}
+                error={errors.ticketDate?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-ticketDate`}
+                  placeholder="Seumur Hidup & Tak Berujung"
+                  {...register("ticketDate")}
+                />
+              </Field>
+            </div>
+
+            <Field
+              label="Pesan Tiket (Catatan Khusus)"
+              htmlFor={`${idPrefix}-ticketNote`}
+              error={errors.ticketNote?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-ticketNote`}
+                placeholder="Tiket sekali jalan menuju kebahagiaan abadi, berlaku tanpa batas masa."
+                {...register("ticketNote")}
+              />
+            </Field>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: KORAN CINTA, 4 BABAK KASIH & TELEGRAM */}
+      {activeTab === "journal" && (
+        <div className="space-y-6 animate-in fade-in-50 duration-200">
+          {/* Warta Berita Cinta (Kliping Koran Klasik) */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Newspaper className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">
+                4. Warta Berita Cinta (The Daily Romance Herald)
+              </h4>
+            </div>
+
+            <Field
+              label="Tajuk Utama Berita (Headline Koran)"
+              htmlFor={`${idPrefix}-newspaperHeadline`}
+              error={errors.newspaperHeadline?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-newspaperHeadline`}
+                placeholder="WARGA GEMPAR: DUA HATI RESMI TERIKAT JANJI SUCI"
+                {...register("newspaperHeadline")}
+              />
+            </Field>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Sub-tajuk Berita"
+                htmlFor={`${idPrefix}-newspaperSub`}
+                error={errors.newspaperSub?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-newspaperSub`}
+                  placeholder="Edisi Khusus Romansa • Terbit untuk Mengabadikan Kisah Terindah"
+                  {...register("newspaperSub")}
+                />
+              </Field>
+
+              <Field
+                label="Tanggal / Edisi Koran"
+                htmlFor={`${idPrefix}-newspaperDate`}
+                error={errors.newspaperDate?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-newspaperDate`}
+                  placeholder="Edisi Kenangan Abadi No. 781"
+                  {...register("newspaperDate")}
+                />
+              </Field>
+            </div>
+
+            <Field
+              label="Isi Artikel Berita Koran"
+              htmlFor={`${idPrefix}-newspaperBody`}
+              error={errors.newspaperBody?.message as string}
+              hint="Kisah berita cinta ala artikel koran tempo dulu."
+            >
+              <Textarea
+                id={`${idPrefix}-newspaperBody`}
+                rows={3}
+                placeholder="Kabar bahagia mengudara ke seluruh pelosok..."
+                {...register("newspaperBody")}
+              />
+            </Field>
+          </div>
+
+          {/* The Chronicles of Us (4 Babak Perjalanan Cinta) */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-5">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Milestone className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">
+                5. Jejak Babak Kasih (The Chronicles of Us &bull; 4 Chapters)
+              </h4>
+            </div>
+
+            {/* Babak 1 */}
+            <div className="rounded-xl border border-stone-200/90 bg-stone-50/50 p-3.5 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="Babak I - Judul" htmlFor={`${idPrefix}-chapter1Title`}>
+                  <Input
+                    id={`${idPrefix}-chapter1Title`}
+                    placeholder="Babak I: Pertemuan Pertama"
+                    {...register("chapter1Title")}
+                  />
+                </Field>
+                <Field label="Babak I - Waktu / Momen" htmlFor={`${idPrefix}-chapter1Year`}>
+                  <Input
+                    id={`${idPrefix}-chapter1Year`}
+                    placeholder="14 Februari 2022"
+                    {...register("chapter1Year")}
+                  />
+                </Field>
+              </div>
+              <Field label="Babak I - Kisah Kenangan" htmlFor={`${idPrefix}-chapter1Story`}>
+                <Input
+                  id={`${idPrefix}-chapter1Story`}
+                  placeholder="Hari di mana tatap mata kita pertama kali bersirobok..."
+                  {...register("chapter1Story")}
+                />
+              </Field>
+            </div>
+
+            {/* Babak 2 */}
+            <div className="rounded-xl border border-stone-200/90 bg-stone-50/50 p-3.5 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="Babak II - Judul" htmlFor={`${idPrefix}-chapter2Title`}>
+                  <Input
+                    id={`${idPrefix}-chapter2Title`}
+                    placeholder="Babak II: Mengikat Janji Kasih"
+                    {...register("chapter2Title")}
+                  />
+                </Field>
+                <Field label="Babak II - Waktu / Momen" htmlFor={`${idPrefix}-chapter2Year`}>
+                  <Input
+                    id={`${idPrefix}-chapter2Year`}
+                    placeholder="21 September 2022"
+                    {...register("chapter2Year")}
+                  />
+                </Field>
+              </div>
+              <Field label="Babak II - Kisah Kenangan" htmlFor={`${idPrefix}-chapter2Story`}>
+                <Input
+                  id={`${idPrefix}-chapter2Story`}
+                  placeholder="Di bawah temaram lampu kota, dua hati akhirnya berani saling mengakui..."
+                  {...register("chapter2Story")}
+                />
+              </Field>
+            </div>
+
+            {/* Babak 3 */}
+            <div className="rounded-xl border border-stone-200/90 bg-stone-50/50 p-3.5 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="Babak III - Judul" htmlFor={`${idPrefix}-chapter3Title`}>
+                  <Input
+                    id={`${idPrefix}-chapter3Title`}
+                    placeholder="Babak III: Badai yang Kita Lewati"
+                    {...register("chapter3Title")}
+                  />
+                </Field>
+                <Field label="Babak III - Waktu / Momen" htmlFor={`${idPrefix}-chapter3Year`}>
+                  <Input
+                    id={`${idPrefix}-chapter3Year`}
+                    placeholder="Tahun 2023"
+                    {...register("chapter3Year")}
+                  />
+                </Field>
+              </div>
+              <Field label="Babak III - Kisah Kenangan" htmlFor={`${idPrefix}-chapter3Story`}>
+                <Input
+                  id={`${idPrefix}-chapter3Story`}
+                  placeholder="Tak selamanya langit cerah, namun setiap kerikil justru memperkokoh kasih kita..."
+                  {...register("chapter3Story")}
+                />
+              </Field>
+            </div>
+
+            {/* Babak 4 */}
+            <div className="rounded-xl border border-stone-200/90 bg-stone-50/50 p-3.5 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Field label="Babak IV - Judul" htmlFor={`${idPrefix}-chapter4Title`}>
+                  <Input
+                    id={`${idPrefix}-chapter4Title`}
+                    placeholder="Babak IV: Menua Bersama"
+                    {...register("chapter4Title")}
+                  />
+                </Field>
+                <Field label="Babak IV - Waktu / Momen" htmlFor={`${idPrefix}-chapter4Year`}>
+                  <Input
+                    id={`${idPrefix}-chapter4Year`}
+                    placeholder="Hari Ini & Selamanya"
+                    {...register("chapter4Year")}
+                  />
+                </Field>
+              </div>
+              <Field label="Babak IV - Kisah Kenangan" htmlFor={`${idPrefix}-chapter4Story`}>
+                <Input
+                  id={`${idPrefix}-chapter4Story`}
+                  placeholder="Kini hingga rambut memutih dan langkah melambat..."
+                  {...register("chapter4Story")}
+                />
+              </Field>
+            </div>
+          </div>
+
+          {/* Telegram Kilat Mesin Tik */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Send className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">
+                6. Surat Telegram Kilat Mesin Tik (Typewriter Telegram)
+              </h4>
+            </div>
+
+            <Field
+              label="Isi Kawat Telegram"
+              htmlFor={`${idPrefix}-telegramMessage`}
+              error={errors.telegramMessage?.message as string}
+              hint="Gunakan kata STOP antar kalimat untuk nuansa telegram kawat vintage autentik."
+            >
+              <Textarea
+                id={`${idPrefix}-telegramMessage`}
+                rows={3}
+                placeholder="BERITA KILAT STOP DUA HATI TELAH RESMI BERPADU STOP TIDAK ADA YANG BISA MEMISAHKAN KITA LAGI STOP SAYANG KAMU SELALU STOP"
+                {...register("telegramMessage")}
+              />
+            </Field>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 5: FOTO KENANGAN & JANJI */}
+      {activeTab === "memories" && (
+        <div className="space-y-6 animate-in fade-in-50 duration-200">
           {/* FOTO 1 */}
-          <div className="space-y-4 rounded-xl border border-stone-200 bg-white p-4">
+          <div className="space-y-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs">
             <h4 className="text-sm font-semibold text-stone-800">Foto Kenangan Utama (Pertama)</h4>
-            {/* Pilihan Foto Cepat */}
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-stone-600">
                 Pilihan Cepat Foto 1:
@@ -385,7 +763,7 @@ export function VintageLoveBuilderForm({
           </div>
 
           {/* FOTO 2 */}
-          <div className="space-y-4 rounded-xl border border-stone-200 bg-white p-4">
+          <div className="space-y-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs">
             <h4 className="text-sm font-semibold text-stone-800">Foto Kenangan Kedua (Opsional)</h4>
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wider text-stone-600">
@@ -446,49 +824,44 @@ export function VintageLoveBuilderForm({
               />
             </Field>
           </div>
-        </div>
-      )}
 
-      {/* TAB 4: BISIKAN RAHASIA & JANJI */}
-      {activeTab === "promises" && (
-        <div className="space-y-6 animate-in fade-in-50 duration-200">
-          <div className="bg-rose-50/70 border border-rose-200/80 rounded-xl p-4 text-xs sm:text-sm text-rose-950">
-            <p className="font-medium mb-1">Catatan Rahasia Tersembunyi</p>
-            <p className="text-rose-900/80 leading-relaxed">
-              Tuliskan pesan rahasia yang terkunci. Pasanganmu dapat mengetuk tombol khusus untuk membuka bisikan cinta ini.
-            </p>
+          {/* BISIKAN RAHASIA */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <div className="flex items-center gap-2 border-b border-stone-100 pb-3">
+              <Lock className="h-4 w-4 text-rose-800" />
+              <h4 className="text-sm font-semibold text-stone-800">Catatan Rahasia Tersembunyi</h4>
+            </div>
+
+            <Field
+              label="Judul Catatan Rahasia"
+              htmlFor={`${idPrefix}-secretNoteTitle`}
+              error={errors.secretNoteTitle?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-secretNoteTitle`}
+                placeholder="Bisikan Rahasia untuk Hatimu ✨"
+                {...register("secretNoteTitle")}
+              />
+            </Field>
+
+            <Field
+              label="Isi Catatan Rahasia (Terkunci)"
+              htmlFor={`${idPrefix}-secretNoteContent`}
+              error={errors.secretNoteContent?.message as string}
+              hint="Pesan manis atau bisikan cinta yang hanya terbuka saat tombol diklik."
+            >
+              <Textarea
+                id={`${idPrefix}-secretNoteContent`}
+                rows={3}
+                placeholder="Jika suatu saat dunia terasa terlalu bising dan melelahkan, ingatlah bahwa kamu tidak pernah sendirian..."
+                {...register("secretNoteContent")}
+              />
+            </Field>
           </div>
 
-          <Field
-            label="Judul Catatan Rahasia"
-            htmlFor={`${idPrefix}-secretNoteTitle`}
-            error={errors.secretNoteTitle?.message as string}
-          >
-            <Input
-              id={`${idPrefix}-secretNoteTitle`}
-              placeholder="Bisikan Rahasia untuk Hatimu ✨"
-              {...register("secretNoteTitle")}
-            />
-          </Field>
-
-          <Field
-            label="Isi Catatan Rahasia (Terkunci)"
-            htmlFor={`${idPrefix}-secretNoteContent`}
-            error={errors.secretNoteContent?.message as string}
-            hint="Pesan manis atau janji rahasia yang tersembunyi."
-          >
-            <Textarea
-              id={`${idPrefix}-secretNoteContent`}
-              rows={4}
-              placeholder="Jika suatu saat dunia terasa terlalu bising dan melelahkan, ingatlah bahwa kamu tidak pernah sendirian..."
-              {...register("secretNoteContent")}
-            />
-          </Field>
-
-          <div className="border-t border-stone-200 pt-5 space-y-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
-              Tiga Janji Setia untuk Hari Esok
-            </h4>
+          {/* TIGA JANJI SETIA */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-2xs space-y-4">
+            <h4 className="text-sm font-semibold text-stone-800">Tiga Janji Setia untuk Hari Esok</h4>
 
             <Field
               label="Judul Seksi Janji"
@@ -541,7 +914,7 @@ export function VintageLoveBuilderForm({
         </div>
       )}
 
-      {/* TAB 5: WARNA & MUSIK */}
+      {/* TAB 6: WARNA & MUSIK */}
       {activeTab === "theme" && (
         <div className="space-y-6 animate-in fade-in-50 duration-200">
           <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 text-xs sm:text-sm text-stone-700">
@@ -551,7 +924,6 @@ export function VintageLoveBuilderForm({
             </p>
           </div>
 
-          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
               <Field label="Warna Segel Lilin & Cap Pos" htmlFor={`${idPrefix}-primaryColor`}>
@@ -619,7 +991,6 @@ export function VintageLoveBuilderForm({
             </div>
           </div>
 
-          {/* Pengaturan Audio dalam Box Tersendiri */}
           <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
               Audio Musik Pengiring (Piringan Hitam)

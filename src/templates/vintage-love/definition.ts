@@ -146,6 +146,244 @@ export const vintageLoveTemplate: TemplateMeta = {
       section: "letter",
     },
 
+    // --- SECTION: JAM SAKU PENGHITUNG WAKTU (POCKET WATCH COUNTER) ---
+    {
+      name: "anniversaryDate",
+      label: "Tanggal mulai hubungan (untuk jam saku)",
+      type: "text",
+      placeholder: "2022-02-14",
+      maxLength: 30,
+      helperText: "Format YYYY-MM-DD (misal: 2022-02-14) agar jam saku antik dapat menghitung total hari, jam, menit & detik cinta secara live.",
+      section: "counter",
+    },
+    {
+      name: "counterSubtitle",
+      label: "Kutipan romantis jam saku",
+      type: "text",
+      placeholder: "Detik demi detik bersamamu adalah anugerah terindah",
+      maxLength: 120,
+      section: "counter",
+    },
+
+    // --- SECTION: PIRINGAN HITAM VINYL GRAMOFON ---
+    {
+      name: "vinylSongTitle",
+      label: "Judul lagu piringan hitam",
+      type: "text",
+      placeholder: "Can't Help Falling in Love",
+      maxLength: 80,
+      section: "vinyl",
+    },
+    {
+      name: "vinylArtist",
+      label: "Penyanyi / Komponis nostalgia",
+      type: "text",
+      placeholder: "Elvis Presley • Side A Track 01",
+      maxLength: 80,
+      section: "vinyl",
+    },
+    {
+      name: "vinylSideNote",
+      label: "Catatan tepi piringan hitam",
+      type: "text",
+      placeholder: "Lagu yang selalu berputar di kepala setiap kali merindukanmu.",
+      maxLength: 140,
+      section: "vinyl",
+    },
+
+    // --- SECTION: TIKET KERETA / BIOSKOP KLASIK (VINTAGE TICKET) ---
+    {
+      name: "ticketOrigin",
+      label: "Titik keberangkatan tiket (Origin)",
+      type: "text",
+      placeholder: "Hari Pertama Bertemu",
+      maxLength: 50,
+      section: "ticket",
+    },
+    {
+      name: "ticketDestination",
+      label: "Tujuan akhir tiket (Destination)",
+      type: "text",
+      placeholder: "Menua Bersama Selamanya",
+      maxLength: 50,
+      section: "ticket",
+    },
+    {
+      name: "ticketDate",
+      label: "Masa berlaku tiket",
+      type: "text",
+      placeholder: "Seumur Hidup & Tak Berujung",
+      maxLength: 50,
+      section: "ticket",
+    },
+    {
+      name: "ticketSeat",
+      label: "Nomor kursi / gerbong",
+      type: "text",
+      placeholder: "Gerbong Kasih No. 01 (VIP)",
+      maxLength: 50,
+      section: "ticket",
+    },
+    {
+      name: "ticketNote",
+      label: "Pesan khusus pada tiket",
+      type: "text",
+      placeholder: "Tiket sekali jalan menuju kebahagiaan abadi, berlaku tanpa batas masa.",
+      maxLength: 160,
+      section: "ticket",
+    },
+
+    // --- SECTION: WARTA BERITA CINTA (VINTAGE HERALD NEWSPAPER) ---
+    {
+      name: "newspaperHeadline",
+      label: "Tajuk utama koran (Headline)",
+      type: "text",
+      placeholder: "WARGA GEMPAR: DUA HATI RESMI TERIKAT JANJI SUCI",
+      maxLength: 100,
+      section: "newspaper",
+    },
+    {
+      name: "newspaperSub",
+      label: "Sub-tajuk berita koran",
+      type: "text",
+      placeholder: "Edisi Khusus Romansa • Terbit untuk Mengabadikan Kisah Terindah",
+      maxLength: 120,
+      section: "newspaper",
+    },
+    {
+      name: "newspaperDate",
+      label: "Tanggal edisi koran",
+      type: "text",
+      placeholder: "Edisi Kenangan Abadi",
+      maxLength: 60,
+      section: "newspaper",
+    },
+    {
+      name: "newspaperBody",
+      label: "Isi artikel berita cinta",
+      type: "textarea",
+      placeholder:
+        "Kabar bahagia mengudara ke seluruh pelosok. Dua insan yang ditakdirkan bersama telah mengukir komitmen suci. Setiap detik yang terlewati menjadi saksi betapa tulusnya cinta yang mereka bangun bersama...",
+      maxLength: 1000,
+      rows: 4,
+      section: "newspaper",
+    },
+
+    // --- SECTION: JEJAK BABAK KASIH (4 CHAPTERS) ---
+    {
+      name: "chapter1Title",
+      label: "Babak I - Judul",
+      type: "text",
+      placeholder: "Babak I: Pertemuan Pertama",
+      maxLength: 80,
+      section: "chronicles",
+    },
+    {
+      name: "chapter1Year",
+      label: "Babak I - Waktu / Tahun",
+      type: "text",
+      placeholder: "Awal Pertemuan",
+      maxLength: 40,
+      section: "chronicles",
+    },
+    {
+      name: "chapter1Story",
+      label: "Babak I - Kisah",
+      type: "textarea",
+      placeholder: "Hari di mana tatap mata kita pertama kali bersirobok...",
+      maxLength: 300,
+      rows: 2,
+      section: "chronicles",
+    },
+    {
+      name: "chapter2Title",
+      label: "Babak II - Judul",
+      type: "text",
+      placeholder: "Babak II: Mengikat Rasa",
+      maxLength: 80,
+      section: "chronicles",
+    },
+    {
+      name: "chapter2Year",
+      label: "Babak II - Waktu / Tahun",
+      type: "text",
+      placeholder: "Hari Jadian",
+      maxLength: 40,
+      section: "chronicles",
+    },
+    {
+      name: "chapter2Story",
+      label: "Babak II - Kisah",
+      type: "textarea",
+      placeholder: "Saat dua hati akhirnya berani saling mengakui dan berjanji untuk melangkah beriringan...",
+      maxLength: 300,
+      rows: 2,
+      section: "chronicles",
+    },
+    {
+      name: "chapter3Title",
+      label: "Babak III - Judul",
+      type: "text",
+      placeholder: "Babak III: Badai yang Kita Lewati",
+      maxLength: 80,
+      section: "chronicles",
+    },
+    {
+      name: "chapter3Year",
+      label: "Babak III - Waktu / Tahun",
+      type: "text",
+      placeholder: "Ujian & Kedewasaan",
+      maxLength: 40,
+      section: "chronicles",
+    },
+    {
+      name: "chapter3Story",
+      label: "Babak III - Kisah",
+      type: "textarea",
+      placeholder: "Tak selamanya jalan berdua bertabur bunga, namun setiap badai justru semakin memperkokoh kasih kita...",
+      maxLength: 300,
+      rows: 2,
+      section: "chronicles",
+    },
+    {
+      name: "chapter4Title",
+      label: "Babak IV - Judul",
+      type: "text",
+      placeholder: "Babak IV: Janji Menua Bersama",
+      maxLength: 80,
+      section: "chronicles",
+    },
+    {
+      name: "chapter4Year",
+      label: "Babak IV - Waktu / Tahun",
+      type: "text",
+      placeholder: "Masa Depan & Abadi",
+      maxLength: 40,
+      section: "chronicles",
+    },
+    {
+      name: "chapter4Story",
+      label: "Babak IV - Kisah",
+      type: "textarea",
+      placeholder: "Kini hingga rambut memutih, tanganku akan tetap menggenggam tanganmu menatap hari esok...",
+      maxLength: 300,
+      rows: 2,
+      section: "chronicles",
+    },
+
+    // --- SECTION: TELEGRAM KILAT MESIN TIK (TYPEWRITER TELEGRAM) ---
+    {
+      name: "telegramMessage",
+      label: "Isi telegram kilat mesin tik",
+      type: "textarea",
+      placeholder:
+        "BERITA KILAT STOP DUA HATI TELAH BERPADU STOP TIDAK ADA YANG BISA MEMISAHKAN KITA LAGI STOP SAYANG KAMU SELALU STOP",
+      maxLength: 400,
+      rows: 3,
+      helperText: "Gunakan kata 'STOP' ala telegram antik kawat kilat untuk nuansa vintage yang autentik.",
+      section: "telegram",
+    },
+
     // --- SECTION: FOTO KENANGAN & PESAN RAHASIA ---
     {
       name: "photoUrl",
@@ -316,6 +554,50 @@ export const vintageLoveTemplate: TemplateMeta = {
       "Dinda,\n\nAda rasa hangat yang selalu merayap ke dadaku setiap kali mengingat caramu tertawa. Di antara miliaran manusia yang berjalan di bumi, bertemu dan berjalan bersamamu adalah kebetulan terindah yang paling kusyukuri dalam hidup.\n\nSurat ini kutulis bukan hanya untuk merayakan hari-hari manis yang telah kita lewati, namun juga sebagai pengingat abadi bahwa di setiap langkah esok, ada sepasang mata yang selalu bangga melihatmu dan hati yang selalu mendoakan bahagiamu.\n\nTerima kasih telah menjadi rumah tempatku pulang, dan pelita di kala malam terasa gelap. Aku mencintaimu lebih dari apa yang sanggup dirangkum oleh kata-kata.",
     closingStatement: "Selamanya mengagumi dan menyayangimu,",
     signature: "Bima Arya",
+
+    // Sample data fitur tambahan mewah:
+    anniversaryDate: "2022-02-14",
+    counterSubtitle: "Detik demi detik bersamamu adalah anugerah terindah",
+
+    vinylSongTitle: "Can't Help Falling in Love",
+    vinylArtist: "Elvis Presley • Side A Track 01",
+    vinylSideNote: "Lagu yang selalu berputar di kepala setiap kali merindukanmu.",
+
+    ticketOrigin: "Pertemuan Pertama di Braga",
+    ticketDestination: "Menua Bersama Selamanya",
+    ticketDate: "Seumur Hidup & Tak Berujung",
+    ticketSeat: "Gerbong Kasih No. 01 (VIP)",
+    ticketNote: "Tiket sekali jalan menuju kebahagiaan abadi, berlaku tanpa batas masa.",
+
+    newspaperHeadline: "WARGA GEMPAR: DUA HATI RESMI TERIKAT JANJI SUCI",
+    newspaperSub: "Edisi Khusus Romansa • Terbit untuk Mengabadikan Kisah Terindah",
+    newspaperDate: "Edisi Kenangan Abadi No. 781",
+    newspaperBody:
+      "Kabar bahagia mengudara ke seluruh pelosok. Dua insan yang ditakdirkan bersama telah mengukir komitmen suci. Setiap detik yang terlewati menjadi saksi betapa tulusnya cinta yang mereka bangun bersama. Menurut saksi mata, senyum bahagia keduanya merebak bagai musim semi abadi.",
+
+    chapter1Title: "Babak I: Pertemuan Pertama",
+    chapter1Year: "14 Februari 2022",
+    chapter1Story:
+      "Hari di mana tatap mata kita pertama kali bersirobok di kedai kopi itu. Senyum manismu seketika mengubah duniaku menjadi jauh lebih hangat dan berwarna.",
+
+    chapter2Title: "Babak II: Mengikat Janji Kasih",
+    chapter2Year: "21 September 2022",
+    chapter2Story:
+      "Di bawah temaram lampu kota, dua hati akhirnya berani saling mengakui dan berjanji untuk saling menggenggam tangan dalam setiap langkah ke depan.",
+
+    chapter3Title: "Babak III: Badai yang Kita Lewati",
+    chapter3Year: "Tahun 2023",
+    chapter3Story:
+      "Tak selamanya langit cerah, namun setiap kerikil dan badai justru membuktikan betapa kokohnya bahu kita untuk saling bersandar.",
+
+    chapter4Title: "Babak IV: Menua Bersama",
+    chapter4Year: "Hari Ini & Selamanya",
+    chapter4Story:
+      "Kini hingga rambut memutih dan langkah melambat, tanganku akan tetap erat menggenggam tanganmu dengan cinta yang tak pernah berkurang sedikit pun.",
+
+    telegramMessage:
+      "BERITA KILAT STOP DUA HATI TELAH RESMI BERPADU STOP TIDAK ADA YANG BISA MEMISAHKAN KITA LAGI STOP TERIMA KASIH TELAH MEMILIHKU STOP SAYANG KAMU SELALU STOP",
+
     photoUrl:
       "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80",
     photoCaption: "Kenangan senja saat kita berjanji untuk saling menjaga selamanya.",
