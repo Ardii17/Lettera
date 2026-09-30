@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import { cn } from "@/lib/utils/cn";
 import type { LetterFormValues } from "./dynamic-form";
 
@@ -655,13 +656,15 @@ export function AmalfiWeddingBuilderForm({
 
           {/* Pengaturan Musik dalam Box Tersendiri */}
           <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
-            <Field label="URL Musik Latar (Melodi Mandolin Italia)">
-              <Input
-                {...register("musicTrack")}
-                id={`${idPrefix}-musicTrack`}
-                placeholder="https://cdn.pixabay.com/..."
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-musicTrack`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("musicTrack") as string) || ""}
+            onChange={(url) =>
+              setValue("musicTrack", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
         </div>
       )}

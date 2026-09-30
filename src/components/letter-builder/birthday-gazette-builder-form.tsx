@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import { BACKGROUND_COLOR_PRESETS } from "@/templates/color-presets";
 import { cn } from "@/lib/utils/cn";
 import type { LetterFormValues } from "./dynamic-form";
@@ -492,7 +493,15 @@ export function BirthdayGazetteBuilderForm({
           <div className="p-4 border border-stone-200 rounded-xl space-y-4 bg-white">
             <p className="text-xs font-bold text-stone-800 uppercase tracking-wider">Audio Piringan Hitam Koran</p>
             <Field label="Judul Musik" id={`${idPrefix}-musicTitle`}><Input id={`${idPrefix}-musicTitle`} placeholder="Vintage Jazz Cafe & Birthday Melody" {...register("musicTitle")} /></Field>
-            <Field label="URL File Audio (MP3)" id={`${idPrefix}-musicUrl`}><Input id={`${idPrefix}-musicUrl`} placeholder="https://..." {...register("musicUrl")} /></Field>
+            <AudioUploadField
+            id={`${idPrefix}-musicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("musicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("musicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
 
           {/* Palet Warna Koran - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}

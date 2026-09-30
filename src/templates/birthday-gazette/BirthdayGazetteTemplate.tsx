@@ -88,8 +88,8 @@ const defaults: Record<string, string> = {
   backgroundColor: "#f4efe6",
   cardColor: "#fdfbf7",
   textColor: "#1c1917",
-  musicTitle: "Vintage Jazz Cafe & Birthday Melody",
-  musicUrl: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-amp-strings-10711.mp3",
+  musicTitle: "",
+  musicUrl: "",
 };
 
 function BirthdayGazetteTemplateInner({

@@ -142,7 +142,7 @@ export const treehouseFriendshipTemplate: TemplateMeta = {
       name: "musicUrl",
       label: "URL Musik Akustik & Lonceng Angin (.mp3)",
       type: "text",
-      defaultValue: "https://assets.mixkit.co/music/preview/mixkit-valley-sunset-127.mp3",
+      defaultValue: "",
       helperText: "Tautan audio file .mp3 musik latar angin dan alam santai.",
     },
     {
@@ -532,8 +532,8 @@ export const treehouseFriendshipTemplate: TemplateMeta = {
     establishedYear: "Est. 2015 (10 Tahun Markas)",
     hoursHidden: "3.650+ Jam Tawa",
     securityLevel: "Level BFF (Strictly Protected)",
-    musicUrl: "https://assets.mixkit.co/music/preview/mixkit-valley-sunset-127.mp3",
-    musicTitle: "Canopy Breeze & Wind Chimes Melancholy",
+    musicUrl: "",
+    musicTitle: "",
 
     ring1Phase: "CINCIN 01 • BENIH & TUNAS AWAL",
     ring1Title: "Bertukar Bekal & Janji Tangga Tali",

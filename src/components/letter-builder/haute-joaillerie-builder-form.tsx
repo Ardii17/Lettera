@@ -11,6 +11,7 @@ import type { LetterFormValues } from "./dynamic-form";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import { cn } from "@/lib/utils/cn";
 import {
   Gem,
@@ -740,13 +741,15 @@ export function HauteJoaillerieBuilderForm({
             </Field>
           </div>
 
-          <Field label="Tautan URL Audio Simfoni Harpa (Opsional)">
-            <Input
-              {...register("audioUrl")}
-              id={`${idPrefix}-audioUrl`}
-              placeholder="https://cdn.freesound.org/previews/612/612089_5674468-lq.mp3"
-            />
-          </Field>
+          <AudioUploadField
+            id={`${idPrefix}-audioUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("audioUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("audioUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
         </div>
       )}
     </div>

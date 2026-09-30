@@ -331,7 +331,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
     cardColor: "#ffffff",
     textColor: "#27272a",
     bodyTextColor: "#4b5563",
-    musicTitle: "Anything You Want (Acoustic Tape)",
-    bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    musicTitle: "",
+    bgMusicUrl: "",
   },
 };

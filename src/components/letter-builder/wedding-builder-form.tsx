@@ -20,6 +20,7 @@ import {
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   WEDDING_COLOR_PRESETS,
   BACKGROUND_COLOR_PRESETS,
@@ -492,17 +493,15 @@ export function WeddingBuilderForm({
               />
             </Field>
 
-            <Field
-              label="Tautan Audio (.mp3)"
-              htmlFor={`${idPrefix}-bgMusicUrl`}
-              hint="Masukkan URL langsung ke file .mp3"
-            >
-              <Input
-                id={`${idPrefix}-bgMusicUrl`}
-                placeholder="https://cdn.pixabay.com/download/audio/..."
-                {...register("bgMusicUrl")}
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-bgMusicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("bgMusicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
 
           <div className="space-y-4">

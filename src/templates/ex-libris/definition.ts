@@ -435,7 +435,7 @@ export const exLibrisTemplate: TemplateMeta = {
       label: "URL Musik Selo Perpustakaan Kuno (Opsional)",
       type: "text",
       placeholder: "https://example.com/audio/antiquarian-library-cello.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_993d05e3f1.mp3?filename=romantic-cello-and-piano-122941.mp3",
+      defaultValue: "",
       section: "Pita Sutra & Musik",
     },
   ],
@@ -495,6 +495,6 @@ export const exLibrisTemplate: TemplateMeta = {
     primaryColor: "#d4af37",
     secondaryColor: "#8b1e2d",
     accentColor: "#be123c",
-    musicTrack: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_993d05e3f1.mp3?filename=romantic-cello-and-piano-122941.mp3",
+    musicTrack: "",
   },
 };

@@ -23,6 +23,7 @@ import {
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   FRIENDSHIP_COLOR_PRESETS,
   BACKGROUND_COLOR_PRESETS,
@@ -853,18 +854,15 @@ export function FriendshipBuilderForm({
                 />
               </Field>
 
-              <Field
-                id={`${idPrefix}-bgMusicUrl`}
-                label="URL Audio Lagu (MP3 Langsung)"
-                error={errors.bgMusicUrl?.message}
-                helperText="Tautan file audio MP3 langsung. Jika kosong, lagu melodi akustik terpadu yang damai akan otomatis dimainkan."
-              >
-                <Input
-                  {...register("bgMusicUrl")}
-                  placeholder="https://example.com/audio/friendship-song.mp3"
-                  autoComplete="off"
-                />
-              </Field>
+              <AudioUploadField
+            id={`${idPrefix}-bgMusicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("bgMusicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
             </div>
           </div>
         </div>

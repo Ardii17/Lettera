@@ -485,7 +485,7 @@ export const parfumDamourTemplate: TemplateMeta = {
       label: "URL Musik Latar Waltz Paris (Opsional)",
       type: "text",
       placeholder: "https://example.com/audio/paris-romance-waltz.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c350170a7b.mp3?filename=paris-romance-waltz-125439.mp3",
+      defaultValue: "",
       section: "Suasana & Musik",
     },
   ],
@@ -551,6 +551,6 @@ export const parfumDamourTemplate: TemplateMeta = {
     primaryColor: "#e6c587",
     secondaryColor: "#d47a88",
     accentColor: "#f59e0b",
-    musicTrack: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c350170a7b.mp3?filename=paris-romance-waltz-125439.mp3",
+    musicTrack: "",
   },
 };

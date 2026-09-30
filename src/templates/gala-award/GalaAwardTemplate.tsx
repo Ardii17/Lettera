@@ -85,8 +85,8 @@ const defaults: Record<string, string> = {
   backgroundColor: "#0a0a0e",
   cardColor: "#14141c",
   textColor: "#fdfcf7",
-  musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  musicTitle: "Grand Imperial Waltz Symphony",
+  musicUrl: "",
+  musicTitle: "",
 };
 
 interface GalaAwardTemplateProps {

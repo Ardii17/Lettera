@@ -497,7 +497,7 @@ export const chateauWeddingTemplate: TemplateMeta = {
       label: "URL Musik Latar (Simfoni Waltz Istana Versailles)",
       type: "text",
       placeholder: "https://cdn.pixabay.com/download/audio/...",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c89b7b9cf4.mp3?filename=celestial-music-box-waltz-10928.mp3",
+      defaultValue: "",
       section: "Pengaturan Tampilan & Musik",
     },
   ],
@@ -568,6 +568,6 @@ export const chateauWeddingTemplate: TemplateMeta = {
     primaryColor: "#d4af37",
     secondaryColor: "#991b1b",
     accentColor: "#24060f",
-    musicTrack: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c89b7b9cf4.mp3?filename=celestial-music-box-waltz-10928.mp3",
+    musicTrack: "",
   },
 };

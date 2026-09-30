@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   BACKGROUND_COLOR_PRESETS,
   CARD_COLOR_PRESETS,
@@ -586,13 +587,15 @@ export function RoyalGardenWeddingBuilderForm({
               <Input id={`${idPrefix}-musicTitle`} placeholder="A Thousand Years (Cello & Piano Orchestra)" {...register("musicTitle")} />
             </Field>
 
-            <Field
-              label="Tautan Audio (.mp3)"
-              htmlFor={`${idPrefix}-bgMusicUrl`}
-              hint="File mp3 yang berputar otomatis saat tamu membuka undangan."
-            >
-              <Input id={`${idPrefix}-bgMusicUrl`} placeholder="https://cdn.pixabay.com/..." {...register("bgMusicUrl")} />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-bgMusicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("bgMusicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
         </div>
       )}

@@ -113,9 +113,9 @@ const defaults: Record<string, string> = {
   backgroundColor: "#08080a",
   cardColor: "#16171d",
   textColor: "#f5efeb",
-  musicTitle: "Cinematic Film Score & Acoustic Overture",
+  musicTitle: "",
   musicUrl:
-    "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792cb.mp3?filename=cinematic-time-lapse-115672.mp3",
+    "",
 };
 
 function BirthdayCinemaTemplateInner({

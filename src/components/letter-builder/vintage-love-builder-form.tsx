@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   VINTAGE_LOVE_COLOR_PRESETS,
   BACKGROUND_COLOR_PRESETS,
@@ -1008,18 +1009,15 @@ export function VintageLoveBuilderForm({
               />
             </Field>
 
-            <Field
-              label="Tautan File Audio (.mp3)"
-              htmlFor={`${idPrefix}-bgMusicUrl`}
-              error={errors.bgMusicUrl?.message as string}
-              hint="Tautan langsung ke file audio mp3 romantis (misal dari Pixabay)."
-            >
-              <Input
-                id={`${idPrefix}-bgMusicUrl`}
-                placeholder="https://cdn.pixabay.com/download/audio/2022/05/16/audio_c0c1b72e04.mp3"
-                {...register("bgMusicUrl")}
-              />
-            </Field>
+            <AudioUploadField
+              id={`${idPrefix}-bgMusicUrl`}
+              label="Unggah File Musik Pengiring (Opsional)"
+              value={(watch("bgMusicUrl") as string) || ""}
+              onChange={(url) =>
+                setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+              }
+              helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+            />
           </div>
         </div>
       )}

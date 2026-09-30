@@ -82,8 +82,8 @@ const defaults: Record<string, string> = {
   backgroundColor: "#090910",
   cardColor: "#12121e",
   textColor: "#f8fafc",
-  musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  musicTitle: "Synthwave Cyber Odyssey Beat",
+  musicUrl: "",
+  musicTitle: "",
 };
 
 interface NeonBashTemplateProps {

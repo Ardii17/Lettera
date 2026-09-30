@@ -114,9 +114,9 @@ const defaults: Record<string, string> = {
   backgroundColor: "#f1ede4",
   paperColor: "#faf8f2",
   textColor: "#1b2533",
-  musicTitle: "In-Flight Bossa & Acoustic Voyage",
+  musicTitle: "",
   musicUrl:
-    "https://cdn.pixabay.com/download/audio/2022/05/16/audio_db6591201e.mp3?filename=acoustic-guitars-ambient-111163.mp3",
+    "",
 };
 
 function BirthdayPassportTemplateInner({

@@ -426,7 +426,7 @@ export const summitAchievementTemplate: TemplateMeta = {
       label: "URL Musik Simfoni Pegunungan (Fanfare)",
       type: "text",
       placeholder: "https://example.com/alpine-epic.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=epic-cinematic-trailer-116035.mp3",
+      defaultValue: "",
       helperText: "Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template.",
       section: "Palet Warna & Audio",
     },
@@ -506,6 +506,6 @@ export const summitAchievementTemplate: TemplateMeta = {
     secondaryColor: "#f59e0b",
     backgroundColor: "#08111e",
     audioUrl:
-      "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=epic-cinematic-trailer-116035.mp3",
+      "",
   },
 };

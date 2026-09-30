@@ -260,8 +260,8 @@ export const apologyTemplate: TemplateMeta = {
     cardColor: "#ffffff",
     textColor: "#20382e",
     bodyTextColor: "#3e5148",
-    musicTitle: "Peaceful Piano Reflections",
+    musicTitle: "",
     bgMusicUrl:
-      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "",
   },
 };

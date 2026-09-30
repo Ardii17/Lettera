@@ -496,7 +496,7 @@ export const solsticeThawTemplate: TemplateMeta = {
       label: "URL Musik Latar (Opsional)",
       type: "text",
       placeholder: "https://example.com/audio/spring-thaw-piano.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=winter-solstice-peaceful-piano-112190.mp3",
+      defaultValue: "",
       section: "Suasana & Musik",
     },
   ],
@@ -566,6 +566,6 @@ export const solsticeThawTemplate: TemplateMeta = {
     primaryColor: "#38bdf8",
     secondaryColor: "#fbbf24",
     accentColor: "#86efac",
-    musicTrack: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=winter-solstice-peaceful-piano-112190.mp3",
+    musicTrack: "",
   },
 };

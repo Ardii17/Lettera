@@ -461,7 +461,7 @@ export const hauteJoaillerieTemplate: TemplateMeta = {
       label: "Tautan URL Audio Simfoni Harpa (Opsional)",
       type: "text",
       placeholder: "https://cdn.freesound.org/previews/612/612089_5674468-lq.mp3",
-      defaultValue: "https://cdn.freesound.org/previews/612/612089_5674468-lq.mp3",
+      defaultValue: "",
       section: "Laci Rahasia & Ukiran Cincin",
     },
   ],
@@ -541,7 +541,7 @@ export const hauteJoaillerieTemplate: TemplateMeta = {
     secretVowMessage:
       "Wahai belahan jiwaku,\n\nJika suatu hari engkau merasa lelah atau dunia terasa terlalu bising, bukalah laci kecil ini dan sentuhlah cincin ini. Ingatlah bahwa di sudut bumi mana pun aku berada, ada satu hati yang telah berjanji untuk selalu pulang kepadamu, melindungimu, dan mencintaimu tanpa syarat apa pun. Engkaulah permata mahkota terindah dalam seluruh hidupku.",
     signatureTitle: "Maître Joaillier de Ton Cœur • Paris",
-    musicTitle: "Gabriel Fauré: Pavane Op. 50 (Romantic Harp & Strings)",
-    audioUrl: "https://cdn.freesound.org/previews/612/612089_5674468-lq.mp3",
+    musicTitle: "",
+    audioUrl: "",
   },
 };

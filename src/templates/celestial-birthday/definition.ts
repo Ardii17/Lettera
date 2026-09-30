@@ -510,7 +510,7 @@ export const celestialBirthdayTemplate: TemplateMeta = {
     backgroundColor: "#0b0e1b",
     cardColor: "#13172b",
     textColor: "#f1f5f9",
-    musicTitle: "Celestial Voyage & Cosmic Ambient Lofi",
-    musicUrl: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=space-chillout-14194.mp3",
+    musicTitle: "",
+    musicUrl: "",
   },
 };

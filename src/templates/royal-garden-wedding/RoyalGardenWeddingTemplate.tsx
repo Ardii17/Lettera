@@ -72,8 +72,8 @@ const defaults = {
   cardColor: "#ffffff",
   textColor: "#064e3b",
   bodyTextColor: "#374151",
-  musicTitle: "A Thousand Years (Cello & Piano Orchestra)",
-  bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+  musicTitle: "",
+  bgMusicUrl: "",
 };
 
 interface RoyalGardenWeddingTemplateProps {

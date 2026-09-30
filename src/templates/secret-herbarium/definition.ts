@@ -490,7 +490,7 @@ export const secretHerbariumTemplate: TemplateMeta = {
       label: "URL Musik Latar (Harpa & Hujan)",
       type: "text",
       placeholder: "https://example.com/botanical-acoustic.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-112318.mp3",
+      defaultValue: "",
       helperText: "Format MP3 publik. Otomatis dimatikan di katalog template.",
       section: "Palet Warna & Audio",
     },
@@ -574,6 +574,6 @@ export const secretHerbariumTemplate: TemplateMeta = {
     secondaryColor: "#c59b58",
     accentColor: "#9b435a",
     audioUrl:
-      "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=acoustic-guitars-ambient-112318.mp3",
+      "",
   },
 };

@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   MIXTAPE_COLOR_PRESETS,
   BACKGROUND_COLOR_PRESETS,
@@ -652,18 +653,15 @@ export function LoveMixtapeBuilderForm({
               />
             </Field>
 
-            <Field
-              label="Tautan File Audio (.mp3)"
-              htmlFor={`${idPrefix}-bgMusicUrl`}
-              error={errors.bgMusicUrl?.message as string}
-              hint="Tautan langsung ke file audio mp3 yang akan diputar oleh kaset ini."
-            >
-              <Input
-                id={`${idPrefix}-bgMusicUrl`}
-                placeholder="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3"
-                {...register("bgMusicUrl")}
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-bgMusicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("bgMusicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
         </div>
       )}

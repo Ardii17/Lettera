@@ -488,7 +488,7 @@ export const amalfiWeddingTemplate: TemplateMeta = {
       label: "URL Musik Latar (Mandolin Serenade Italia)",
       type: "text",
       placeholder: "https://cdn.pixabay.com/download/audio/...",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c89b7b9cf4.mp3?filename=celestial-music-box-waltz-10928.mp3",
+      defaultValue: "",
       section: "Pengaturan Tampilan & Musik",
     },
   ],
@@ -557,6 +557,6 @@ export const amalfiWeddingTemplate: TemplateMeta = {
     primaryColor: "#eab308",
     secondaryColor: "#0284c7",
     accentColor: "#0f2b48",
-    musicTrack: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c89b7b9cf4.mp3?filename=celestial-music-box-waltz-10928.mp3",
+    musicTrack: "",
   },
 };

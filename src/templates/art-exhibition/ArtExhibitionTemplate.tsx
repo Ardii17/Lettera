@@ -85,8 +85,8 @@ const defaults: Record<string, string> = {
   backgroundColor: "#09090b",
   cardColor: "#18181b",
   textColor: "#fafafa",
-  musicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  musicTitle: "Ambient Nocturne in D Minor",
+  musicUrl: "",
+  musicTitle: "",
 };
 
 interface ArtExhibitionTemplateProps {

@@ -353,7 +353,7 @@ export const loveScrapbookTemplate: TemplateMeta = {
     cardColor: "#ffffff",
     textColor: "#27272a",
     bodyTextColor: "#4b5563",
-    musicTitle: "Acoustic Ukulele & Coffee Morning",
-    bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    musicTitle: "",
+    bgMusicUrl: "",
   },
 };

@@ -11,6 +11,7 @@ import type { LetterFormValues } from "./dynamic-form";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import { cn } from "@/lib/utils/cn";
 import {
   Flame,
@@ -220,13 +221,15 @@ export function CampfireFriendshipBuilderForm({
 
           {/* Audio Musik Latar */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field label="URL Musik Akustik (.mp3)" error={errors.musicUrl?.message}>
-              <Input
-                id={`${idPrefix}-musicUrl`}
-                {...register("musicUrl")}
-                placeholder="https://.../acoustic-campfire.mp3"
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-musicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("musicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("musicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
 
             <Field label="Judul Musik Latar" error={errors.musicTitle?.message}>
               <Input

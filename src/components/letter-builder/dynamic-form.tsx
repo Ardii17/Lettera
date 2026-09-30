@@ -3,6 +3,7 @@
 import type { FieldErrors, UseFormRegister, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import type { TemplateField } from "@/templates/types";
 import type { LetterContent } from "@/types/letter";
 
@@ -80,6 +81,18 @@ export function DynamicForm({
               ) : (
                 <Input type="color" {...shared} />
               )
+            ) : setValue &&
+              watch &&
+              (field.type === "audio" ||
+                ["bgMusicUrl", "musicUrl", "musicTrack", "audioUrl"].includes(field.name)) ? (
+              <AudioUploadField
+                id={fieldId}
+                value={(watch(field.name) as string) || ""}
+                onChange={(url) =>
+                  setValue(field.name, url, { shouldValidate: true, shouldDirty: true })
+                }
+                helperText={field.helperText}
+              />
             ) : (
               <Input type="text" maxLength={field.maxLength} {...shared} />
             )}

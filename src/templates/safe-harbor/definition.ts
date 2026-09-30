@@ -390,7 +390,7 @@ export const safeHarborTemplate: TemplateMeta = {
       label: "URL Musik Deburan Ombak Damai (Cello & Waves)",
       type: "text",
       placeholder: "https://example.com/ocean-lullaby.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/05/16/audio_c976939fc9.mp3?filename=gentle-ocean-waves-birdsong-and-acoustic-guitar-111406.mp3",
+      defaultValue: "",
       helperText: "Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template.",
       section: "Palet Warna & Audio",
     },
@@ -462,6 +462,6 @@ export const safeHarborTemplate: TemplateMeta = {
     secondaryColor: "#38bdf8",
     backgroundColor: "#07101d",
     audioUrl:
-      "https://cdn.pixabay.com/download/audio/2022/05/16/audio_c976939fc9.mp3?filename=gentle-ocean-waves-birdsong-and-acoustic-guitar-111406.mp3",
+      "",
   },
 };

@@ -135,7 +135,7 @@ export const roadtripFriendshipTemplate: TemplateMeta = {
       name: "musicUrl",
       label: "URL Musik Mixtape Jalanan (.mp3)",
       type: "text",
-      defaultValue: "https://assets.mixkit.co/music/preview/mixkit-driving-ambience-1088.mp3",
+      defaultValue: "",
       helperText: "Tautan audio file .mp3 musik latar roadtrip santai.",
     },
     {
@@ -564,8 +564,8 @@ export const roadtripFriendshipTemplate: TemplateMeta = {
     totalDistance: "12.500+ KM",
     pitStopsCount: "84 Pit-Stops",
     fuelStatus: "Full Tank (100% Loyal)",
-    musicUrl: "https://assets.mixkit.co/music/preview/mixkit-driving-ambience-1088.mp3",
-    musicTitle: "Highway Mixtape: Sunset Cruise & Open Windows",
+    musicUrl: "",
+    musicTitle: "",
 
     mile1Km: "KM 000 • Titik Nol",
     mile1Title: "Gerbang Tol Pertemuan Pertama",

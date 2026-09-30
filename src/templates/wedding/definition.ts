@@ -616,8 +616,8 @@ export const weddingTemplate: TemplateMeta = {
     cardColor: "#ffffff",
     textColor: "#2a241e",
     bodyTextColor: "#524b43",
-    musicTitle: "A Thousand Years (Piano Instrumental)",
+    musicTitle: "",
     bgMusicUrl:
-      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "",
   },
 };

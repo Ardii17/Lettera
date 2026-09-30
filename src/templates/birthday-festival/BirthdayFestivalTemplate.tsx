@@ -112,9 +112,9 @@ const defaults: Record<string, string> = {
   backgroundColor: "#0d0718",
   cardColor: "#1c122e",
   textColor: "#faf5ff",
-  musicTitle: "Live Festival Acoustic & Indie Celebration",
+  musicTitle: "",
   musicUrl:
-    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-amp-strings-10711.mp3",
+    "",
 };
 
 function BirthdayFestivalTemplateInner({

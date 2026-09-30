@@ -414,7 +414,7 @@ export const grandLaureateTemplate: TemplateMeta = {
       label: "URL Musik Simfoni Kemenangan",
       type: "text",
       placeholder: "https://example.com/triumph-orchestra.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_b28205efc4.mp3?filename=cinematic-orchestral-109068.mp3",
+      defaultValue: "",
       helperText: "Format MP3 publik. Audio otomatis tidak aktif di katalog template.",
       section: "Palet Warna & Fanfare",
     },
@@ -493,6 +493,6 @@ export const grandLaureateTemplate: TemplateMeta = {
     primaryColor: "#caa64f",
     backgroundColor: "#0b1526",
     audioUrl:
-      "https://cdn.pixabay.com/download/audio/2022/03/15/audio_b28205efc4.mp3?filename=cinematic-orchestral-109068.mp3",
+      "",
   },
 };

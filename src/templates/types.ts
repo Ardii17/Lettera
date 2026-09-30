@@ -1,6 +1,6 @@
 import type { LetterContent } from "@/types/letter";
 
-export type TemplateFieldType = "text" | "textarea" | "date" | "select" | "number" | "color" | "image";
+export type TemplateFieldType = "text" | "textarea" | "date" | "select" | "number" | "color" | "image" | "audio";
 
 export interface TemplateFieldOption {
   label: string;

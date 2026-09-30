@@ -551,8 +551,8 @@ export const museumOfUsTemplate: TemplateMeta = {
     backgroundColor: "#f7f5f0",
     cardColor: "#ffffff",
     textColor: "#1c1917",
-    musicTitle: "Museum Cello & Piano Nocturne",
+    musicTitle: "",
     musicUrl:
-      "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-amp-strings-10711.mp3",
+      "",
   },
 };

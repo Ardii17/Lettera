@@ -22,6 +22,7 @@ import {
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   BIRTHDAY_COLOR_PRESETS,
   BACKGROUND_COLOR_PRESETS,
@@ -829,18 +830,15 @@ export function BirthdayBuilderForm({
               />
             </Field>
 
-            <Field
-              label="Tautan Audio Langsung (Direct MP3 URL)"
-              htmlFor={`${idPrefix}-bgMusicUrl`}
-              hint="Masukkan link file .mp3 langsung agar musik dapat dimainkan"
-            >
-              <Input
-                id={`${idPrefix}-bgMusicUrl`}
-                placeholder="https://cdn.pixabay.com/download/audio/..."
-                maxLength={1000}
-                {...register("bgMusicUrl")}
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-bgMusicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("bgMusicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
 
             {/* Quick preset audio */}
             <div>

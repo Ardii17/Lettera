@@ -370,7 +370,7 @@ export const kintsugiRepairTemplate: TemplateMeta = {
       label: "URL Musik Seruling Zen (Shakuhachi & Koto)",
       type: "text",
       placeholder: "https://example.com/zen-healing.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/02/07/audio_845f0baea3.mp3?filename=japanese-zen-flute-meditation-101140.mp3",
+      defaultValue: "",
       helperText: "Format MP3 publik. Audio otomatis tidak aktif di katalog template.",
       section: "Palet Warna & Audio",
     },
@@ -439,6 +439,6 @@ export const kintsugiRepairTemplate: TemplateMeta = {
     primaryColor: "#d4af37",
     backgroundColor: "#0f1318",
     audioUrl:
-      "https://cdn.pixabay.com/download/audio/2022/02/07/audio_845f0baea3.mp3?filename=japanese-zen-flute-meditation-101140.mp3",
+      "",
   },
 };

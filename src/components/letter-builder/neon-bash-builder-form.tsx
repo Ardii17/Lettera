@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   BACKGROUND_COLOR_PRESETS,
   CARD_COLOR_PRESETS,
@@ -589,17 +590,15 @@ export function NeonBashBuilderForm({
                 {...register("musicTitle")}
               />
             </Field>
-            <Field
-              label="URL Audio Background (.mp3)"
-              htmlFor={`${idPrefix}-musicUrl`}
-              hint="Format file audio (.mp3) untuk diputar di kartu pesta"
-            >
-              <Input
-                id={`${idPrefix}-musicUrl`}
-                placeholder="https://cdn.pixabay.com/download/audio/..."
-                {...register("musicUrl")}
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-musicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("musicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("musicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
         </div>
       )}

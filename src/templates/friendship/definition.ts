@@ -568,7 +568,7 @@ export const friendshipTemplate: TemplateMeta = {
     senderName: "Yudha Pratama",
     signature: "Sahabatmu Selamanya,",
     letterDate: "2026-09-20",
-    musicTitle: "Acoustic Friendship Melody",
+    musicTitle: "",
     bgMusicUrl: "",
   },
 };

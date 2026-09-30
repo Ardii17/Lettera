@@ -138,7 +138,7 @@ export const campfireFriendshipTemplate: TemplateMeta = {
       name: "musicUrl",
       label: "URL Musik Akustik / Audio Ambient",
       type: "text",
-      defaultValue: "https://assets.mixkit.co/music/preview/mixkit-acoustic-guitar-chill-1033.mp3",
+      defaultValue: "",
       helperText: "Tautan audio file .mp3 musik latar akustik santai.",
     },
     {
@@ -604,8 +604,8 @@ export const campfireFriendshipTemplate: TemplateMeta = {
     yearsKnown: "8 Tahun",
     daysLaughed: "2.900+ Hari",
     hqLocation: "Kopi Sudut Tenda & Bukit Bintang",
-    musicUrl: "https://assets.mixkit.co/music/preview/mixkit-acoustic-guitar-chill-1033.mp3",
-    musicTitle: "Acoustic Campfire & Ember Serenade",
+    musicUrl: "",
+    musicTitle: "",
 
     memory1Title: "Malam Tersesat di Puncak Kabut",
     memory1Date: "Agustus 2019 • Puncak Gn. Prau",

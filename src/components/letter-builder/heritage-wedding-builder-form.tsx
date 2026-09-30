@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import { BACKGROUND_COLOR_PRESETS } from "@/templates/color-presets";
 import { cn } from "@/lib/utils/cn";
 import type { LetterFormValues } from "./dynamic-form";
@@ -585,9 +586,15 @@ export function HeritageWeddingBuilderForm({
             <Field label="Judul Gending" id={`${idPrefix}-musicTitle`}>
               <Input id={`${idPrefix}-musicTitle`} placeholder="Gamelan Kebo Giro & Seruling Wilasa Syahdu" {...register("musicTitle")} />
             </Field>
-            <Field label="URL Audio Musik (MP3)" id={`${idPrefix}-musicUrl`}>
-              <Input id={`${idPrefix}-musicUrl`} placeholder="https://..." {...register("musicUrl")} />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-musicUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("musicUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("musicUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
 
           {/* Palet Warna Template - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}

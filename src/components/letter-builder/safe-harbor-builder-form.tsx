@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
+import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import { cn } from "@/lib/utils/cn";
 import type { LetterFormValues } from "./dynamic-form";
 
@@ -561,18 +562,15 @@ export function SafeHarborBuilderForm({
 
           {/* Pengaturan Audio dalam Box Tersendiri */}
           <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
-            <Field
-              id={`${idPrefix}-audioUrl`}
-              label="URL Musik Deburan Ombak Damai (Cello & Waves)"
-              error={errors.audioUrl?.message}
-              helperText="Format MP3 publik. Audio otomatis tidak aktif di thumbnail katalog template."
-            >
-              <Input
-                id={`${idPrefix}-audioUrl`}
-                {...register("audioUrl")}
-                placeholder="https://example.com/ocean-lullaby.mp3"
-              />
-            </Field>
+            <AudioUploadField
+            id={`${idPrefix}-audioUrl`}
+            label="Unggah File Musik / Audio (Opsional)"
+            value={(watch("audioUrl") as string) || ""}
+            onChange={(url) =>
+              setValue("audioUrl", url, { shouldValidate: true, shouldDirty: true })
+            }
+            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
+          />
           </div>
         </div>
       )}

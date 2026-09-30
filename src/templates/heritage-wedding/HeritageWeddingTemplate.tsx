@@ -131,8 +131,8 @@ const defaults: Record<string, string> = {
   backgroundColor: "#0b1320",
   cardColor: "#121d2f",
   textColor: "#fef3c7",
-  musicTitle: "Gamelan Kebo Giro & Seruling Wilasa Syahdu",
-  musicUrl: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c3c3167123.mp3?filename=a-thousand-years-cello-and-piano-orchestra-124991.mp3",
+  musicTitle: "",
+  musicUrl: "",
 };
 
 function HeritageWeddingTemplateInner({

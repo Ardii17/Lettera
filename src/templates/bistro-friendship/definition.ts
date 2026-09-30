@@ -142,7 +142,7 @@ export const bistroFriendshipTemplate: TemplateMeta = {
       name: "musicUrl",
       label: "URL Musik Latar Jazz Lo-Fi / Akustik Bistro",
       type: "text",
-      defaultValue: "https://assets.mixkit.co/music/preview/mixkit-chill-bro-494.mp3",
+      defaultValue: "",
       helperText: "Tautan audio file .mp3 musik latar bistro santai.",
     },
     {
@@ -579,8 +579,8 @@ export const bistroFriendshipTemplate: TemplateMeta = {
     servingSince: "Sejak 2016 (9 Tahun)",
     coffeeLiters: "1.250+ Cangkir",
     longestChatHours: "7.5 Jam Nonstop",
-    musicUrl: "https://assets.mixkit.co/music/preview/mixkit-chill-bro-494.mp3",
-    musicTitle: "Midnight Lo-Fi Coffeehouse & Rain Serenade",
+    musicUrl: "",
+    musicTitle: "",
 
     menu1Name: "Espresso Midnight Confession",
     menu1Ingredients: "100% Ekstrak Curhat Jam 1 Pagi, 0% Gula Kepalsuan, Sentuhan Pelukan Hangat.",

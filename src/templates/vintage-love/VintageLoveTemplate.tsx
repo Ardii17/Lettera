@@ -18,15 +18,10 @@ import {
   Compass,
   Clock,
   Ticket,
-  Newspaper,
-  Radio,
-  Send,
-  Calendar,
   Milestone,
   Music2,
   Hourglass,
   ArrowRight,
-  Bookmark,
   Volume2,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
@@ -120,8 +115,8 @@ const defaults = {
   cardColor: "#fffdf9",
   textColor: "#3e1b24",
   bodyTextColor: "#4a3b32",
-  musicTitle: "Romantic Music Box & Cello",
-  bgMusicUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+  musicTitle: "",
+  bgMusicUrl: "",
 };
 
 interface VintageLoveTemplateProps {
@@ -468,7 +463,7 @@ function VintageLoveTemplateInner({ data, className }: VintageLoveTemplateProps)
         {/* MODULE 1: LEMBARAN SURAT PERKAMEN UTAMA */}
         {/* ======================================================================= */}
         <article
-          className="relative rounded-3xl border-2 p-8 sm:p-14 shadow-2xl space-y-8 backdrop-blur-sm transition-all"
+          className="relative rounded-3xl border-2 px-5 py-8 sm:px-12 sm:py-14 pb-16 sm:pb-24 shadow-2xl space-y-8 backdrop-blur-sm transition-all overflow-hidden"
           style={{
             backgroundColor: card,
             borderColor: `${primary}30`,
@@ -476,7 +471,7 @@ function VintageLoveTemplateInner({ data, className }: VintageLoveTemplateProps)
         >
           {/* Ornamen Tepi Ganda Halus */}
           <div
-            className="pointer-events-none absolute inset-3 rounded-2xl border border-dashed opacity-40"
+            className="pointer-events-none absolute inset-3 sm:inset-5 rounded-2xl border border-dashed opacity-40"
             style={{ borderColor: primary }}
           />
 
@@ -587,11 +582,11 @@ function VintageLoveTemplateInner({ data, className }: VintageLoveTemplateProps)
           )}
 
           {/* Penutup & Tanda Tangan Kaligrafi */}
-          <footer className="border-t border-stone-200/80 pt-8 text-right space-y-2">
-            <p className="font-serif text-sm italic text-stone-500">
+          <footer className="border-t border-stone-200/80 pt-6 sm:pt-8 text-right space-y-1.5 pb-2 pr-2 sm:pr-4">
+            <p className="font-serif text-xs sm:text-sm italic text-stone-500">
               {content.closingStatement || "Selamanya mengagumi dan menyayangimu,"}
             </p>
-            <p className="font-serif text-2xl font-bold tracking-wide sm:text-3xl" style={{ color: textColor }}>
+            <p className="font-serif text-xl sm:text-3xl font-bold tracking-wide break-words" style={{ color: textColor }}>
               {content.signature}
             </p>
           </footer>
@@ -728,115 +723,117 @@ function VintageLoveTemplateInner({ data, className }: VintageLoveTemplateProps)
         {/* ======================================================================= */}
         {/* MODULE 3: PIRINGAN HITAM VINYL GRAMOFON (INTERACTIVE TURNTABLE) */}
         {/* ======================================================================= */}
-        <section
-          className="relative overflow-hidden rounded-3xl border-2 p-6 sm:p-10 shadow-xl transition-all"
-          style={{
-            backgroundColor: card,
-            borderColor: `${primary}35`,
-          }}
-        >
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            {/* Sisi Kiri: Piringan Hitam Vinyl Realistis dengan Alur Jarum */}
-            <div className="relative flex items-center justify-center shrink-0">
-              {/* Piringan Hitam Berputar */}
-              <div
-                className={cn(
-                  "relative h-48 w-48 sm:h-56 sm:w-56 rounded-full border-4 border-stone-800 shadow-2xl flex items-center justify-center transition-all duration-700",
-                  isPlaying ? "animate-[spin_4s_linear_infinite]" : "rotate-12",
-                )}
-                style={{
-                  background:
-                    "radial-gradient(circle, #1a1a1a 0%, #2a2a2a 20%, #111111 40%, #262626 60%, #0d0d0d 80%, #222222 100%)",
-                  boxShadow: "0 12px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(255,255,255,0.1)",
-                }}
-              >
-                {/* Garis Alur Vinyl (Grooves) */}
-                <div className="absolute inset-4 rounded-full border border-stone-700/40 pointer-events-none" />
-                <div className="absolute inset-8 rounded-full border border-stone-700/30 pointer-events-none" />
-                <div className="absolute inset-12 rounded-full border border-stone-700/40 pointer-events-none" />
-
-                {/* Label Tengah Vinyl (Vintage Center Label) */}
+        {Boolean(content.bgMusicUrl) && (
+          <section
+            className="relative overflow-hidden rounded-3xl border-2 p-6 sm:p-10 shadow-xl transition-all"
+            style={{
+              backgroundColor: card,
+              borderColor: `${primary}35`,
+            }}
+          >
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              {/* Sisi Kiri: Piringan Hitam Vinyl Realistis dengan Alur Jarum */}
+              <div className="relative flex items-center justify-center shrink-0">
+                {/* Piringan Hitam Berputar */}
                 <div
-                  className="relative h-20 w-20 sm:h-22 sm:w-22 rounded-full border-2 border-stone-800 flex flex-col items-center justify-center p-2 text-center shadow-lg"
-                  style={{ backgroundColor: primary }}
+                  className={cn(
+                    "relative h-48 w-48 sm:h-56 sm:w-56 rounded-full border-4 border-stone-800 shadow-2xl flex items-center justify-center transition-all duration-700",
+                    isPlaying ? "animate-[spin_4s_linear_infinite]" : "rotate-12",
+                  )}
+                  style={{
+                    background:
+                      "radial-gradient(circle, #1a1a1a 0%, #2a2a2a 20%, #111111 40%, #262626 60%, #0d0d0d 80%, #222222 100%)",
+                    boxShadow: "0 12px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(255,255,255,0.1)",
+                  }}
                 >
-                  <Heart className="h-4 w-4 fill-white text-white mb-0.5 animate-pulse" />
-                  <span className="text-[8px] font-bold tracking-wider uppercase text-white/90">
-                    SIDE A
-                  </span>
-                  <span className="text-[7px] font-serif italic text-amber-100/90 truncate max-w-[65px]">
-                    {content.recipientName}
-                  </span>
-                  {/* Lubang Spindle */}
-                  <div className="mt-1 h-3 w-3 rounded-full bg-stone-900 border border-amber-200/50 shadow-inner" />
+                  {/* Garis Alur Vinyl (Grooves) */}
+                  <div className="absolute inset-4 rounded-full border border-stone-700/40 pointer-events-none" />
+                  <div className="absolute inset-8 rounded-full border border-stone-700/30 pointer-events-none" />
+                  <div className="absolute inset-12 rounded-full border border-stone-700/40 pointer-events-none" />
+
+                  {/* Label Tengah Vinyl (Vintage Center Label) */}
+                  <div
+                    className="relative h-20 w-20 sm:h-22 sm:w-22 rounded-full border-2 border-stone-800 flex flex-col items-center justify-center p-2 text-center shadow-lg"
+                    style={{ backgroundColor: primary }}
+                  >
+                    <Heart className="h-4 w-4 fill-white text-white mb-0.5 animate-pulse" />
+                    <span className="text-[8px] font-bold tracking-wider uppercase text-white/90">
+                      SIDE A
+                    </span>
+                    <span className="text-[7px] font-serif italic text-amber-100/90 truncate max-w-[65px]">
+                      {content.recipientName}
+                    </span>
+                    {/* Lubang Spindle */}
+                    <div className="mt-1 h-3 w-3 rounded-full bg-stone-900 border border-amber-200/50 shadow-inner" />
+                  </div>
+                </div>
+
+                {/* Jarum Gramofon (Tonearm) */}
+                <div
+                  className={cn(
+                    "absolute -top-3 -right-2 w-14 h-24 origin-top transition-transform duration-700 pointer-events-none z-10",
+                    isPlaying ? "rotate-[28deg]" : "rotate-0",
+                  )}
+                >
+                  <div className="h-4 w-4 rounded-full bg-amber-700 border-2 border-amber-900 shadow-md" />
+                  <div className="h-20 w-1.5 bg-gradient-to-b from-stone-400 to-stone-600 rounded-full mx-auto -mt-1 shadow" />
+                  <div className="h-4 w-3 bg-amber-800 rounded-sm mx-auto -mt-1 shadow-sm" />
                 </div>
               </div>
 
-              {/* Jarum Gramofon (Tonearm) */}
-              <div
-                className={cn(
-                  "absolute -top-3 -right-2 w-14 h-24 origin-top transition-transform duration-700 pointer-events-none z-10",
-                  isPlaying ? "rotate-[28deg]" : "rotate-0",
-                )}
-              >
-                <div className="h-4 w-4 rounded-full bg-amber-700 border-2 border-amber-900 shadow-md" />
-                <div className="h-20 w-1.5 bg-gradient-to-b from-stone-400 to-stone-600 rounded-full mx-auto -mt-1 shadow" />
-                <div className="h-4 w-3 bg-amber-800 rounded-sm mx-auto -mt-1 shadow-sm" />
-              </div>
-            </div>
+              {/* Sisi Kanan: Detail Lagu & Kontrol Putar */}
+              <div className="flex-1 text-center md:text-left space-y-4">
+                <div className="inline-flex items-center gap-2 rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-600">
+                  <Music2 className="h-3.5 w-3.5" style={{ color: primary }} />
+                  <span>Piringan Hitam Nostalgia</span>
+                </div>
 
-            {/* Sisi Kanan: Detail Lagu & Kontrol Putar */}
-            <div className="flex-1 text-center md:text-left space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full bg-stone-100 px-3 py-1 text-xs font-semibold text-stone-600">
-                <Music2 className="h-3.5 w-3.5" style={{ color: primary }} />
-                <span>Piringan Hitam Nostalgia</span>
-              </div>
+                <div className="space-y-1">
+                  <h3
+                    className="font-serif text-2xl sm:text-3xl font-bold tracking-wide"
+                    style={{ color: textColor }}
+                  >
+                    {content.vinylSongTitle || "Can't Help Falling in Love"}
+                  </h3>
+                  <p className="font-serif text-sm italic text-stone-600">
+                    {content.vinylArtist || "Elvis Presley • Side A Track 01"}
+                  </p>
+                </div>
 
-              <div className="space-y-1">
-                <h3
-                  className="font-serif text-2xl sm:text-3xl font-bold tracking-wide"
-                  style={{ color: textColor }}
-                >
-                  {content.vinylSongTitle || "Can't Help Falling in Love"}
-                </h3>
-                <p className="font-serif text-sm italic text-stone-600">
-                  {content.vinylArtist || "Elvis Presley • Side A Track 01"}
+                <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-serif">
+                  &ldquo;{content.vinylSideNote || "Lagu yang selalu berputar di sanubari setiap kali mengingat senyummu."}&rdquo;
                 </p>
-              </div>
 
-              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-serif">
-                &ldquo;{content.vinylSideNote || "Lagu yang selalu berputar di sanubari setiap kali mengingat senyummu."}&rdquo;
-              </p>
+                {/* Tombol Interaktif Putar / Jeda */}
+                <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                  <button
+                    type="button"
+                    onClick={toggleMusic}
+                    className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+                    style={{ backgroundColor: primary }}
+                  >
+                    {isPlaying ? (
+                      <>
+                        <Pause className="h-4 w-4" />
+                        <span>Jeda Putaran Vinyl</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play className="h-4 w-4" />
+                        <span>Putar Piringan Hitam</span>
+                      </>
+                    )}
+                  </button>
 
-              {/* Tombol Interaktif Putar / Jeda */}
-              <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
-                <button
-                  type="button"
-                  onClick={toggleMusic}
-                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
-                  style={{ backgroundColor: primary }}
-                >
-                  {isPlaying ? (
-                    <>
-                      <Pause className="h-4 w-4" />
-                      <span>Jeda Putaran Vinyl</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="h-4 w-4" />
-                      <span>Putar Piringan Hitam</span>
-                    </>
-                  )}
-                </button>
-
-                <span className="text-[11px] font-mono text-stone-400 flex items-center gap-1">
-                  <Volume2 className="h-3.5 w-3.5" />
-                  <span>33 ⅓ RPM Hi-Fi Sound</span>
-                </span>
+                  <span className="text-[11px] font-mono text-stone-400 flex items-center gap-1">
+                    <Volume2 className="h-3.5 w-3.5" />
+                    <span>33 ⅓ RPM Hi-Fi Sound</span>
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ======================================================================= */}
         {/* MODULE 4: TIKET KERETA / BIOSKOP KLASIK (VINTAGE EXPRESS TICKET) */}

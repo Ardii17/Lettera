@@ -471,7 +471,7 @@ export const tourbillonLoveTemplate: TemplateMeta = {
       label: "URL Musik Kotak Mekanik Jam / Harpsichord (Opsional)",
       type: "text",
       placeholder: "https://example.com/audio/mechanical-music-box.mp3",
-      defaultValue: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c89b7b9cf4.mp3?filename=celestial-music-box-waltz-10928.mp3",
+      defaultValue: "",
       section: "Mahkota Jam & Musik",
     },
   ],
@@ -539,6 +539,6 @@ export const tourbillonLoveTemplate: TemplateMeta = {
     primaryColor: "#e0a96d",
     secondaryColor: "#38bdf8",
     accentColor: "#d4af37",
-    musicTrack: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c89b7b9cf4.mp3?filename=celestial-music-box-waltz-10928.mp3",
+    musicTrack: "",
   },
 };
