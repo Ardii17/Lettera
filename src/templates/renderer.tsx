@@ -39,6 +39,7 @@ import { CelestialBirthdayTemplate } from "./celestial-birthday/CelestialBirthda
 import { BirthdayPassportTemplate } from "./birthday-passport/BirthdayPassportTemplate";
 import { BirthdayCinemaTemplate } from "./birthday-cinema/BirthdayCinemaTemplate";
 import { BirthdayFestivalTemplate } from "./birthday-festival/BirthdayFestivalTemplate";
+import { BirthdayCelebrationTemplate } from "./birthday-celebration/BirthdayCelebrationTemplate";
 
 export interface TemplateComponentProps {
   data: LetterContent;
@@ -67,6 +68,7 @@ const TEMPLATE_COMPONENTS: Record<string, ComponentType<TemplateComponentProps>>
   "symphony-love": SymphonyLoveTemplate,
   "haute-joaillerie": HauteJoaillerieTemplate,
   birthday: BirthdayTemplate,
+  "birthday-celebration": BirthdayCelebrationTemplate,
   "birthday-gazette": BirthdayGazetteTemplate,
   "celestial-birthday": CelestialBirthdayTemplate,
   "birthday-passport": BirthdayPassportTemplate,

@@ -11,17 +11,18 @@ export const loveMixtapeTemplate: TemplateMeta = {
   name: "Retro Love Mixtape & Cassette",
   category: "Romansa",
   tagline:
-    "Kaset pita cinta analog 90-an — roda kaset berputar, tracklist lagu kenangan, dan surat cinta di dalam sleeve kaset.",
+    "Kaset pita analog 90-an — fitur bolak-balik Side A/B, visualizer equalizer, 6 tracklist kenangan, galeri polaroid, dan pesan rahasia tersembunyi.",
   description:
-    "Pengalaman berkirim pesan cinta bergaya kaset pita mixtape retro tahun 90-an. Menampilkan kaset fisik interaktif dengan roda pita berputar saat lagu dimainkan, label tulisan tangan spidol personal, tracklist lagu penuh kenangan berdua, dan lembaran surat cinta yang terlipat rapi di dalam sleeve kaset.",
+    "Pengalaman berkirim surat cinta paling otentik bergaya kaset pita mixtape retro tahun 90-an. Dilengkapi dengan bodi kaset interaktif yang bisa dibolak-balik (Side A & Side B), roda pita berputar dengan visualizer equalizer, live tape counter durasi cinta, tracklist lengkap 6 lagu kenangan, 3 lembar foto polaroid berselotip vintage, booklet lirik lagu favorit, hingga pesan tersembunyi (hidden track) yang penuh kejutan romantis.",
   cardAccent: "bg-amber-50 text-amber-900 ring-1 ring-amber-300",
   highlights: [
-    "Fisik kaset pita analog dengan roda pita berputar (Spinning Tape Reels)",
-    "Stiker label kaset tulisan spidol personal",
-    "Tracklist lagu kenangan berdua beserta cerita di balik lagunya",
-    "Lipatan sleeve kaset (J-Card Sleeve) berisi surat cinta panjang",
-    "Memo tulisan tangan manis di sisi belakang kaset",
-    "Pemutar audio bergaya pemutar kaset analog vintage",
+    "Fisik kaset pita analog bolak-balik Side A & Side B interaktif",
+    "Roda kaset berputar (Spinning Reels) & spektrum audio equalizer animasi",
+    "Kalkulator durasi pita cinta real-time (Magnetic Tape Love Counter)",
+    "Tracklist lengkap 6 lagu kenangan berdua (Side A Classics & Side B Acoustic)",
+    "Galeri 3 foto polaroid dengan aksen selotip vintage dan catatan kenangan",
+    "Booklet lirik lagu favorit & pesan rahasia tersembunyi (Hidden Bonus Track)",
+    "Lipatan sleeve kaset J-Card panjang dengan memo tulisan tangan",
   ],
   fields: [
     // --- SECTION: IDENTITAS & LABEL KASET ---
@@ -54,6 +55,15 @@ export const loveMixtapeTemplate: TemplateMeta = {
       section: "cassette",
     },
     {
+      name: "anniversaryDate",
+      label: "Tanggal jadian / momen spesial (opsional)",
+      type: "text",
+      placeholder: "2022-10-14",
+      maxLength: 30,
+      helperText: "Format: YYYY-MM-DD. Menghitung durasi cinta yang terekam pada pita kaset secara live.",
+      section: "cassette",
+    },
+    {
       name: "releaseYear",
       label: "Tahun / Edisi kaset",
       type: "text",
@@ -63,7 +73,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
     },
     {
       name: "sideLabel",
-      label: "Label sisi kaset",
+      label: "Label Sisi A kaset",
       type: "text",
       placeholder: "SIDE A • FOR YOUR EARS ONLY",
       maxLength: 40,
@@ -73,7 +83,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
       name: "totalDuration",
       label: "Total durasi mixtape",
       type: "text",
-      placeholder: "Side A: 24 Menit • 3 Lagu Penuh Cinta",
+      placeholder: "Side A & B: 48 Menit • 6 Lagu Penuh Cinta",
       maxLength: 50,
       helperText: "Keterangan durasi pemutaran pita kaset.",
       section: "cassette",
@@ -87,34 +97,6 @@ export const loveMixtapeTemplate: TemplateMeta = {
       maxLength: 1000,
       helperText: "Foto romantis berdua sebagai artwork sampul album kaset mixtape.",
       section: "cassette",
-    },
-
-    // --- SECTION: FOTO KENANGAN & LIRIK FAVORIT ---
-    {
-      name: "sleeveMemoryPhotoUrl",
-      label: "Foto polaroid di lipatan sleeve kaset",
-      type: "text",
-      placeholder:
-        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
-      maxLength: 1000,
-      helperText: "Foto cetak kenangan yang terselip di dalam lipatan kertas sleeve kaset.",
-      section: "memories",
-    },
-    {
-      name: "sleevePhotoCaption",
-      label: "Keterangan foto sleeve kaset",
-      type: "text",
-      placeholder: "Tawa kita di sore itu, terselip selamanya di antara pita kenangan.",
-      maxLength: 120,
-      section: "memories",
-    },
-    {
-      name: "favoriteLyric",
-      label: "Kutipan lirik lagu cinta favorit",
-      type: "text",
-      placeholder: "Kau adalah melodi yang tak pernah bosan kuputar berulang kali di kepalaku.",
-      maxLength: 200,
-      section: "memories",
     },
 
     // --- SECTION: SURAT SLEEVE KASET (J-CARD) ---
@@ -163,7 +145,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
       section: "letter",
     },
 
-    // --- SECTION: TRACKLIST LAGU KENANGAN ---
+    // --- SECTION: TRACKLIST LAGU KENANGAN (SIDE A & SIDE B) ---
     {
       name: "tracklistTitle",
       label: "Judul seksi tracklist",
@@ -174,7 +156,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
     },
     {
       name: "track1Title",
-      label: "Lagu 1: Judul lagu & artis",
+      label: "Lagu 1 (Side A): Judul lagu & artis",
       type: "text",
       placeholder: "Track 01: Reality Club — Anything You Want",
       maxLength: 100,
@@ -190,7 +172,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
     },
     {
       name: "track2Title",
-      label: "Lagu 2: Judul lagu & artis",
+      label: "Lagu 2 (Side A): Judul lagu & artis",
       type: "text",
       placeholder: "Track 02: Sheila On 7 — Anugerah Terindah yang Pernah Kumiliki",
       maxLength: 100,
@@ -206,7 +188,7 @@ export const loveMixtapeTemplate: TemplateMeta = {
     },
     {
       name: "track3Title",
-      label: "Lagu 3: Judul lagu & artis",
+      label: "Lagu 3 (Side A): Judul lagu & artis",
       type: "text",
       placeholder: "Track 03: Danilla — Senja di Ambang Pilu",
       maxLength: 100,
@@ -220,8 +202,147 @@ export const loveMixtapeTemplate: TemplateMeta = {
       maxLength: 180,
       section: "tracks",
     },
+    {
+      name: "sideBTitle",
+      label: "Label Sisi B kaset",
+      type: "text",
+      placeholder: "SIDE B • ACOUSTIC & HIDDEN GEMS",
+      maxLength: 60,
+      section: "tracks",
+    },
+    {
+      name: "track4Title",
+      label: "Lagu 4 (Side B): Judul lagu & artis",
+      type: "text",
+      placeholder: "Track 04: Kings of Convenience — Cayman Islands",
+      maxLength: 100,
+      section: "tracks",
+    },
+    {
+      name: "track4Meaning",
+      label: "Lagu 4: Cerita & makna kenangan",
+      type: "text",
+      placeholder: "Lagu pengantar tidur ketika kita saling bercerita lewat telepon hingga larut.",
+      maxLength: 180,
+      section: "tracks",
+    },
+    {
+      name: "track5Title",
+      label: "Lagu 5 (Side B): Judul lagu & artis",
+      type: "text",
+      placeholder: "Track 05: Maliq & D'Essentials — Kita Bikin Romantis",
+      maxLength: 100,
+      section: "tracks",
+    },
+    {
+      name: "track5Meaning",
+      label: "Lagu 5: Cerita & makna kenangan",
+      type: "text",
+      placeholder: "Tentang hal-hal kecil sederhana: sarapan berdua dan caramu tersenyum.",
+      maxLength: 180,
+      section: "tracks",
+    },
+    {
+      name: "track6Title",
+      label: "Lagu 6 (Side B): Judul lagu & artis",
+      type: "text",
+      placeholder: "Track 06: Pamungkas — To The Bone",
+      maxLength: 100,
+      section: "tracks",
+    },
+    {
+      name: "track6Meaning",
+      label: "Lagu 6: Cerita & makna kenangan",
+      type: "text",
+      placeholder: "Karena sejak hari itu, tak ada lagi yang bisa menggantikan posisimu di hatiku.",
+      maxLength: 180,
+      section: "tracks",
+    },
 
-    // --- SECTION: CATATAN TAMBAHAN (INLAY NOTE) ---
+    // --- SECTION: FOTO POLAROID & LIRIK FAVORIT ---
+    {
+      name: "sleeveMemoryPhotoUrl",
+      label: "Foto polaroid 1 di sleeve kaset",
+      type: "text",
+      placeholder:
+        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
+      maxLength: 1000,
+      helperText: "Foto cetak kenangan pertama yang terselip di dalam lipatan kertas sleeve kaset.",
+      section: "memories",
+    },
+    {
+      name: "sleevePhotoCaption",
+      label: "Keterangan foto polaroid 1",
+      type: "text",
+      placeholder: "Tawa kita di sore itu, terselip selamanya di antara pita kenangan.",
+      maxLength: 120,
+      section: "memories",
+    },
+    {
+      name: "photo2Url",
+      label: "Foto polaroid 2 di sleeve kaset",
+      type: "text",
+      placeholder:
+        "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80",
+      maxLength: 1000,
+      helperText: "Foto kenangan kedua yang mempercantik galeri sleeve kaset.",
+      section: "memories",
+    },
+    {
+      name: "photo2Caption",
+      label: "Keterangan foto polaroid 2",
+      type: "text",
+      placeholder: "Kala itu kita tertawa lepas tanpa peduli waktu terus berputar.",
+      maxLength: 120,
+      section: "memories",
+    },
+    {
+      name: "photo3Url",
+      label: "Foto polaroid 3 di sleeve kaset",
+      type: "text",
+      placeholder:
+        "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1000&q=80",
+      maxLength: 1000,
+      helperText: "Foto kenangan ketiga yang melengkapi lembaran cinta kalian.",
+      section: "memories",
+    },
+    {
+      name: "photo3Caption",
+      label: "Keterangan foto polaroid 3",
+      type: "text",
+      placeholder: "Senja di pelataran stasiun saat kau tersenyum menatap mataku.",
+      maxLength: 120,
+      section: "memories",
+    },
+    {
+      name: "lyricSongTitle",
+      label: "Judul lagu untuk lirik favorit",
+      type: "text",
+      placeholder: "Reality Club — Anything You Want",
+      maxLength: 80,
+      section: "memories",
+    },
+    {
+      name: "favoriteLyric",
+      label: "Kutipan lirik lagu cinta favorit",
+      type: "text",
+      placeholder: "Kau adalah melodi yang tak pernah bosan kuputar berulang kali di kepalaku.",
+      maxLength: 250,
+      section: "memories",
+    },
+
+    // --- SECTION: PESAN RAHASIA & CATATAN TAMBAHAN ---
+    {
+      name: "secretDedication",
+      label: "Pesan rahasia tersembunyi (Hidden Bonus Track)",
+      type: "textarea",
+      placeholder:
+        "Bonus Track: Kalau kamu membaca sampai bagian tersembunyi ini, terima kasih sudah menjadi tempat ternyaman untuk pulang. Peluk aku saat kita bertemu nanti, ya!",
+      maxLength: 400,
+      rows: 3,
+      helperText: "Pesan tersembunyi yang dapat dibuka di sisi kaset Side B.",
+      section: "note",
+    },
     {
       name: "handwrittenNote",
       label: "Memo catatan tulisan tangan (belakang kaset)",
@@ -291,9 +412,9 @@ export const loveMixtapeTemplate: TemplateMeta = {
       name: "bgMusicUrl",
       label: "Tautan audio kaset (.mp3)",
       type: "text",
-      placeholder: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3",
+      placeholder: "",
       maxLength: 1000,
-      helperText: "Tautan langsung ke file audio mp3 yang diputar oleh kaset.",
+      helperText: "Pilih file audio dari perangkat Anda atau biarkan kosong jika tanpa musik.",
       section: "theme",
     },
   ],
@@ -301,16 +422,25 @@ export const loveMixtapeTemplate: TemplateMeta = {
     recipientName: "Nadia Safitri",
     senderName: "Dimas Anggara",
     tapeTitle: "Songs That Feel Like You • Vol. 1",
+    anniversaryDate: "2022-10-14",
     releaseYear: "Est. 2022 • Special Edition",
     sideLabel: "SIDE A • FOR YOUR EARS ONLY",
-    totalDuration: "Side A: 24 Menit • 3 Lagu Penuh Cinta",
+    sideBTitle: "SIDE B • ACOUSTIC & HIDDEN GEMS",
+    totalDuration: "Side A & B: 48 Menit • 6 Lagu Penuh Cinta",
     albumCoverPhotoUrl:
       "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80",
     sleeveMemoryPhotoUrl:
       "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
     sleevePhotoCaption: "Tawa kita di sore itu, terselip selamanya di antara pita kenangan.",
+    photo2Url:
+      "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=80",
+    photo2Caption: "Kala itu kita tertawa lepas tanpa peduli waktu terus berputar.",
+    photo3Url:
+      "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1000&q=80",
+    photo3Caption: "Senja di pelataran stasiun saat kau tersenyum menatap mataku.",
+    lyricSongTitle: "Reality Club — Anything You Want",
     favoriteLyric:
-      "Kau adalah melodi yang tak pernah bosan kuputar berulang kali di kepalaku.",
+      "Kau adalah melodi yang tak pernah bosan kuputar berulang kali di kepalaku, selamanya.",
     title: "Catatan Dari Balik Pita Magnetik",
     introMessage: "Untuk seseorang yang melodi tawanya selalu memenuhi kepalaku,",
     message:
@@ -324,6 +454,14 @@ export const loveMixtapeTemplate: TemplateMeta = {
     track2Meaning: "Lirik yang selalu mengingatkanku betapa bersyukurnya aku bisa memilikimu dalam hidupku.",
     track3Title: "Track 03: Danilla — Senja di Ambang Pilu",
     track3Meaning: "Melodi tenang yang selalu kita dengarkan saat duduk berdua menikmati senja sore di kedai kopi.",
+    track4Title: "Track 04: Kings of Convenience — Cayman Islands",
+    track4Meaning: "Lagu pengantar tidur ketika kita saling bercerita lewat telepon hingga larut malam.",
+    track5Title: "Track 05: Maliq & D'Essentials — Kita Bikin Romantis",
+    track5Meaning: "Tentang hal-hal kecil sederhana: sarapan berdua dan caramu tertawa tersipu.",
+    track6Title: "Track 06: Pamungkas — To The Bone",
+    track6Meaning: "Karena sejak hari pertama bertemu, tak ada lagi yang bisa menggantikan posisimu di hatiku.",
+    secretDedication:
+      "Bonus Track: Kalau kamu membaca sampai bagian tersembunyi ini, terima kasih sudah menjadi tempat ternyaman untuk pulang. Peluk aku saat kita bertemu nanti, ya!",
     handwrittenNote:
       "P.S. Jika kaset ini kusut, putar rodanya dengan bolpoin. Tapi cintaku padamu takkan pernah kusut selamanya :)",
     primaryColor: "#e15b64",

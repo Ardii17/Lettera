@@ -55,6 +55,7 @@ import { CelestialBirthdayBuilderForm } from "./celestial-birthday-builder-form"
 import { BirthdayPassportBuilderForm } from "./birthday-passport-builder-form";
 import { BirthdayCinemaBuilderForm } from "./birthday-cinema-builder-form";
 import { BirthdayFestivalBuilderForm } from "./birthday-festival-builder-form";
+import { BirthdayCelebrationBuilderForm } from "./birthday-celebration-builder-form";
 import { PreviewPanel } from "./preview-panel";
 import { FinalPreviewModal } from "./final-preview-modal";
 
@@ -618,6 +619,14 @@ export function LetterBuilder({
               />
             ) : template.slug === "gala-award" ? (
               <GalaAwardBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
+            ) : template.slug === "birthday-celebration" ? (
+              <BirthdayCelebrationBuilderForm
                 register={form.register}
                 setValue={form.setValue}
                 watch={form.watch}
