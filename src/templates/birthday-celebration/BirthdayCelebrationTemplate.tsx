@@ -354,23 +354,126 @@ function BirthdayCelebrationTemplateInner({
         )}
 
       {/* ========================================================================= */}
-      {/* 1. HERO PESTA ULANG TAHUN & COVER POSTER */}
+      {/* 1. JENDELA PEMBUKA MENGAPUNG (FLOATING OPENING WINDOW BOX - SOLID)        */}
+      {/* Hanya tampil saat surat pertama kali dibuka (!isOpened di FullPreview/Public) */}
+      {/* ========================================================================= */}
+      {!isOpened && (isPublicLetter || isFullPreview) ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-300"
+          style={{
+            backgroundColor: "rgba(15, 12, 12, 0.85)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* BOX JENDELA PEMBUKA MENGAPUNG DENGAN BACKGROUND SOLID */}
+          <div
+            className="relative w-full max-w-lg rounded-3xl border-2 p-6 sm:p-10 text-center shadow-2xl overflow-hidden my-auto animate-in zoom-in-95 duration-400"
+            style={{
+              backgroundColor: card,
+              borderColor: `${primary}50`,
+              boxShadow: `0 25px 60px -15px ${primary}40, 0 10px 25px -5px rgba(0, 0, 0, 0.4)`,
+            }}
+          >
+            {/* Garis Pita Pesta Bagian Atas */}
+            <div
+              className="absolute top-0 inset-x-0 h-2.5"
+              style={{
+                background: `linear-gradient(90deg, ${primary}, #f59e0b, #ec4899, ${primary})`,
+              }}
+            />
+
+            {/* Aksen Emoji Sudut */}
+            <div className="absolute top-4 left-4 text-sm select-none">🎈</div>
+            <div className="absolute top-4 right-4 text-sm select-none">🎉</div>
+
+            {/* Badge Pembuka */}
+            <div
+              className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1 text-xs font-bold uppercase tracking-wider shadow-2xs"
+              style={{
+                borderColor: `${primary}30`,
+                backgroundColor: `${primary}10`,
+                color: primary,
+              }}
+            >
+              <PartyPopper className="h-3.5 w-3.5" />
+              <span>{content.heroGreeting || `Happy ${content.age}th Birthday!`}</span>
+            </div>
+
+            {/* Foto Potret Utama & Badge Usia */}
+            {content.heroCoverPhoto && (
+              <div className="relative mx-auto my-4 flex justify-center">
+                <div
+                  className="relative h-32 w-32 sm:h-40 sm:w-40 overflow-hidden rounded-full border-4 shadow-xl"
+                  style={{ borderColor: primary }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={content.heroCoverPhoto}
+                    alt={recipientName}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div
+                  className="absolute bottom-0 right-1/2 translate-x-12 sm:translate-x-16 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-white text-white font-serif text-base sm:text-lg font-bold shadow-md"
+                  style={{ backgroundColor: primary }}
+                >
+                  {content.age}th
+                </div>
+              </div>
+            )}
+
+            {/* Nama & Headline */}
+            <div className="space-y-2 pt-1">
+              <p className="font-mono text-[11px] uppercase tracking-widest text-stone-500 font-semibold">
+                Hari Spesial Untuk Orang Paling Berharga
+              </p>
+              <h1
+                className="font-serif text-2xl sm:text-4xl font-extrabold tracking-tight"
+                style={{ color: textColor }}
+              >
+                {recipientName}
+              </h1>
+              {content.heroHeadline && (
+                <p className="text-xs sm:text-sm text-stone-600 font-medium italic max-w-sm mx-auto leading-relaxed">
+                  &ldquo;{content.heroHeadline}&rdquo;
+                </p>
+              )}
+              <p className="text-[11px] text-stone-500 pt-1">
+                Dipersembahkan dengan penuh cinta oleh:{" "}
+                <span className="font-semibold text-stone-800">{content.senderName}</span>
+              </p>
+            </div>
+
+            {/* Tombol Utama Buka Surat & Pesta */}
+            <div className="pt-5">
+              <button
+                type="button"
+                onClick={handleOpenParty}
+                className="inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm sm:text-base font-bold tracking-wide text-white shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 w-full sm:w-auto"
+                style={{ backgroundColor: primary }}
+              >
+                <Cake className="h-5 w-5" />
+                <span>Mulai Perayaan & Buka Surat 🎂</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {/* ========================================================================= */}
+      {/* 2. HERO BANNER ATAS (Tampil di Halaman Surat Saat Terbuka / Editor Preview)*/}
       {/* ========================================================================= */}
       <section
         className={cn(
-          "relative flex w-full flex-col items-center justify-center overflow-hidden px-4 text-center transition-all duration-700",
-          !isOpened && (isPublicLetter || isFullPreview)
-            ? "fixed inset-0 z-50 min-h-screen py-10"
-            : !isOpened
-              ? "relative min-h-[560px] py-16"
-              : "min-h-[500px] sm:min-h-[560px] py-20",
+          "relative flex w-full flex-col items-center justify-center overflow-hidden px-4 text-center py-12 sm:py-16 transition-all duration-700",
+          !isOpened && (isPublicLetter || isFullPreview) && "hidden",
         )}
         style={{
           background: `radial-gradient(ellipse at center, ${primary}18 0%, ${bg} 100%)`,
         }}
       >
-        <div className="relative z-10 mx-auto flex w-full max-w-xl flex-col items-center space-y-6">
-          {/* Badge Pesta Resmi */}
+        <div className="relative z-10 mx-auto flex w-full max-w-xl flex-col items-center space-y-5">
+          {/* Badge Pesta */}
           <div className="inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white/90 px-4 py-1.5 text-xs font-bold uppercase tracking-wider shadow-xs backdrop-blur-sm">
             <PartyPopper className="h-3.5 w-3.5" style={{ color: primary }} />
             <span style={{ color: primary }}>
@@ -382,7 +485,7 @@ function BirthdayCelebrationTemplateInner({
           {content.heroCoverPhoto && (
             <div className="relative">
               <div
-                className="relative h-36 w-36 sm:h-44 sm:w-44 overflow-hidden rounded-full border-4 shadow-2xl transition-transform hover:scale-105"
+                className="relative h-32 w-32 sm:h-40 sm:w-40 overflow-hidden rounded-full border-4 shadow-2xl transition-transform hover:scale-105"
                 style={{ borderColor: primary }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -395,7 +498,7 @@ function BirthdayCelebrationTemplateInner({
 
               {/* Angka Usia Badge */}
               <div
-                className="absolute -bottom-2 -right-2 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border-2 border-white text-white font-serif text-lg sm:text-xl font-bold shadow-lg"
+                className="absolute -bottom-2 -right-2 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border-2 border-white text-white font-serif text-base sm:text-lg font-bold shadow-lg"
                 style={{ backgroundColor: primary }}
               >
                 {content.age}th
@@ -404,8 +507,8 @@ function BirthdayCelebrationTemplateInner({
           )}
 
           {/* Nama Penerima & Headline */}
-          <div className="space-y-2 max-w-lg">
-            <p className="font-mono text-xs uppercase tracking-widest text-stone-500 font-semibold">
+          <div className="space-y-1.5 max-w-lg">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-stone-500 font-semibold">
               Hari Spesial Untuk Orang Paling Berharga
             </p>
             <h1
@@ -417,52 +520,31 @@ function BirthdayCelebrationTemplateInner({
             <p className="text-sm sm:text-base text-stone-600 font-medium leading-relaxed">
               &ldquo;{content.heroHeadline}&rdquo;
             </p>
-            <p className="text-xs text-stone-500 pt-1">
+            <p className="text-xs text-stone-500 pt-0.5">
               Dipersembahkan dengan penuh cinta oleh:{" "}
               <span className="font-semibold text-stone-800">{content.senderName}</span>
             </p>
           </div>
 
-          {/* Tombol Interaktif Buka Pesta */}
-          <div className="pt-2">
-            {isThumbnail ? (
-              <div className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-xs font-bold text-stone-800 shadow-sm border border-stone-200">
-                <Cake className="h-4 w-4 text-rose-500" />
-                <span>Pesta Ulang Tahun & Kue</span>
-              </div>
-            ) : !isOpened ? (
-              <button
-                type="button"
-                onClick={handleOpenParty}
-                className="inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm font-bold tracking-wide text-white shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-white/30"
-                style={{ backgroundColor: primary }}
-              >
-                <Cake className="h-4 w-4" />
-                <span>Mulai Perayaan & Buka Kue 🎂</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  const target = document.getElementById("birthday-cake-stage");
-                  if (target) {
-                    target.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-2 text-xs font-bold text-stone-800 shadow-md transition-all hover:bg-stone-50 border border-stone-200"
-              >
-                <Cake className="h-3.5 w-3.5 text-rose-500" />
-                <span>Lihat Kue Bolu & Lilin</span>
-              </button>
-            )}
-          </div>
+          {isThumbnail ? (
+            <div className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-xs font-bold text-stone-800 shadow-sm border border-stone-200">
+              <Cake className="h-4 w-4 text-rose-500" />
+              <span>Pesta Ulang Tahun & Kue</span>
+            </div>
+          ) : null}
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. AREA KONTEN UTAMA PERAYAAN (SELEBRASI KLASIK) */}
+      {/* 3. AREA KONTEN UTAMA PERAYAAN (SELEBRASI KLASIK)                           */}
+      {/* Tersembunyi saat !isOpened di FullPreview/Public sehingga tidak bertumpuk  */}
       {/* ========================================================================= */}
-      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 space-y-20">
+      <div
+        className={cn(
+          "mx-auto max-w-4xl px-4 py-12 sm:px-6 space-y-20 transition-all duration-500",
+          !isOpened && (isPublicLetter || isFullPreview) && "hidden",
+        )}
+      >
         {/* ======================================================================= */}
         {/* 2A. BOLU ULANG TAHUN INTERAKTIF & TIUP LILIN */}
         {/* ======================================================================= */}
