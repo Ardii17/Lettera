@@ -1122,44 +1122,6 @@ function BirthdayCelebrationTemplateInner({
             </div>
           </footer>
         </article>
-
-        {/* ======================================================================= */}
-        {/* 2I. KOTAK BAGIKAN TAUTAN SURAT */}
-        {/* ======================================================================= */}
-        <section
-          className="rounded-3xl border-2 p-6 sm:p-8 text-center space-y-4 shadow-sm"
-          style={{ backgroundColor: card, borderColor: `${primary}30` }}
-        >
-          <div className="max-w-md mx-auto space-y-1.5">
-            <h3 className="font-serif text-lg font-bold sm:text-xl" style={{ color: textColor }}>
-              Bagikan Surat Pesta Ulang Tahun Ini
-            </h3>
-            <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
-              Tautan ucapan ulang tahun ini abadi dan dapat dibuka kembali kapan saja untuk mengenang hari bahagia ini.
-            </p>
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-xs font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
-              style={{ backgroundColor: primary }}
-            >
-              {copiedLink ? (
-                <>
-                  <Check className="h-4 w-4" />
-                  <span>Tautan Berhasil Disalin!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-4 w-4" />
-                  <span>Salin Tautan Surat Ulang Tahun</span>
-                </>
-              )}
-            </button>
-          </div>
-        </section>
       </div>
 
       {/* Lightbox Modal Pratinjau Foto */}
