@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import type { TemplateComponentProps } from "../renderer";
 import {
   Heart,
@@ -23,6 +23,7 @@ import {
   BookOpen,
   MessageCircle,
   Play,
+  Loader2,
   Share2,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
@@ -150,6 +151,8 @@ function CountdownTimerLive({
 // --- KOMPONEN UTAMA BERKONTEN ---
 function MahligaiWeddingContent({ data }: TemplateComponentProps) {
   const searchParams = useSearchParams();
+  const params = useParams();
+  const letterToken = typeof params?.token === "string" ? params.token : null;
   const letter = data;
 
   // Nama penerima tamu dari parameter URL (?to=Nama) atau fallback
@@ -203,6 +206,47 @@ function MahligaiWeddingContent({ data }: TemplateComponentProps) {
   const [rsvpGuestCount, setRsvpGuestCount] = useState("2");
   const [rsvpMessage, setRsvpMessage] = useState("");
   const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
+  const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
+
+  // Ambil data RSVP dari database jika sedang membuka surat dengan token
+  useEffect(() => {
+    if (!letterToken) return;
+    let isMounted = true;
+
+    async function loadRsvps() {
+      try {
+        const res = await fetch(`/api/rsvp?letterToken=${encodeURIComponent(letterToken!)}`);
+        const json = await res.json();
+        if (isMounted && json.ok && Array.isArray(json.data) && json.data.length > 0) {
+          const dbItems = json.data.map(
+            (item: {
+              guest_name: string;
+              presence: string;
+              message: string;
+              created_at: string;
+            }) => ({
+              name: item.guest_name,
+              presence: item.presence,
+              message: item.message,
+              time: new Date(item.created_at).toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              }),
+            }),
+          );
+          setRsvpList(dbItems);
+        }
+      } catch (err) {
+        console.error("Gagal memuat RSVP dari database:", err);
+      }
+    }
+
+    loadRsvps();
+    return () => {
+      isMounted = false;
+    };
+  }, [letterToken]);
 
   // Palet Warna & Nilai Bawaan
   const primaryColor = (letter.primaryColor as string) || "#c59a3f";
@@ -266,23 +310,69 @@ function MahligaiWeddingContent({ data }: TemplateComponentProps) {
     setTimeout(() => setCopiedAccount(null), 2500);
   };
 
-  // Kirim RSVP
-  const handleRsvpSubmit = (e: React.FormEvent) => {
+  // Kirim RSVP ke API database
+  const handleRsvpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rsvpName.trim() || !rsvpMessage.trim()) return;
+    if (!rsvpName.trim() || !rsvpMessage.trim() || isSubmittingRsvp) return;
 
-    setRsvpList([
-      {
-        name: rsvpName.trim(),
-        presence: rsvpPresence,
-        message: rsvpMessage.trim(),
-        time: "Baru saja",
-      },
-      ...rsvpList,
-    ]);
-    setRsvpSubmitted(true);
-    setRsvpName("");
-    setRsvpMessage("");
+    setIsSubmittingRsvp(true);
+    try {
+      const res = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          letterToken,
+          guestName: rsvpName.trim(),
+          presence: rsvpPresence,
+          guestCount: rsvpGuestCount,
+          message: rsvpMessage.trim(),
+        }),
+      });
+
+      const json = await res.json();
+      if (json.ok && json.data) {
+        setRsvpList((prev) => [
+          {
+            name: json.data.guest_name,
+            presence: json.data.presence,
+            message: json.data.message,
+            time: "Baru saja",
+          },
+          ...prev,
+        ]);
+      } else {
+        // Fallback visual update
+        setRsvpList((prev) => [
+          {
+            name: rsvpName.trim(),
+            presence: rsvpPresence,
+            message: rsvpMessage.trim(),
+            time: "Baru saja",
+          },
+          ...prev,
+        ]);
+      }
+      setRsvpSubmitted(true);
+      setRsvpName("");
+      setRsvpMessage("");
+    } catch (err) {
+      console.error("Gagal mengirim RSVP:", err);
+      // Tetap tampilkan secara visual agar pengunjung tidak bingung
+      setRsvpList((prev) => [
+        {
+          name: rsvpName.trim(),
+          presence: rsvpPresence,
+          message: rsvpMessage.trim(),
+          time: "Baru saja",
+        },
+        ...prev,
+      ]);
+      setRsvpSubmitted(true);
+      setRsvpName("");
+      setRsvpMessage("");
+    } finally {
+      setIsSubmittingRsvp(false);
+    }
   };
 
   // Scroll to section
@@ -1290,11 +1380,21 @@ function MahligaiWeddingContent({ data }: TemplateComponentProps) {
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-white font-medium text-sm shadow-md hover:shadow-lg transition-all active:scale-95"
+                  disabled={isSubmittingRsvp}
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-white font-medium text-sm shadow-md hover:shadow-lg transition-all active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
                   style={{ backgroundColor: primaryColor }}
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Kirim Konfirmasi &amp; Doa Restu</span>
+                  {isSubmittingRsvp ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Menyimpan ke Buku Tamu...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Kirim Konfirmasi &amp; Doa Restu</span>
+                    </>
+                  )}
                 </button>
               </form>
             )}

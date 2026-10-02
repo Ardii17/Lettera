@@ -57,6 +57,16 @@ export type PublicLetterRow = {
   created_at: string;
 }
 
+export type WeddingRsvpRow = {
+  id: string;
+  letter_id: string;
+  guest_name: string;
+  presence: string;
+  guest_count: string;
+  message: string;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -77,6 +87,13 @@ export interface Database {
         Insert: Omit<LetterRow, "id" | "created_at" | "updated_at" | "view_count"> &
           Partial<Pick<LetterRow, "id" | "user_id" | "status" | "view_count" | "payer_email" | "payer_name" | "payment_status" | "amount">>;
         Update: Partial<LetterRow>;
+        Relationships: [];
+      };
+      wedding_rsvps: {
+        Row: WeddingRsvpRow;
+        Insert: Omit<WeddingRsvpRow, "id" | "created_at"> &
+          Partial<Pick<WeddingRsvpRow, "id" | "created_at">>;
+        Update: Partial<WeddingRsvpRow>;
         Relationships: [];
       };
     };
