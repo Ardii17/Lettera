@@ -106,6 +106,7 @@ const DEFAULT_TEMPLATE_METAS: Record<string, { id: string; sort_order: number }>
   "bistro-friendship": { id: "00000000-0000-4000-8000-000000000037", sort_order: 37 },
   "roadtrip-friendship": { id: "00000000-0000-4000-8000-000000000038", sort_order: 38 },
   "treehouse-friendship": { id: "00000000-0000-4000-8000-000000000039", sort_order: 39 },
+  "mahligai-wedding": { id: "00000000-0000-4000-8000-000000000040", sort_order: 40 },
 };
 
 export async function getTemplateRowBySlug(slug: string): Promise<TemplateRow | null> {

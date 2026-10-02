@@ -50,6 +50,7 @@ import { GalaAwardBuilderForm } from "./gala-award-builder-form";
 import { HeritageWeddingBuilderForm } from "./heritage-wedding-builder-form";
 import { AmalfiWeddingBuilderForm } from "./amalfi-wedding-builder-form";
 import { ChateauWeddingBuilderForm } from "./chateau-wedding-builder-form";
+import { MahligaiWeddingBuilderForm } from "./mahligai-wedding-builder-form";
 import { BirthdayGazetteBuilderForm } from "./birthday-gazette-builder-form";
 import { CelestialBirthdayBuilderForm } from "./celestial-birthday-builder-form";
 import { BirthdayPassportBuilderForm } from "./birthday-passport-builder-form";
@@ -601,6 +602,14 @@ export function LetterBuilder({
                 errors={form.formState.errors}
                 idPrefix={template.slug}
               />
+            ) : template.slug === "mahligai-wedding" ? (
+              <MahligaiWeddingBuilderForm
+                register={form.register}
+                setValue={form.setValue}
+                watch={form.watch}
+                errors={form.formState.errors}
+                idPrefix={template.slug}
+              />
             ) : template.slug === "art-exhibition" ? (
               <ArtExhibitionBuilderForm
                 register={form.register}
@@ -665,10 +674,6 @@ export function LetterBuilder({
                 Ganti template
               </Link>
             </div>
-
-            <p className="mt-4 text-sm text-ink-muted">
-              Draf tersimpan otomatis di perangkatmu. Pembayaran QRIS dilakukan setelah konfirmasi pratinjau.
-            </p>
           </div>
         </div>
 

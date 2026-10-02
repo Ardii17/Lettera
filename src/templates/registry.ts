@@ -38,6 +38,7 @@ import { birthdayPassportTemplate } from "./birthday-passport/definition";
 import { birthdayCinemaTemplate } from "./birthday-cinema/definition";
 import { birthdayFestivalTemplate } from "./birthday-festival/definition";
 import { birthdayCelebrationTemplate } from "./birthday-celebration/definition";
+import { mahligaiWeddingTemplate } from "./mahligai-wedding/definition";
 import type { TemplateMeta } from "./types";
 
 /**
@@ -82,6 +83,7 @@ export const TEMPLATES: TemplateMeta[] = [
   heritageWeddingTemplate,
   amalfiWeddingTemplate,
   chateauWeddingTemplate,
+  mahligaiWeddingTemplate,
   artExhibitionTemplate,
   neonBashTemplate,
   galaAwardTemplate,

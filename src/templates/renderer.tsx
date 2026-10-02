@@ -40,6 +40,7 @@ import { BirthdayPassportTemplate } from "./birthday-passport/BirthdayPassportTe
 import { BirthdayCinemaTemplate } from "./birthday-cinema/BirthdayCinemaTemplate";
 import { BirthdayFestivalTemplate } from "./birthday-festival/BirthdayFestivalTemplate";
 import { BirthdayCelebrationTemplate } from "./birthday-celebration/BirthdayCelebrationTemplate";
+import { MahligaiWeddingTemplate } from "./mahligai-wedding/MahligaiWeddingTemplate";
 
 export interface TemplateComponentProps {
   data: LetterContent;
@@ -87,6 +88,7 @@ const TEMPLATE_COMPONENTS: Record<string, ComponentType<TemplateComponentProps>>
   "heritage-wedding": HeritageWeddingTemplate,
   "amalfi-wedding": AmalfiWeddingTemplate,
   "chateau-wedding": ChateauWeddingTemplate,
+  "mahligai-wedding": MahligaiWeddingTemplate,
   "art-exhibition": ArtExhibitionTemplate,
   "neon-bash": NeonBashTemplate,
   "gala-award": GalaAwardTemplate,

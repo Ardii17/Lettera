@@ -17,12 +17,15 @@ import {
   Check,
   ChevronRight,
   ChevronLeft,
+  Lock,
+  Award,
 } from "lucide-react";
 import { Field, Input, Textarea } from "@/components/ui/field";
 import { ColorPickerField } from "@/components/ui/color-picker-field";
 import { AudioUploadField } from "@/components/ui/audio-upload-field";
 import {
   STARLIGHT_COLOR_PRESETS,
+  CARD_COLOR_PRESETS,
   TEXT_COLOR_PRESETS,
 } from "@/templates/color-presets";
 import { cn } from "@/lib/utils/cn";
@@ -36,7 +39,13 @@ interface StarlightLoveBuilderFormProps {
   idPrefix?: string;
 }
 
-type TabType = "constellation" | "letter" | "memories" | "stars" | "lantern" | "theme";
+type TabType =
+  | "constellation"
+  | "letter"
+  | "memories"
+  | "stars"
+  | "whisper"
+  | "theme";
 
 const PRESET_STARLIGHT_PHOTOS = [
   {
@@ -50,7 +59,7 @@ const PRESET_STARLIGHT_PHOTOS = [
     thumb: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=200&q=60",
   },
   {
-    name: "Berdansa di Bawah Cahaya Kota",
+    name: "Berdansa di Bawah Cahaya Senja",
     url: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1000&q=80",
     thumb: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=200&q=60",
   },
@@ -59,6 +68,14 @@ const PRESET_STARLIGHT_PHOTOS = [
     url: "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=1000&q=80",
     thumb: "https://images.unsplash.com/photo-1513279922550-250c2129b13a?auto=format&fit=crop&w=200&q=60",
   },
+];
+
+const BRIGHT_BACKGROUND_PRESETS = [
+  { label: "Warm Starlight Ivory", value: "#fdfbf7", description: "Ivory hangat mewah bergradasi lembut" },
+  { label: "Pure Celestial Cream", value: "#fffdfa", description: "Krem lembut bersih & elegan" },
+  { label: "Champagne Dawn", value: "#fef7ee", description: "Nuansa sampanye fajar keemasan" },
+  { label: "Soft Pearl Amber", value: "#fffbeb", description: "Kuning mutiara lembut bercahaya" },
+  { label: "Cloud White", value: "#ffffff", description: "Putih bersih minimalis modern" },
 ];
 
 export function StarlightLoveBuilderForm({
@@ -71,22 +88,24 @@ export function StarlightLoveBuilderForm({
   const [activeTab, setActiveTab] = useState<TabType>("constellation");
 
   const tabs: Array<{ id: TabType; label: string; icon: typeof Sparkles }> = [
-    { id: "constellation", label: "Penerima & Konstelasi", icon: Sparkles },
+    { id: "constellation", label: "Penerima & Sertifikat", icon: Award },
     { id: "letter", label: "Surat Semesta", icon: Scroll },
-    { id: "memories", label: "Portal Foto Bintang", icon: ImageIcon },
-    { id: "stars", label: "3 Bintang Harapan", icon: Star },
-    { id: "lantern", label: "Lentera Cahaya", icon: Flame },
-    { id: "theme", label: "Warna & Musik", icon: Palette },
+    { id: "memories", label: "Galeri 4 Foto", icon: ImageIcon },
+    { id: "stars", label: "5 Janji Semesta", icon: Star },
+    { id: "whisper", label: "Bisikan & Lentera", icon: Flame },
+    { id: "theme", label: "Warna Cerah & Musik", icon: Palette },
   ];
 
   const currentTabIndex = tabs.findIndex((t) => t.id === activeTab);
   const currentPhoto1 = watch("starlightPhotoUrl") as string;
   const currentPhoto2 = watch("secondPhotoUrl") as string;
+  const currentPhoto3 = watch("photo3Url") as string;
+  const currentPhoto4 = watch("photo4Url") as string;
 
   return (
     <div className="space-y-6">
-      {/* Tab Navigation */}
-      <div className="flex overflow-x-auto no-scrollbar gap-1.5 p-1 bg-stone-100/80 rounded-xl border border-stone-200">
+      {/* Tab Navigation Bar */}
+      <div className="flex overflow-x-auto no-scrollbar gap-1.5 p-1 bg-stone-100/90 rounded-2xl border border-stone-200">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -96,52 +115,56 @@ export function StarlightLoveBuilderForm({
               type="button"
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all flex-1 justify-center",
+                "flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all flex-1 justify-center",
                 isActive
-                  ? "bg-slate-900 text-amber-300 shadow-sm border border-slate-800"
-                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-200/50",
+                  ? "bg-amber-500 text-white shadow-md border border-amber-600"
+                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-200/60"
               )}
             >
-              <Icon className={cn("w-4 h-4", isActive ? "text-amber-400" : "text-stone-400")} />
+              <Icon className={cn("w-4 h-4", isActive ? "text-white" : "text-amber-600")} />
               <span>{tab.label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* TAB 1: PENERIMA & KONSTELASI */}
+      {/* ========================================================================= */}
+      {/* TAB 1: PENERIMA & SERTIFIKAT BINTANG RESMI */}
+      {/* ========================================================================= */}
       {activeTab === "constellation" && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200">
-            <p className="font-medium text-amber-300 mb-1">Gugusan Bintang Kenangan Berdua</p>
-            <p className="text-slate-400 leading-relaxed">
-              Tentukan nama pasangan, judul rasi bintang cinta kalian, serta tanggal atau koordinat simbolik pertemuan yang ingin diabadikan di langit semesta.
+          <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-stone-700">
+            <p className="font-bold text-amber-900 mb-1">
+              ✨ Sertifikat Dedikasi Bintang Resmi & Live Counter Waktu Cinta
+            </p>
+            <p className="text-stone-600 leading-relaxed">
+              Daftarkan bintang abadi di langit semesta atas nama kekasihmu. Dilengkapi koordinat astronomis, tingkat magnitudo cahaya, nomor registrasi resmi, dan live counter waktu kebersamaan.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field
-              label="Nama Kekasih (Penerima)"
+              label="Nama Kekasih (Penerima Surat)"
               htmlFor={`${idPrefix}-recipientName`}
               error={errors.recipientName?.message as string}
               required
             >
               <Input
                 id={`${idPrefix}-recipientName`}
-                placeholder="Contoh: Clarissa Aurelia"
+                placeholder="Clarissa Aurelia"
                 {...register("recipientName")}
               />
             </Field>
 
             <Field
-              label="Nama Kamu (Pengirim)"
+              label="Nama Kamu (Pengirim Surat)"
               htmlFor={`${idPrefix}-senderName`}
               error={errors.senderName?.message as string}
               required
             >
               <Input
                 id={`${idPrefix}-senderName`}
-                placeholder="Contoh: Reyhan Danendra"
+                placeholder="Reyhan Danendra"
                 {...register("senderName")}
               />
             </Field>
@@ -155,75 +178,120 @@ export function StarlightLoveBuilderForm({
           >
             <Input
               id={`${idPrefix}-constellationTitle`}
-              placeholder="Contoh: Constellation of Our First Spark ✨"
+              placeholder="Constellation of Our First Spark ✨"
               {...register("constellationTitle")}
             />
           </Field>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field
-              label="Tanggal Pertemuan / Kenangan"
+              label="Tanggal Pertemuan / Momen Spesial"
               htmlFor={`${idPrefix}-specialDate`}
               error={errors.specialDate?.message as string}
+              hint="Teks tanggal yang tertulis di sertifikat bintang."
             >
               <Input
                 id={`${idPrefix}-specialDate`}
-                placeholder="Contoh: 14 Februari 2023"
+                placeholder="14 Februari 2023"
                 {...register("specialDate")}
               />
             </Field>
 
             <Field
-              label="Koordinat Simbolik"
-              htmlFor={`${idPrefix}-starCoordinate`}
-              error={errors.starCoordinate?.message as string}
-              hint="Koordinat rasi bintang atau lokasi kota."
+              label="Tanggal Awal Kisah / Jadian (YYYY-MM-DD)"
+              htmlFor={`${idPrefix}-anniversaryDate`}
+              error={errors.anniversaryDate?.message as string}
+              hint="Format: YYYY-MM-DD. Digunakan untuk menghitung detik, menit, dan hari bersama secara live."
             >
               <Input
-                id={`${idPrefix}-starCoordinate`}
-                placeholder="Contoh: RA 05h 35m • Dec -05° 23′ (Celestial Orion)"
-                {...register("starCoordinate")}
+                id={`${idPrefix}-anniversaryDate`}
+                placeholder="2023-02-14"
+                {...register("anniversaryDate")}
               />
             </Field>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field
-              label="Nama Bintang Simbolik Khusus"
-              htmlFor={`${idPrefix}-starName`}
-              error={errors.starName?.message as string}
-              hint="Nama bintang yang kamu dedikasikan untuk pasangan."
-            >
-              <Input
-                id={`${idPrefix}-starName`}
-                placeholder="Contoh: Stella Clarissa Majoris ✨"
-                {...register("starName")}
-              />
-            </Field>
+          <div className="rounded-2xl border border-amber-200 bg-white p-4 sm:p-5 space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+              Dokumen Registrasi Bintang Abadi
+            </h4>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Nama Bintang yang Didedikasikan"
+                htmlFor={`${idPrefix}-starName`}
+                error={errors.starName?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-starName`}
+                  placeholder="Stella Clarissa Majoris ✨"
+                  {...register("starName")}
+                />
+              </Field>
+
+              <Field
+                label="Koordinat Astronomis Bintang"
+                htmlFor={`${idPrefix}-starCoordinate`}
+                error={errors.starCoordinate?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-starCoordinate`}
+                  placeholder="RA 05h 35m • Dec -05° 23′ (Celestial Orion)"
+                  {...register("starCoordinate")}
+                />
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field
+                label="Tingkat Magnitudo Cahaya"
+                htmlFor={`${idPrefix}-starMagnitude`}
+                error={errors.starMagnitude?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-starMagnitude`}
+                  placeholder="Magnitude 1.0 (Bintang Terang Utama)"
+                  {...register("starMagnitude")}
+                />
+              </Field>
+
+              <Field
+                label="Nomor Registrasi Kosmik"
+                htmlFor={`${idPrefix}-starRegistryId`}
+                error={errors.starRegistryId?.message as string}
+              >
+                <Input
+                  id={`${idPrefix}-starRegistryId`}
+                  placeholder="STAR-LOVE-2023-CLARISSA"
+                  {...register("starRegistryId")}
+                />
+              </Field>
+            </div>
 
             <Field
-              label="Momen / Tanggal Perayaan Langit"
-              htmlFor={`${idPrefix}-anniversaryDate`}
-              error={errors.anniversaryDate?.message as string}
-              hint="Tanggal jadian atau momen spesial."
+              label="Kutipan Janji pada Sertifikat Bintang"
+              htmlFor={`${idPrefix}-starDedicationQuote`}
+              error={errors.starDedicationQuote?.message as string}
             >
               <Input
-                id={`${idPrefix}-anniversaryDate`}
-                placeholder="Contoh: 14 Februari 2023 • Malam Langit Sejajar"
-                {...register("anniversaryDate")}
+                id={`${idPrefix}-starDedicationQuote`}
+                placeholder="Didaftarkan abadi di hamparan galaksi, bersinar selamanya hanya untukmu."
+                {...register("starDedicationQuote")}
               />
             </Field>
           </div>
         </div>
       )}
 
+      {/* ========================================================================= */}
       {/* TAB 2: SURAT SEMESTA */}
+      {/* ========================================================================= */}
       {activeTab === "letter" && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
-          <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 text-xs sm:text-sm text-stone-700">
-            <p className="font-medium text-stone-900 mb-1">Surat Cinta Kaca Temaram</p>
+          <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 text-xs sm:text-sm text-stone-700">
+            <p className="font-bold text-stone-900 mb-1">Warkah Hati di Bawah Langit Semesta</p>
             <p className="text-stone-600 leading-relaxed">
-              Ungkapkan perasaan cintamu di bawah keheningan malam. Tipografi emas yang hangat di atas latar kaca temaram akan memberikan sentuhan yang intim dan mewah.
+              Ungkapkan isi hatimu yang terdalam. Lembaran surat didesain dengan kertas mewah berpita keemasan yang nyaman dibaca dan sangat romantis.
             </p>
           </div>
 
@@ -235,7 +303,7 @@ export function StarlightLoveBuilderForm({
           >
             <Input
               id={`${idPrefix}-title`}
-              placeholder="Contoh: Di Antara Miliaran Bintang di Langit Semesta"
+              placeholder="Di Antara Miliaran Bintang di Langit Semesta"
               {...register("title")}
             />
           </Field>
@@ -244,26 +312,26 @@ export function StarlightLoveBuilderForm({
             label="Kutipan Puitis Pembuka"
             htmlFor={`${idPrefix}-openingQuote`}
             error={errors.openingQuote?.message as string}
-            hint="Kutipan romantis bertema bintang atau semesta."
+            hint="Kutipan pembuka puitis bertema bintang atau takdir semesta."
           >
             <Textarea
               id={`${idPrefix}-openingQuote`}
               rows={2}
-              placeholder="Jika setiap bintang di langit malam adalah alasan mengapa aku mencintaimu, maka seluruh galaksi ini pun tak akan cukup..."
+              placeholder="Jika setiap bintang di langit adalah alasan mengapa aku mencintaimu, maka seluruh galaksi ini pun tak akan cukup..."
               {...register("openingQuote")}
             />
           </Field>
 
           <Field
-            label="Isi Surat Cinta"
+            label="Isi Surat Cinta Lengkap"
             htmlFor={`${idPrefix}-message`}
             error={errors.message?.message as string}
             required
-            hint="Pisahkan setiap paragraf dengan baris kosong untuk kerapian tampilan."
+            hint="Pisahkan setiap paragraf dengan menekan Enter dua kali (baris kosong)."
           >
             <Textarea
               id={`${idPrefix}-message`}
-              rows={10}
+              rows={11}
               placeholder="Tuliskan seluruh isi hatimu di sini..."
               {...register("message")}
             />
@@ -277,19 +345,19 @@ export function StarlightLoveBuilderForm({
             >
               <Input
                 id={`${idPrefix}-closingWord`}
-                placeholder="Contoh: Mencintaimu hingga ke ujung galaksi terluar,"
+                placeholder="Mencintaimu hingga ke ujung galaksi terluar,"
                 {...register("closingWord")}
               />
             </Field>
 
             <Field
-              label="Tanda Tangan"
+              label="Tanda Tangan Pengirim"
               htmlFor={`${idPrefix}-signature`}
               error={errors.signature?.message as string}
             >
               <Input
                 id={`${idPrefix}-signature`}
-                placeholder="Contoh: Reyhan Danendra"
+                placeholder="Reyhan Danendra"
                 {...register("signature")}
               />
             </Field>
@@ -297,344 +365,362 @@ export function StarlightLoveBuilderForm({
         </div>
       )}
 
-      {/* TAB 3: PORTAL FOTO BINTANG */}
+      {/* ========================================================================= */}
+      {/* TAB 3: GALERI 4 FOTO POLAROID */}
+      {/* ========================================================================= */}
       {activeTab === "memories" && (
         <div className="space-y-6 animate-in fade-in-50 duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200">
-            <p className="font-medium text-amber-300 mb-1">Portal Foto Kenangan Kosmik</p>
-            <p className="text-slate-400 leading-relaxed">
-              Pajang hingga dua foto kenangan romantis berdua yang akan ditampilkan dengan bingkai portal bintang ber-aura cahaya emas di dalam surat kaca temaram.
+          <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-stone-700">
+            <p className="font-bold text-amber-900 mb-1">Galeri 4 Foto Polaroid Berselotip Emas</p>
+            <p className="text-stone-600 leading-relaxed">
+              Pajang hingga 4 foto kenangan manis. Foto akan disajikan dengan gaya polaroid berselotip bintang emas lengkap dengan efek lightbox interaktif saat diklik.
             </p>
           </div>
 
-          {/* FOTO 1 */}
-          <div className="space-y-4 rounded-xl border border-stone-200 bg-white p-4">
-            <h4 className="text-sm font-semibold text-stone-800">Foto Utama (Portal Bintang)</h4>
-            {/* Pilihan Foto Cepat */}
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-stone-600">
-                Pilihan Cepat Foto 1:
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {PRESET_STARLIGHT_PHOTOS.map((p) => {
-                  const isSelected = currentPhoto1 === p.url;
-                  return (
-                    <button
-                      key={`star1-${p.name}`}
-                      type="button"
-                      onClick={() =>
-                        setValue("starlightPhotoUrl", p.url, {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        })
-                      }
-                      className={cn(
-                        "relative aspect-square overflow-hidden rounded-xl border-2 transition-all text-left",
-                        isSelected
-                          ? "border-amber-500 ring-2 ring-amber-300"
-                          : "border-stone-200 hover:border-stone-300",
-                      )}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={p.thumb} alt={p.name} className="h-full w-full object-cover" />
-                      {isSelected && (
-                        <span className="absolute top-1 right-1 rounded-full bg-amber-500 p-0.5 text-slate-950">
-                          <Check className="h-3 w-3" />
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Preset Foto Cepat */}
+          <div className="space-y-2">
+            <p className="text-xs font-bold uppercase tracking-wider text-stone-700">
+              Pilihan Cepat Foto Inspirasi Romantis:
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {PRESET_STARLIGHT_PHOTOS.map((p, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setValue("starlightPhotoUrl", p.url, { shouldValidate: true, shouldDirty: true });
+                  }}
+                  className="relative aspect-square overflow-hidden rounded-xl border border-stone-200 hover:border-amber-400 transition-all text-left group"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={p.thumb} alt={p.name} className="h-full w-full object-cover group-hover:scale-105 transition-transform" />
+                  <div className="absolute inset-0 bg-stone-900/40 p-2 flex items-end">
+                    <span className="text-[10px] font-medium text-white line-clamp-1">{p.name}</span>
+                  </div>
+                </button>
+              ))}
             </div>
+          </div>
 
-            <Field
-              label="Tautan Foto 1 (URL)"
-              htmlFor={`${idPrefix}-starlightPhotoUrl`}
-              error={errors.starlightPhotoUrl?.message as string}
-              hint="Tempel tautan gambar dari Unsplash atau Cloudinary."
-            >
+          {/* Form Foto 1 */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3 shadow-2xs">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+              Foto Polaroid 1 (Portal Bintang Utama)
+            </h4>
+            <Field label="URL Foto 1" htmlFor={`${idPrefix}-starlightPhotoUrl`}>
               <Input
                 id={`${idPrefix}-starlightPhotoUrl`}
                 placeholder="https://images.unsplash.com/..."
                 {...register("starlightPhotoUrl")}
               />
             </Field>
-
-            <Field
-              label="Keterangan Foto 1 (Caption)"
-              htmlFor={`${idPrefix}-starlightPhotoCaption`}
-              error={errors.starlightPhotoCaption?.message as string}
-            >
+            <Field label="Keterangan Foto 1 (Caption)" htmlFor={`${idPrefix}-starlightPhotoCaption`}>
               <Input
                 id={`${idPrefix}-starlightPhotoCaption`}
-                placeholder="Contoh: Malam pertama kita menatap gemintang bersama di atas bukit."
+                placeholder="Pertama kali menatap gemintang bersama di atas bukit."
                 {...register("starlightPhotoCaption")}
               />
             </Field>
           </div>
 
-          {/* FOTO 2 */}
-          <div className="space-y-4 rounded-xl border border-stone-200 bg-white p-4">
-            <h4 className="text-sm font-semibold text-stone-800">Foto Kedua (Nebula Kasih - Opsional)</h4>
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-stone-600">
-                Pilihan Cepat Foto 2:
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {PRESET_STARLIGHT_PHOTOS.map((p) => {
-                  const isSelected = currentPhoto2 === p.url;
-                  return (
-                    <button
-                      key={`star2-${p.name}`}
-                      type="button"
-                      onClick={() =>
-                        setValue("secondPhotoUrl", p.url, {
-                          shouldValidate: true,
-                          shouldDirty: true,
-                        })
-                      }
-                      className={cn(
-                        "relative aspect-square overflow-hidden rounded-xl border-2 transition-all text-left",
-                        isSelected
-                          ? "border-amber-500 ring-2 ring-amber-300"
-                          : "border-stone-200 hover:border-stone-300",
-                      )}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={p.thumb} alt={p.name} className="h-full w-full object-cover" />
-                      {isSelected && (
-                        <span className="absolute top-1 right-1 rounded-full bg-amber-500 p-0.5 text-slate-950">
-                          <Check className="h-3 w-3" />
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <Field
-              label="Tautan Foto 2 (URL)"
-              htmlFor={`${idPrefix}-secondPhotoUrl`}
-              error={errors.secondPhotoUrl?.message as string}
-            >
+          {/* Form Foto 2 */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3 shadow-2xs">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+              Foto Polaroid 2 (Nebula Kasih)
+            </h4>
+            <Field label="URL Foto 2" htmlFor={`${idPrefix}-secondPhotoUrl`}>
               <Input
                 id={`${idPrefix}-secondPhotoUrl`}
                 placeholder="https://images.unsplash.com/..."
                 {...register("secondPhotoUrl")}
               />
             </Field>
-
-            <Field
-              label="Keterangan Foto 2 (Caption)"
-              htmlFor={`${idPrefix}-secondPhotoCaption`}
-              error={errors.secondPhotoCaption?.message as string}
-            >
+            <Field label="Keterangan Foto 2 (Caption)" htmlFor={`${idPrefix}-secondPhotoCaption`}>
               <Input
                 id={`${idPrefix}-secondPhotoCaption`}
-                placeholder="Contoh: Genggaman jemari yang selalu menghangatkan dinginnya malam."
+                placeholder="Genggaman jemari yang selalu menghangatkan dinginnya malam."
                 {...register("secondPhotoCaption")}
+              />
+            </Field>
+          </div>
+
+          {/* Form Foto 3 */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3 shadow-2xs">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+              Foto Polaroid 3 (Senja Keemasan)
+            </h4>
+            <Field label="URL Foto 3" htmlFor={`${idPrefix}-photo3Url`}>
+              <Input
+                id={`${idPrefix}-photo3Url`}
+                placeholder="https://images.unsplash.com/..."
+                {...register("photo3Url")}
+              />
+            </Field>
+            <Field label="Keterangan Foto 3 (Caption)" htmlFor={`${idPrefix}-photo3Caption`}>
+              <Input
+                id={`${idPrefix}-photo3Caption`}
+                placeholder="Tawa renyahmu di bawah cahaya senja keemasan."
+                {...register("photo3Caption")}
+              />
+            </Field>
+          </div>
+
+          {/* Form Foto 4 */}
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3 shadow-2xs">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+              Foto Polaroid 4 (Galaksi Berdua)
+            </h4>
+            <Field label="URL Foto 4" htmlFor={`${idPrefix}-photo4Url`}>
+              <Input
+                id={`${idPrefix}-photo4Url`}
+                placeholder="https://images.unsplash.com/..."
+                {...register("photo4Url")}
+              />
+            </Field>
+            <Field label="Keterangan Foto 4 (Caption)" htmlFor={`${idPrefix}-photo4Caption`}>
+              <Input
+                id={`${idPrefix}-photo4Caption`}
+                placeholder="Saat dunia di luar sana terasa sunyi dan hanya ada kita berdua."
+                {...register("photo4Caption")}
               />
             </Field>
           </div>
         </div>
       )}
 
-      {/* TAB 4: TIGA BINTANG HARAPAN */}
+      {/* ========================================================================= */}
+      {/* TAB 4: 5 JANJI SEMESTA & RASI BINTANG */}
+      {/* ========================================================================= */}
       {activeTab === "stars" && (
         <div className="space-y-5 animate-in fade-in-50 duration-200">
-          <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 text-xs sm:text-sm text-amber-950">
-            <p className="font-medium mb-1">Tiga Ikrar Cinta di Bawah Langit Malam</p>
-            <p className="text-amber-900/80 leading-relaxed">
-              Tuliskan 3 harapan dan janji setia yang ingin kamu jaga bersama pasanganmu di masa depan.
+          <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-stone-700">
+            <p className="font-bold text-amber-900 mb-1">5 Janji Semesta Abadi (Peta Rasi Interaktif)</p>
+            <p className="text-stone-600 leading-relaxed">
+              Tuliskan kisah rasi bintang kenangan dan 5 pilar janji suci yang akan bersinar abadi di langit masa depan kalian berdua.
             </p>
           </div>
 
           <Field
-            label="Judul Seksi Harapan"
-            htmlFor={`${idPrefix}-wishesTitle`}
-            error={errors.wishesTitle?.message as string}
-          >
-            <Input
-              id={`${idPrefix}-wishesTitle`}
-              placeholder="Tiga Bintang Harapan di Bawah Langit Malam"
-              {...register("wishesTitle")}
-            />
-          </Field>
-
-          <Field
-            label="Bintang 1 (Harapan Pertama)"
-            htmlFor={`${idPrefix}-star1`}
-            error={errors.star1?.message as string}
-          >
-            <Input
-              id={`${idPrefix}-star1`}
-              placeholder="Bintang Kedamaian: Selalu menjadi pelabuhan paling tenang dan aman saat harimu lelah."
-              {...register("star1")}
-            />
-          </Field>
-
-          <Field
-            label="Bintang 2 (Harapan Kedua)"
-            htmlFor={`${idPrefix}-star2`}
-            error={errors.star2?.message as string}
-          >
-            <Input
-              id={`${idPrefix}-star2`}
-              placeholder="Bintang Ketulusan: Menjagamu dengan kejujuran, kehangatan, dan kesetiaan yang tak luntur."
-              {...register("star2")}
-            />
-          </Field>
-
-          <Field
-            label="Bintang 3 (Harapan Ketiga)"
-            htmlFor={`${idPrefix}-star3`}
-            error={errors.star3?.message as string}
-          >
-            <Input
-              id={`${idPrefix}-star3`}
-              placeholder="Bintang Keabadian: Terus menggenggam jemarimu dan menatap langit masa depan bersama-sama."
-              {...register("star3")}
-            />
-          </Field>
-        </div>
-      )}
-
-      {/* TAB 4: LENTERA CAHAYA */}
-      {activeTab === "lantern" && (
-        <div className="space-y-5 animate-in fade-in-50 duration-200">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs sm:text-sm text-slate-200">
-            <p className="font-medium text-amber-300 mb-1">Kartu Lentera Cinta Bercahaya</p>
-            <p className="text-slate-400 leading-relaxed">
-              Sertakan sebuah pesan doa atau lentera harapan yang melambangkan hangatnya rasa cinta yang tak pernah padam.
-            </p>
-          </div>
-
-          <Field
-            label="Judul Kartu Lentera"
-            htmlFor={`${idPrefix}-lanternTitle`}
-            error={errors.lanternTitle?.message as string}
-          >
-            <Input
-              id={`${idPrefix}-lanternTitle`}
-              placeholder="Lentera Harapan yang Tak Pernah Padam 🏮"
-              {...register("lanternTitle")}
-            />
-          </Field>
-
-          <Field
-            label="Isi Pesan Lentera"
-            htmlFor={`${idPrefix}-lanternMessage`}
-            error={errors.lanternMessage?.message as string}
-            hint="Pesan manis yang bersinar di bagian bawah surat cinta."
+            label="Kisah di Balik Rasi Bintang Kenangan"
+            htmlFor={`${idPrefix}-constellationStory`}
+            error={errors.constellationStory?.message as string}
+            hint="Narasi puitis pengantar peta rasi bintang kenangan."
           >
             <Textarea
-              id={`${idPrefix}-lanternMessage`}
-              rows={4}
-              placeholder="Lentera ini membawa doa dan rasa syukurku atas hadirnya dirimu..."
-              {...register("lanternMessage")}
+              id={`${idPrefix}-constellationStory`}
+              rows={2}
+              placeholder="Rasi bintang ini tercipta dari jalinan kenangan manis kita: tatap mata pertama, tawa bersama..."
+              {...register("constellationStory")}
             />
           </Field>
+
+          <div className="space-y-4 pt-2">
+            <Field
+              label="Bintang 1 • Janji Kedamaian"
+              htmlFor={`${idPrefix}-star1`}
+              error={errors.star1?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-star1`}
+                placeholder="Bintang Kedamaian: Selalu menjadi pelabuhan paling tenang dan aman saat harimu lelah."
+                {...register("star1")}
+              />
+            </Field>
+
+            <Field
+              label="Bintang 2 • Janji Ketulusan"
+              htmlFor={`${idPrefix}-star2`}
+              error={errors.star2?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-star2`}
+                placeholder="Bintang Ketulusan: Menjagamu dengan kejujuran, kehangatan, dan kesetiaan yang tak luntur."
+                {...register("star2")}
+              />
+            </Field>
+
+            <Field
+              label="Bintang 3 • Janji Kehangatan"
+              htmlFor={`${idPrefix}-star3`}
+              error={errors.star3?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-star3`}
+                placeholder="Bintang Kehangatan: Menjadi selimut di kala dingin dan pelukan paling tulus di setiap senja."
+                {...register("star3")}
+              />
+            </Field>
+
+            <Field
+              label="Bintang 4 • Janji Senyuman"
+              htmlFor={`${idPrefix}-star4`}
+              error={errors.star4?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-star4`}
+                placeholder="Bintang Tawa: Mengukir senyuman di wajahmu bahkan di saat hari-hari terasa berat."
+                {...register("star4")}
+              />
+            </Field>
+
+            <Field
+              label="Bintang 5 • Janji Keabadian"
+              htmlFor={`${idPrefix}-star5`}
+              error={errors.star5?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-star5`}
+                placeholder="Bintang Keabadian: Terus menggenggam jemarimu dan menatap langit masa depan bersama."
+                {...register("star5")}
+              />
+            </Field>
+          </div>
         </div>
       )}
 
-      {/* TAB 5: WARNA & MUSIK MALAM */}
-      {activeTab === "theme" && (
-        <div className="space-y-6 animate-in fade-in-50 duration-200">
-          <div className="bg-stone-50 border border-stone-200 rounded-xl p-4 text-xs sm:text-sm text-stone-700">
-            <p className="font-medium text-stone-900 mb-1">Kilau Kosmik & Melodi Malam</p>
+      {/* ========================================================================= */}
+      {/* TAB 5: BISIKAN RAHASIA & LENTERA */}
+      {/* ========================================================================= */}
+      {activeTab === "whisper" && (
+        <div className="space-y-5 animate-in fade-in-50 duration-200">
+          <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-stone-700">
+            <p className="font-bold text-amber-900 mb-1">Bisikan Bintang Rahasia & Lentera Harapan</p>
             <p className="text-stone-600 leading-relaxed">
-              Sesuaikan warna kilauan bintang dan audio instrumen malam yang menenangkan.
+              Bisikan rahasia akan terkunci dan baru terbuka ketika pasanganmu mengklik tombol interaktif. Lentera harapan melambangkan doa hangat yang terus membakar cinta kalian.
             </p>
           </div>
 
-          {/* Pengaturan Warna - Setiap Bagian Memiliki Box Tersendiri Secara Vertikal */}
+          <Field
+            label="Bisikan Bintang Rahasia Tersembunyi (Hidden Whisper)"
+            htmlFor={`${idPrefix}-secretStarlightWhisper`}
+            error={errors.secretStarlightWhisper?.message as string}
+            hint="Pesan emosional tersembunyi yang terkunci dengan gembok interaktif."
+          >
+            <Textarea
+              id={`${idPrefix}-secretStarlightWhisper`}
+              rows={4}
+              placeholder="Dari triliunan kemungkinan di semesta ini, tidak ada satu detik pun yang kusesali saat memilihmu..."
+              {...register("secretStarlightWhisper")}
+            />
+          </Field>
+
+          <div className="pt-2 border-t border-stone-200 space-y-4">
+            <Field
+              label="Judul Lentera Harapan"
+              htmlFor={`${idPrefix}-lanternTitle`}
+              error={errors.lanternTitle?.message as string}
+            >
+              <Input
+                id={`${idPrefix}-lanternTitle`}
+                placeholder="Lentera Harapan yang Tak Pernah Padam 🏮"
+                {...register("lanternTitle")}
+              />
+            </Field>
+
+            <Field
+              label="Isi Doa pada Lentera"
+              htmlFor={`${idPrefix}-lanternMessage`}
+              error={errors.lanternMessage?.message as string}
+            >
+              <Textarea
+                id={`${idPrefix}-lanternMessage`}
+                rows={3}
+                placeholder="Lentera ini membawa doa dan rasa syukurku atas hadirnya dirimu..."
+                {...register("lanternMessage")}
+              />
+            </Field>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* TAB 6: WARNA CERAH MEWAH & MUSIK */}
+      {/* ========================================================================= */}
+      {activeTab === "theme" && (
+        <div className="space-y-6 animate-in fade-in-50 duration-200">
+          <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-4 text-xs sm:text-sm text-stone-700">
+            <p className="font-bold text-amber-900 mb-1">Palet Cerah Menawan & Audio Malam</p>
+            <p className="text-stone-600 leading-relaxed">
+              Tema Celestial Starlight Romance kini menggunakan latar cerah berkelas (Warm Ethereal Luxury) dengan aksen emas bintang yang mewah.
+            </p>
+          </div>
+
+          {/* Pengaturan Warna - Masing-masing dalam Box Terpisah */}
           <div className="space-y-4">
             <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
-              <Field label="Warna Aksen Bintang & Lentera" htmlFor={`${idPrefix}-primaryColor`}>
+              <Field label="Warna Aksen Bintang & Lentera (Primary)" htmlFor={`${idPrefix}-primaryColor`}>
                 <ColorPickerField
-                  value={(watch("primaryColor") as string) || "#f5c542"}
+                  value={(watch("primaryColor") as string) || "#d97706"}
                   onChange={(hex) =>
                     setValue("primaryColor", hex, { shouldValidate: true, shouldDirty: true })
                   }
                   presets={STARLIGHT_COLOR_PRESETS}
-                  helperText="Warna ornamen bintang berkilau, tombol lentera, dan ikon konstelasi."
+                  helperText="Warna ornamen bintang berkilau, tombol buka surat, dan aksen emas sertifikat."
                 />
               </Field>
             </div>
 
             <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
-              <Field label="Warna Langit Malam (Latar)" htmlFor={`${idPrefix}-backgroundColor`}>
+              <Field label="Warna Latar Belakang (Tema Cerah)" htmlFor={`${idPrefix}-backgroundColor`}>
                 <ColorPickerField
-                  value={(watch("backgroundColor") as string) || "#0b0f19"}
+                  value={(watch("backgroundColor") as string) || "#fdfbf7"}
                   onChange={(hex) =>
                     setValue("backgroundColor", hex, { shouldValidate: true, shouldDirty: true })
                   }
-                  presets={[
-                    { label: "Deep Midnight Navy", value: "#0b0f19", description: "Biru dongker pekat malam kosmik" },
-                    { label: "Obsidian Black", value: "#09090b", description: "Hitam obsidian pekat luar angkasa" },
-                    { label: "Dark Indigo", value: "#0f172a", description: "Indigo malam berbintang" },
-                    { label: "Velvet Nebula", value: "#1e112a", description: "Ungu tua nebula misterius" },
-                    { label: "Abyssal Slate", value: "#0f141c", description: "Abu-abu laut malam gelap" },
-                  ]}
-                  helperText="Warna dasar kanvas malam."
+                  presets={BRIGHT_BACKGROUND_PRESETS}
+                  helperText="Warna kanvas cerah yang bersih, hangat, dan sangat nyaman dipandang."
                 />
               </Field>
             </div>
 
             <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
-              <Field label="Warna Wadah Kaca Temaram" htmlFor={`${idPrefix}-cardColor`}>
+              <Field label="Warna Wadah Kartu & Kertas Surat" htmlFor={`${idPrefix}-cardColor`}>
                 <ColorPickerField
-                  value={(watch("cardColor") as string) || "#131b2e"}
+                  value={(watch("cardColor") as string) || "#ffffff"}
                   onChange={(hex) =>
                     setValue("cardColor", hex, { shouldValidate: true, shouldDirty: true })
                   }
-                  presets={[
-                    { label: "Midnight Glass", value: "#131b2e", description: "Kaca navy malam elegan" },
-                    { label: "Obsidian Card", value: "#18181b", description: "Kaca gelap arang pekat" },
-                    { label: "Nebula Glass", value: "#231535", description: "Kaca ungu velvet temaram" },
-                  ]}
-                  helperText="Warna kartu surat kaca (dark glassmorphism)."
+                  presets={CARD_COLOR_PRESETS}
+                  helperText="Warna dasar sertifikat resmi, kotak pembuka mengapung, dan kartu surat cinta."
                 />
               </Field>
             </div>
 
             <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
-              <Field label="Warna Teks Judul Emas" htmlFor={`${idPrefix}-textColor`}>
+              <Field label="Warna Teks Judul Utama" htmlFor={`${idPrefix}-textColor`}>
                 <ColorPickerField
-                  value={(watch("textColor") as string) || "#fef3c7"}
+                  value={(watch("textColor") as string) || "#1c1917"}
                   onChange={(hex) =>
                     setValue("textColor", hex, { shouldValidate: true, shouldDirty: true })
                   }
                   presets={TEXT_COLOR_PRESETS}
-                  helperText="Warna judul surat dan nama penerima."
+                  helperText="Warna judul surat dan nama pasangan (kontras tinggi, tegas & jelas)."
                 />
               </Field>
             </div>
 
             <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs">
-              <Field label="Warna Isi Paragraf" htmlFor={`${idPrefix}-bodyTextColor`}>
+              <Field label="Warna Isi Paragraf Surat" htmlFor={`${idPrefix}-bodyTextColor`}>
                 <ColorPickerField
-                  value={(watch("bodyTextColor") as string) || "#cbd5e1"}
+                  value={(watch("bodyTextColor") as string) || "#44403c"}
                   onChange={(hex) =>
                     setValue("bodyTextColor", hex, { shouldValidate: true, shouldDirty: true })
                   }
                   presets={TEXT_COLOR_PRESETS}
-                  helperText="Warna teks paragraf surat."
+                  helperText="Warna isi paragraf surat cinta."
                 />
               </Field>
             </div>
           </div>
 
-          {/* Audio Pengiring dalam Box Tersendiri */}
+          {/* Musik Romantis */}
           <div className="rounded-2xl border border-stone-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-700">
-              Audio Melodi Malam Romantis
+              Audio Melodi Romantis (Opsional)
             </h4>
 
             <Field
-              label="Judul Musik Malam"
+              label="Judul Musik Pengiring"
               htmlFor={`${idPrefix}-musicTitle`}
               error={errors.musicTitle?.message as string}
             >
@@ -646,14 +732,14 @@ export function StarlightLoveBuilderForm({
             </Field>
 
             <AudioUploadField
-            id={`${idPrefix}-bgMusicUrl`}
-            label="Unggah File Musik / Audio (Opsional)"
-            value={(watch("bgMusicUrl") as string) || ""}
-            onChange={(url) =>
-              setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
-            }
-            helperText="Pilih lagu cinta dari perangkat Anda (.mp3, .wav, .m4a). Kosongkan jika tidak ingin memutar musik."
-          />
+              id={`${idPrefix}-bgMusicUrl`}
+              label="Unggah File Audio Musik (.mp3, .wav, .m4a)"
+              value={(watch("bgMusicUrl") as string) || ""}
+              onChange={(url) =>
+                setValue("bgMusicUrl", url, { shouldValidate: true, shouldDirty: true })
+              }
+              helperText="Pilih file lagu romantis dari perangkat Anda. Kosongkan jika tanpa musik."
+            />
           </div>
         </div>
       )}
@@ -664,7 +750,7 @@ export function StarlightLoveBuilderForm({
           <button
             type="button"
             onClick={() => setActiveTab(tabs[currentTabIndex - 1].id)}
-            className="flex items-center gap-1 text-xs sm:text-sm font-medium text-stone-600 hover:text-stone-900 px-3 py-1.5 rounded-lg border border-stone-300 hover:bg-stone-100 transition-colors"
+            className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-stone-600 hover:text-stone-900 px-3.5 py-2 rounded-xl border border-stone-300 hover:bg-stone-100 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             Sebelumnya: {tabs[currentTabIndex - 1].label}
@@ -677,7 +763,7 @@ export function StarlightLoveBuilderForm({
           <button
             type="button"
             onClick={() => setActiveTab(tabs[currentTabIndex + 1].id)}
-            className="flex items-center gap-1 text-xs sm:text-sm font-medium text-slate-950 bg-amber-400 hover:bg-amber-300 px-4 py-1.5 rounded-lg transition-colors shadow-sm ml-auto font-semibold"
+            className="flex items-center gap-1 text-xs sm:text-sm font-bold text-white bg-amber-500 hover:bg-amber-600 px-5 py-2 rounded-xl transition-all shadow-md ml-auto"
           >
             Lanjut: {tabs[currentTabIndex + 1].label}
             <ChevronRight className="w-4 h-4" />

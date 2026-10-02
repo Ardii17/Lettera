@@ -240,6 +240,15 @@ values
     'Pertemanan',
     true,
     39
+  ),
+  (
+    '00000000-0000-4000-8000-000000000040',
+    'mahligai-wedding',
+    'Mahligai Cinta: Pure Indonesian Wedding',
+    'Undangan pernikahan digital murni khas Indonesia bernuansa cerah dengan cover pembuka eksklusif, kaligrafi ayat suci, profil silsilah mempelai, jadwal akad & resepsi, live countdown, 4 babak kisah cinta, galeri prewedding, dan amplop digital.',
+    'Undangan',
+    true,
+    40
   )
 on conflict (slug) do update
 set
