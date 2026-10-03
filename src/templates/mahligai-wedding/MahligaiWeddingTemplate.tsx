@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo, Suspense } from "react";
-import { useSearchParams, useParams } from "next/navigation";
+import { useSearchParams, useParams, usePathname } from "next/navigation";
 import type { TemplateComponentProps } from "../renderer";
 import {
   Heart,
@@ -149,11 +149,35 @@ function CountdownTimerLive({
 }
 
 // --- KOMPONEN UTAMA BERKONTEN ---
-function MahligaiWeddingContent({ data }: TemplateComponentProps) {
+function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
   const searchParams = useSearchParams();
   const params = useParams();
+  const pathname = usePathname();
   const letterToken = typeof params?.token === "string" ? params.token : null;
   const letter = data;
+
+  const isThumbnail =
+    Boolean(data._isThumbnail) ||
+    pathname === "/templates" ||
+    className?.includes("is-thumbnail") ||
+    className?.includes("thumb");
+
+  const isEditorPreview =
+    Boolean(data._isEditorPreview) ||
+    className?.includes("is-editor-preview") ||
+    Boolean(pathname?.startsWith("/create/"));
+
+  const isDetailPage = Boolean(pathname?.startsWith("/templates/"));
+  const isPublicLetter = Boolean(pathname?.startsWith("/letter/"));
+  const isFullPreview = Boolean(data._isFullPreview) || className?.includes("is-full-preview");
+
+  // Gerbang HANYA menutup (aktif) pada halaman surat publik (/letter/...) atau modal full preview
+  // Di halaman detail template (/templates/[slug]), katalog, atau preview editor, gerbang SELALU TERBUKA
+  const shouldStartClosed =
+    (isPublicLetter || isFullPreview) &&
+    !isDetailPage &&
+    !isEditorPreview &&
+    !isThumbnail;
 
   // Nama penerima tamu dari parameter URL (?to=Nama) atau fallback
   const recipientParam = searchParams.get("to");
@@ -163,9 +187,15 @@ function MahligaiWeddingContent({ data }: TemplateComponentProps) {
       : (letter.recipientName as string) || "Tamu Undangan Terhormat";
 
   // State Cover Pembuka
-  const [isOpened, setIsOpened] = useState(false);
+  const [isOpened, setIsOpened] = useState(!shouldStartClosed);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (isDetailPage || isEditorPreview || isThumbnail) {
+      setIsOpened(true);
+    }
+  }, [isDetailPage, isEditorPreview, isThumbnail]);
 
   // State Salin Nomor Rekening
   const [copiedAccount, setCopiedAccount] = useState<string | null>(null);
@@ -400,16 +430,21 @@ function MahligaiWeddingContent({ data }: TemplateComponentProps) {
       {/* ========================================================================= */}
       {/* 1. COVER SCREEN PEMBUKA INTERAKTIF (OVERLAY JIKA BELUM DIBUKA) */}
       {/* ========================================================================= */}
-      {!isOpened && (
-        <section className="fixed inset-0 z-50 flex flex-col items-center justify-between p-6 sm:p-10 text-center bg-gradient-to-b from-stone-50 via-amber-50/40 to-stone-100 overflow-y-auto">
-          {/* Ornamen Floral Atas */}
-          <div className="pt-4 animate-fade-in">
-            <span className="text-3xl">🕊️</span>
-            <p className="text-xs uppercase tracking-[0.25em] text-amber-700/80 font-medium mt-2">
+      {!isOpened && shouldStartClosed && (
+        <section
+          className="fixed inset-0 z-50 flex flex-col items-center justify-between h-[100dvh] max-h-[100dvh] w-full overflow-hidden p-3.5 sm:p-5 text-center select-none"
+          style={{
+            backgroundColor: backgroundColor || "#fdfbf7",
+          }}
+        >
+          {/* Ornamen Floral & Nama Pengantin (Header) */}
+          <div className="shrink-0 pt-1 sm:pt-2 space-y-0.5 sm:space-y-1">
+            <span className="text-xl sm:text-2xl">🕊️</span>
+            <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-amber-800/80 font-medium">
               {(letter.weddingTitle as string) || "The Wedding Celebration of"}
             </p>
             <h1
-              className="text-4xl sm:text-6xl font-serif font-bold tracking-wide mt-2"
+              className="text-2xl sm:text-4xl font-serif font-bold tracking-wide"
               style={{ color: primaryColor }}
             >
               {(letter.groomNickname as string) || "Rama"} &amp;{" "}
@@ -417,52 +452,52 @@ function MahligaiWeddingContent({ data }: TemplateComponentProps) {
             </h1>
           </div>
 
-          {/* Bingkai Foto Prewedding Cover */}
-          <div className="relative my-6 max-w-xs sm:max-w-sm w-full mx-auto">
-            <div className="relative aspect-[3/4] rounded-t-full rounded-b-3xl overflow-hidden shadow-2xl border-4 border-white ring-2 ring-amber-200/70">
+          {/* Bingkai Foto Prewedding Kubah Tengah (Menyesuaikan sisa tinggi layar secara fleksibel) */}
+          <div className="flex-1 min-h-0 w-full max-w-[220px] sm:max-w-[270px] my-1.5 sm:my-2 mx-auto flex items-center justify-center">
+            <div className="relative w-full h-full max-h-[38dvh] aspect-[3/4] rounded-t-full rounded-b-2xl overflow-hidden shadow-xl border-4 border-white ring-2 ring-amber-200/80">
               <img
                 src={coverPhoto}
                 alt="Foto Cover Undangan"
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent" />
-              <div className="absolute bottom-4 inset-x-0 text-white px-4">
-                <p className="text-xs uppercase tracking-widest text-amber-200 font-medium">
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/75 via-transparent to-transparent" />
+              <div className="absolute bottom-2 inset-x-0 text-white px-3">
+                <p className="text-[10px] uppercase tracking-widest text-amber-200 font-semibold">
                   Janji Suci Mahligai
                 </p>
-                <p className="text-sm sm:text-base font-serif font-medium mt-0.5">
+                <p className="text-xs sm:text-sm font-serif font-medium mt-0.5">
                   {(letter.weddingDateText as string) || "Minggu, 24 Oktober 2026"}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Kartu Kepada Tamu & Tombol Buka */}
-          <div className="w-full max-w-sm pb-6">
-            <div className="p-4 sm:p-5 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg border border-amber-100 mb-5">
-              <p className="text-[11px] uppercase tracking-wider text-stone-500 font-medium">
+          {/* Kartu Kepada Tamu & Tombol Buka Undangan (Footer) */}
+          <div className="shrink-0 w-full max-w-xs sm:max-w-sm pb-1 sm:pb-2 space-y-2 sm:space-y-2.5">
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-white/95 shadow-md border border-amber-200/70">
+              <p className="text-[10px] uppercase tracking-wider text-stone-500 font-medium">
                 Kepada Yth. Bapak/Ibu/Saudara/i:
               </p>
               <h2
-                className="text-xl sm:text-2xl font-serif font-bold mt-1 text-stone-800"
+                className="text-base sm:text-lg font-serif font-bold mt-0.5 text-stone-800 line-clamp-1"
                 style={{ color: primaryColor }}
               >
                 {guestName}
               </h2>
-              <p className="text-xs text-stone-500 mt-1 italic">
+              <p className="text-[10px] text-stone-400 italic">
                 *Mohon maaf bila ada kesalahan penulisan nama/gelar
               </p>
             </div>
 
             <button
               onClick={handleOpenInvitation}
-              className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full text-white font-medium text-base shadow-xl transform active:scale-95 hover:shadow-2xl transition-all duration-300 group"
+              className="w-full inline-flex items-center justify-center gap-2.5 py-3 sm:py-3.5 px-6 rounded-full text-white font-medium text-sm sm:text-base shadow-lg transform active:scale-95 hover:shadow-xl transition-all duration-300 group"
               style={{
                 backgroundColor: primaryColor,
-                boxShadow: `0 10px 25px -5px ${primaryColor}66`,
+                boxShadow: `0 8px 20px -4px ${primaryColor}66`,
               }}
             >
-              <Heart className="w-5 h-5 fill-white text-white group-hover:scale-125 transition-transform" />
+              <Heart className="w-4 h-4 fill-white text-white group-hover:scale-125 transition-transform" />
               <span>{(letter.openButtonText as string) || "Buka Undangan"}</span>
             </button>
           </div>
