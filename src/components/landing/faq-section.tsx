@@ -65,6 +65,7 @@ export function FaqSection() {
               >
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={() => toggle(index)}
                   className="flex w-full items-center justify-between p-5 text-left sm:p-6"
                   aria-expanded={isOpen}

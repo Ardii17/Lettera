@@ -26,6 +26,7 @@ export function MobileNav({ links }: { links: NavLinkItem[] }) {
     <div className="lg:hidden">
       <button
         type="button"
+        suppressHydrationWarning
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? "Tutup menu" : "Buka menu"}

@@ -568,6 +568,7 @@ export function GraduationTemplate({
               <div className="mt-6">
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={handleTossCap}
                   className="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-95"
                   style={{ backgroundColor: primaryColor }}

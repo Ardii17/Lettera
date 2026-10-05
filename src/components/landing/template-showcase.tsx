@@ -63,6 +63,7 @@ export function TemplateShowcase({ templates }: { templates: TemplateMeta[] }) {
               <button
                 key={cat}
                 type="button"
+                suppressHydrationWarning
                 onClick={() => setSelectedCategory(cat)}
                 className={`rounded-full px-4 py-2 text-xs font-semibold transition-all whitespace-nowrap ${
                   isActive

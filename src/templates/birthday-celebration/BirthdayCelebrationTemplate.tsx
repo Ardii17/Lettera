@@ -661,6 +661,7 @@ function BirthdayCelebrationTemplateInner({
               </p>
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={handleBlowCandle}
                 className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-xs sm:text-sm font-bold text-white shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
                 style={{ backgroundColor: primary }}

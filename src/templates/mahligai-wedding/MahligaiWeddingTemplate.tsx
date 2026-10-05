@@ -321,7 +321,7 @@ function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
   };
 
   // Kirim RSVP ke API database
-  const handleRsvpSubmit = async (e: React.FormEvent) => {
+  const handleRsvpSubmit = async (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     if (!rsvpName.trim() || !rsvpMessage.trim() || isSubmittingRsvp) return;
 
@@ -1344,7 +1344,7 @@ function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleRsvpSubmit} className="space-y-4">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-stone-700 uppercase tracking-wider mb-1">
                     Nama Lengkap
@@ -1407,7 +1407,8 @@ function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
                 </div>
 
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleRsvpSubmit}
                   disabled={isSubmittingRsvp}
                   className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-white font-medium text-sm shadow-md hover:shadow-lg transition-all active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
                   style={{ backgroundColor: primaryColor }}
@@ -1424,7 +1425,7 @@ function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
                     </>
                   )}
                 </button>
-              </form>
+              </div>
             )}
 
             {/* List Ucapan Tamu */}

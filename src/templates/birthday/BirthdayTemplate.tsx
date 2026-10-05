@@ -436,6 +436,7 @@ export function BirthdayTemplate({
           <div className="mt-8 flex justify-center">
             <button
               type="button"
+              suppressHydrationWarning
               onClick={() => {
                 const el = document.getElementById("kue-ulang-tahun");
                 el?.scrollIntoView({ behavior: "smooth" });
@@ -595,6 +596,7 @@ export function BirthdayTemplate({
               <div className="mt-8">
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={handleBlowCandle}
                   className="group relative inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg transition-all hover:scale-105 active:scale-95"
                   style={{ backgroundColor: primaryColor }}

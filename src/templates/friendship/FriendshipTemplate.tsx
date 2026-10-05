@@ -506,6 +506,7 @@ export function FriendshipTemplate({
 
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={handleFistBump}
                 className={cn(
                   "relative flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-white font-bold text-base sm:text-lg shadow-xl transition-all duration-300 transform active:scale-95",

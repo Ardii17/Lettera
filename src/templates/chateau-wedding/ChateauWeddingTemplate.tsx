@@ -69,7 +69,7 @@ function ChateauWeddingTemplateContent({
     }, 2500);
   };
 
-  const handleRsvpSubmit = (e: React.FormEvent) => {
+  const handleRsvpSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     setRsvpSubmitted(true);
   };
@@ -673,7 +673,7 @@ function ChateauWeddingTemplateContent({
           {/* Interactive Royal RSVP Form Simulation */}
           <div className="max-w-xl mx-auto p-6 rounded-2xl bg-[#140207]/95 border border-amber-400/40 space-y-4 shadow-xl">
             {!rsvpSubmitted ? (
-              <form onSubmit={handleRsvpSubmit} className="space-y-4 font-sans text-xs">
+              <div className="space-y-4 font-sans text-xs">
                 <div>
                   <label className="block text-amber-200 font-semibold mb-2">
                     Apakah Anda akan berkenan hadir di perayaan agung kami?
@@ -736,13 +736,14 @@ function ChateauWeddingTemplateContent({
                 </div>
 
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleRsvpSubmit}
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold tracking-wider uppercase transition shadow-lg flex items-center justify-center gap-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>Kirimkan Konfirmasi Kerajaan</span>
                 </button>
-              </form>
+              </div>
             ) : (
               <div className="text-center py-6 space-y-3">
                 <div className="w-12 h-12 rounded-full bg-amber-400/20 border border-amber-400 flex items-center justify-center mx-auto text-amber-300">
