@@ -323,7 +323,18 @@ function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
   // Kirim RSVP ke API database
   const handleRsvpSubmit = async (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
-    if (!rsvpName.trim() || !rsvpMessage.trim() || isSubmittingRsvp) return;
+    
+    if (!rsvpName.trim()) {
+      alert("Mohon isi nama Anda terlebih dahulu.");
+      return;
+    }
+    
+    if (!rsvpMessage.trim()) {
+      alert("Mohon isi doa dan ucapan selamat.");
+      return;
+    }
+    
+    if (isSubmittingRsvp) return;
 
     setIsSubmittingRsvp(true);
     try {
