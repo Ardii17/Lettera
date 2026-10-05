@@ -516,7 +516,7 @@ function MahligaiWeddingContent({ data, className }: TemplateComponentProps) {
           </button>
 
           {/* Bottom Navigation Dock */}
-          <nav className="fixed bottom-4 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
+          <nav className="fixed bottom-4 inset-x-0 z-40 flex justify-center px-4 pointer-events-none hidden sm:hidden md:flex ">
             <div className="pointer-events-auto flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-full bg-white/90 backdrop-blur-md shadow-xl border border-amber-200/80 text-xs font-medium text-stone-600">
               <button
                 onClick={() => scrollTo("section-hero")}
