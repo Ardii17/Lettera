@@ -41,6 +41,7 @@ import { BirthdayCinemaTemplate } from "./birthday-cinema/BirthdayCinemaTemplate
 import { BirthdayFestivalTemplate } from "./birthday-festival/BirthdayFestivalTemplate";
 import { BirthdayCelebrationTemplate } from "./birthday-celebration/BirthdayCelebrationTemplate";
 import { MahligaiWeddingTemplate } from "./mahligai-wedding/MahligaiWeddingTemplate";
+import { UltimateBirthdayTemplate } from "./ultimate-birthday/UltimateBirthdayTemplate";
 
 export interface TemplateComponentProps {
   data: LetterContent;
@@ -96,6 +97,7 @@ const TEMPLATE_COMPONENTS: Record<string, ComponentType<TemplateComponentProps>>
   "kintsugi-repair": KintsugiRepairTemplate,
   "safe-harbor": SafeHarborTemplate,
   "solstice-thaw": SolsticeThawTemplate,
+  "ultimate-birthday": UltimateBirthdayTemplate,
 };
 
 export function hasTemplateComponent(slug: string): boolean {

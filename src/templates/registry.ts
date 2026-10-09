@@ -39,6 +39,7 @@ import { birthdayCinemaTemplate } from "./birthday-cinema/definition";
 import { birthdayFestivalTemplate } from "./birthday-festival/definition";
 import { birthdayCelebrationTemplate } from "./birthday-celebration/definition";
 import { mahligaiWeddingTemplate } from "./mahligai-wedding/definition";
+import { ultimateBirthdayTemplate } from "./ultimate-birthday/definition";
 import type { TemplateMeta } from "./types";
 
 /**
@@ -91,6 +92,7 @@ export const TEMPLATES: TemplateMeta[] = [
   kintsugiRepairTemplate,
   safeHarborTemplate,
   solsticeThawTemplate,
+  ultimateBirthdayTemplate,
 ];
 
 const TEMPLATE_MAP: Record<string, TemplateMeta> = Object.fromEntries(

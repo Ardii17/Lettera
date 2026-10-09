@@ -833,6 +833,7 @@ function WeddingTemplateInner({ data, className }: WeddingTemplateProps) {
                   <p className="text-xs text-ink-soft">a.n. {content.bankHolder1}</p>
                   <button
                     type="button"
+                    suppressHydrationWarning
                     onClick={() => handleCopy(content.bankAccount1, "bank1")}
                     className="mt-4 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all"
                     style={{
@@ -867,6 +868,7 @@ function WeddingTemplateInner({ data, className }: WeddingTemplateProps) {
                   <p className="text-xs text-ink-soft">a.n. {content.bankHolder2}</p>
                   <button
                     type="button"
+                    suppressHydrationWarning
                     onClick={() => handleCopy(content.bankAccount2, "bank2")}
                     className="mt-4 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all"
                     style={{
@@ -941,6 +943,7 @@ function WeddingTemplateInner({ data, className }: WeddingTemplateProps) {
                 <input
                   id="guest-input-field"
                   type="text"
+                  suppressHydrationWarning
                   value={newGuestInput}
                   onChange={(e) => setNewGuestInput(e.target.value)}
                   placeholder="Contoh: Bpk. Hendro & Keluarga, dr. Sarah, S.Ked"
@@ -948,6 +951,7 @@ function WeddingTemplateInner({ data, className }: WeddingTemplateProps) {
                 />
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={handleCopyGuestLink}
                   className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:opacity-95"
                   style={{
@@ -968,6 +972,7 @@ function WeddingTemplateInner({ data, className }: WeddingTemplateProps) {
                 </button>
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={handleShareWhatsapp}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-700"
                 >

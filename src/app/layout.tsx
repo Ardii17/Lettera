@@ -45,7 +45,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className={`${inter.variable} ${fraunces.variable} ${caveat.variable}`}>
-      <body className="min-h-dvh antialiased">
+      <body suppressHydrationWarning className="min-h-dvh antialiased">
         <a
           href="#konten"
           className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:text-page"
